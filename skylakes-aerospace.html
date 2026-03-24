@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SkyLakes AeroSpace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Syne:wght@300;400;500;600&family=Syne+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-deep: #04060d;
+    --bg-mid: #080d1a;
+    --bg-card: #0b1120;
+    --accent: #f97316;
+    --accent2: #fb923c;
+    --accent-glow: rgba(249,115,22,0.35);
+    --blue: #1e40af;
+    --blue-light: #3b82f6;
+    --white: #f1f5f9;
+    --muted: #64748b;
+    --muted2: #94a3b8;
+    --border: rgba(249,115,22,0.15);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg-deep);
+    color: var(--white);
+    font-family: 'Syne', sans-serif;
+    overflow-x: hidden;
+  }
+
+
+
+  /* Stars canvas */
+  #stars-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 60px;
+    background: linear-gradient(to bottom, rgba(4,6,13,0.95), transparent);
+    backdrop-filter: blur(2px);
+  }
+  .nav-logo {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: 0.08em;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .nav-logo-icon {
+    width: 32px; height: 32px;
+    background: var(--accent);
+    clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+  @keyframes pulse-glow {
+    0%,100% { box-shadow: 0 0 12px var(--accent-glow); }
+    50% { box-shadow: 0 0 28px var(--accent-glow), 0 0 50px var(--accent-glow); }
+  }
+  .nav-links {
+    display: flex; gap: 36px; list-style: none;
+  }
+  .nav-links a {
+    color: var(--muted2);
+    text-decoration: none;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+    font-weight: 500;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 120px 20px 80px;
+    overflow: hidden;
+    z-index: 1;
+  }
+  .hero-bg-gradient {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(30,64,175,0.18) 0%, transparent 70%),
+                radial-gradient(ellipse 40% 40% at 50% 80%, rgba(249,115,22,0.08) 0%, transparent 70%);
+    z-index: 0;
+  }
+  .hero-grid-lines {
+    position: absolute; inset: 0; z-index: 0; opacity: 0.04;
+    background-image:
+      linear-gradient(rgba(249,115,22,1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(249,115,22,1) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: grid-move 20s linear infinite;
+  }
+  @keyframes grid-move {
+    0% { background-position: 0 0; }
+    100% { background-position: 60px 60px; }
+  }
+  .hero-badge {
+    font-family: 'Syne Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid var(--border);
+    padding: 8px 20px;
+    border-radius: 100px;
+    margin-bottom: 32px;
+    background: rgba(249,115,22,0.06);
+    animation: fadeInUp 0.8s ease 0.2s both;
+  }
+  .hero-title {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(3rem, 8vw, 7.5rem);
+    font-weight: 900;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-bottom: 28px;
+    animation: fadeInUp 0.8s ease 0.4s both;
+  }
+  .hero-title span {
+    display: block;
+    background: linear-gradient(135deg, #fff 0%, #f97316 50%, #fb923c 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-subtitle {
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    color: var(--muted2);
+    max-width: 560px;
+    line-height: 1.7;
+    margin-bottom: 48px;
+    font-weight: 400;
+    animation: fadeInUp 0.8s ease 0.6s both;
+  }
+  .hero-ctas {
+    display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
+    animation: fadeInUp 0.8s ease 0.8s both;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: #000;
+    font-family: 'Orbitron', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 16px 36px;
+    border: none; border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s;
+    box-shadow: 0 0 30px var(--accent-glow);
+  }
+  .btn-primary:hover {
+    background: #fff;
+    box-shadow: 0 0 50px rgba(249,115,22,0.5);
+    transform: translateY(-2px);
+  }
+  .btn-outline {
+    background: transparent;
+    color: var(--white);
+    font-family: 'Orbitron', monospace;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 16px 36px;
+    border: 1px solid rgba(241,245,249,0.2);
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s;
+  }
+  .btn-outline:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .hero-scroll-indicator {
+    position: absolute; bottom: 40px;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    color: var(--muted);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    animation: fadeInUp 1s ease 1.2s both;
+  }
+  .scroll-line {
+    width: 1px; height: 48px;
+    background: linear-gradient(to bottom, transparent, var(--accent));
+    animation: scroll-pulse 2s ease-in-out infinite;
+  }
+  @keyframes scroll-pulse {
+    0%,100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
+  /* Rocket SVG hero */
+  .hero-rocket {
+    position: absolute; right: 8%; bottom: 15%;
+    width: 80px; opacity: 0.15;
+    animation: float 6s ease-in-out infinite;
+    z-index: 0;
+  }
+  @keyframes float {
+    0%,100% { transform: translateY(0) rotate(20deg); }
+    50% { transform: translateY(-30px) rotate(20deg); }
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Sections */
+  section { position: relative; z-index: 1; }
+
+  .section-label {
+    font-family: 'Syne Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+  .section-title {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    margin-bottom: 20px;
+  }
+
+  /* MISSION */
+  .mission {
+    padding: 140px 60px;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 80px; align-items: center;
+    max-width: 1300px; margin: 0 auto;
+  }
+  .mission-visual {
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .planet-container {
+    position: relative;
+    width: 320px; height: 320px;
+  }
+  .planet {
+    width: 100%; height: 100%;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%,
+      #fb923c 0%, #f97316 25%, #c2410c 55%, #7c2d12 80%, #1c0a00 100%);
+    box-shadow:
+      0 0 60px rgba(249,115,22,0.4),
+      0 0 120px rgba(249,115,22,0.2),
+      inset -40px -20px 60px rgba(0,0,0,0.6);
+    animation: planet-spin 30s linear infinite;
+    position: relative;
+    overflow: hidden;
+  }
+  .planet::after {
+    content: '';
+    position: absolute; inset: 0;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 50%);
+  }
+  @keyframes planet-spin {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
+  }
+  .planet-ring {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%) rotateX(72deg);
+    width: 420px; height: 420px;
+    border-radius: 50%;
+    border: 2px solid rgba(249,115,22,0.2);
+    box-shadow: 0 0 30px rgba(249,115,22,0.1);
+    animation: ring-glow 4s ease-in-out infinite alternate;
+  }
+  .planet-ring2 {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%) rotateX(72deg);
+    width: 480px; height: 480px;
+    border-radius: 50%;
+    border: 1px solid rgba(249,115,22,0.08);
+  }
+  @keyframes ring-glow {
+    from { border-color: rgba(249,115,22,0.15); }
+    to { border-color: rgba(249,115,22,0.4); }
+  }
+  .mission-text .section-title { color: var(--white); }
+  .mission-body {
+    color: var(--muted2);
+    font-size: 1.05rem;
+    line-height: 1.85;
+    margin-bottom: 32px;
+  }
+  .mission-stats {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+  }
+  .stat-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    background: rgba(249,115,22,0.04);
+    transition: all 0.3s;
+  }
+  .stat-card:hover {
+    border-color: var(--accent);
+    background: rgba(249,115,22,0.08);
+    transform: translateY(-3px);
+  }
+  .stat-num {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+  .stat-label {
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* MILESTONES */
+  .milestones-section {
+    padding: 120px 60px;
+    max-width: 1300px; margin: 0 auto;
+  }
+  .milestones-header {
+    text-align: center;
+    margin-bottom: 80px;
+  }
+  .milestones-grid {
+    display: flex; flex-direction: column; gap: 2px;
+  }
+  .milestone-item {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 24px;
+    transition: all 0.4s;
+    background: var(--bg-card);
+  }
+  .milestone-item:nth-child(even) .milestone-img-wrap { order: 2; }
+  .milestone-item:nth-child(even) .milestone-content { order: 1; }
+  .milestone-item:hover {
+    border-color: rgba(249,115,22,0.4);
+    box-shadow: 0 0 40px rgba(249,115,22,0.08);
+    transform: translateY(-4px);
+  }
+  .milestone-img-wrap {
+    position: relative; overflow: hidden;
+    min-height: 280px;
+  }
+  .milestone-img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: brightness(0.6) saturate(0.8);
+    transition: filter 0.4s, transform 0.4s;
+  }
+  .milestone-item:hover .milestone-img {
+    filter: brightness(0.75) saturate(1);
+    transform: scale(1.05);
+  }
+  .milestone-year-badge {
+    position: absolute; top: 20px; left: 20px;
+    font-family: 'Orbitron', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    background: var(--accent);
+    color: #000;
+    padding: 6px 14px;
+    border-radius: 4px;
+    letter-spacing: 0.1em;
+  }
+  .milestone-content {
+    padding: 48px;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .milestone-content .section-label { margin-bottom: 12px; }
+  .milestone-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+    line-height: 1.3;
+  }
+  .milestone-desc {
+    color: var(--muted2);
+    line-height: 1.75;
+    font-size: 0.95rem;
+  }
+
+  /* QUOTE */
+  .quote-section {
+    padding: 120px 60px;
+    background: linear-gradient(135deg, rgba(8,13,26,0.8) 0%, rgba(30,64,175,0.06) 100%);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .quote-bg-text {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    font-family: 'Orbitron', monospace;
+    font-size: 20vw;
+    font-weight: 900;
+    color: rgba(249,115,22,0.025);
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+  }
+  .quote-mark {
+    font-family: 'Orbitron', monospace;
+    font-size: 5rem;
+    color: var(--accent);
+    line-height: 0;
+    vertical-align: -0.4em;
+    margin-right: 8px;
+    opacity: 0.6;
+  }
+  .quote-text {
+    font-size: clamp(1.4rem, 3vw, 2.2rem);
+    font-weight: 300;
+    line-height: 1.5;
+    max-width: 900px;
+    margin: 0 auto 40px;
+    font-style: italic;
+    color: var(--white);
+  }
+  .quote-author {
+    font-family: 'Syne Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  /* TECH */
+  .tech-section {
+    padding: 120px 60px;
+    max-width: 1300px; margin: 0 auto;
+  }
+  .tech-header { text-align: center; margin-bottom: 64px; }
+  .tech-cards {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+  }
+  .tech-card {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 40px 32px;
+    background: var(--bg-card);
+    transition: all 0.4s;
+    position: relative;
+    overflow: hidden;
+  }
+  .tech-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    transform: scaleX(0);
+    transition: transform 0.4s;
+  }
+  .tech-card:hover {
+    border-color: rgba(249,115,22,0.3);
+    box-shadow: 0 20px 60px rgba(249,115,22,0.08);
+    transform: translateY(-6px);
+  }
+  .tech-card:hover::before { transform: scaleX(1); }
+  .tech-icon {
+    width: 52px; height: 52px;
+    margin-bottom: 24px;
+    color: var(--accent);
+  }
+  .tech-card-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 14px;
+    letter-spacing: 0.04em;
+  }
+  .tech-card-desc {
+    color: var(--muted2);
+    font-size: 0.9rem;
+    line-height: 1.75;
+  }
+
+  /* BLOG */
+  .blog-section {
+    padding: 120px 60px;
+    background: rgba(8,13,26,0.5);
+    border-top: 1px solid var(--border);
+  }
+  .blog-inner { max-width: 1300px; margin: 0 auto; }
+  .blog-header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 56px;
+  }
+  .blog-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+  }
+  .blog-card {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--bg-card);
+    transition: all 0.4s;
+    cursor: pointer;
+  }
+  .blog-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(249,115,22,0.3);
+    box-shadow: 0 20px 60px rgba(249,115,22,0.08);
+  }
+  .blog-img {
+    width: 100%; height: 200px; object-fit: cover;
+    filter: brightness(0.7) saturate(0.6);
+    transition: filter 0.4s;
+  }
+  .blog-card:hover .blog-img { filter: brightness(0.85) saturate(1); }
+  .blog-body { padding: 28px; }
+  .blog-tag {
+    font-family: 'Syne Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+    display: block;
+  }
+  .blog-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.9rem;
+    font-weight: 600;
+    line-height: 1.4;
+    margin-bottom: 12px;
+    letter-spacing: 0.02em;
+  }
+  .blog-excerpt { color: var(--muted2); font-size: 0.85rem; line-height: 1.7; }
+
+  /* FAQ */
+  .faq-section {
+    padding: 120px 60px;
+    max-width: 900px; margin: 0 auto;
+  }
+  .faq-header { text-align: center; margin-bottom: 64px; }
+  .faq-item {
+    border-bottom: 1px solid var(--border);
+    padding: 28px 0;
+    cursor: pointer;
+  }
+  .faq-q {
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'Orbitron', monospace;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    transition: color 0.2s;
+  }
+  .faq-q:hover { color: var(--accent); }
+  .faq-toggle {
+    width: 28px; height: 28px;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+    color: var(--accent);
+    transition: all 0.3s;
+    flex-shrink: 0;
+  }
+  .faq-item.open .faq-toggle {
+    transform: rotate(45deg);
+    background: var(--accent);
+    color: #000;
+    border-color: var(--accent);
+  }
+  .faq-a {
+    max-height: 0; overflow: hidden;
+    transition: max-height 0.4s ease, padding 0.3s;
+    color: var(--muted2);
+    line-height: 1.8;
+    font-size: 0.95rem;
+  }
+  .faq-item.open .faq-a {
+    max-height: 200px;
+    padding-top: 16px;
+  }
+
+  /* COMMUNITY */
+  .community-section {
+    padding: 120px 60px;
+    text-align: center;
+    background: linear-gradient(135deg, rgba(30,64,175,0.06) 0%, transparent 100%);
+    border-top: 1px solid var(--border);
+  }
+  .community-inner {
+    max-width: 640px; margin: 0 auto;
+  }
+  .community-section .section-title { margin-bottom: 16px; }
+  .community-sub {
+    color: var(--muted2);
+    font-size: 1rem;
+    line-height: 1.7;
+    margin-bottom: 48px;
+  }
+  .form-row {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;
+  }
+  .form-input {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px 20px;
+    color: var(--white);
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.3s;
+    width: 100%;
+  }
+  .form-input::placeholder { color: var(--muted); }
+  .form-input:focus { border-color: var(--accent); }
+  .form-email {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px 20px;
+    color: var(--white);
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.3s;
+    width: 100%;
+    margin-bottom: 16px;
+  }
+  .form-email::placeholder { color: var(--muted); }
+  .form-email:focus { border-color: var(--accent); }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 64px 60px 40px;
+    background: var(--bg-mid);
+  }
+  .footer-grid {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr;
+    gap: 60px; max-width: 1300px; margin: 0 auto 48px;
+  }
+  .footer-brand .nav-logo { margin-bottom: 16px; font-size: 1.2rem; }
+  .footer-tagline {
+    color: var(--muted);
+    font-size: 0.875rem;
+    line-height: 1.7;
+    margin-bottom: 24px;
+  }
+  .footer-social { display: flex; gap: 12px; }
+  .social-btn {
+    width: 36px; height: 36px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--muted2);
+    text-decoration: none;
+    font-size: 0.8rem;
+    transition: all 0.2s;
+  }
+  .social-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .footer-col-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-bottom: 20px;
+  }
+  .footer-links { list-style: none; }
+  .footer-links li { margin-bottom: 10px; }
+  .footer-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.875rem;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--accent); }
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding-top: 32px;
+    display: flex; justify-content: space-between; align-items: center;
+    max-width: 1300px; margin: 0 auto;
+  }
+  .footer-copy {
+    font-family: 'Syne Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+  }
+  .footer-made {
+    font-family: 'Syne Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+  .footer-made span { color: var(--accent); }
+
+  /* Reveal animation */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Horizontal divider */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 0 60px;
+  }
+
+  @media (max-width: 900px) {
+    nav { padding: 20px 24px; }
+    .nav-links { display: none; }
+    .mission { grid-template-columns: 1fr; padding: 80px 24px; gap: 48px; }
+    .mission-visual { justify-content: center; }
+    .milestones-section, .tech-section, .blog-section .blog-inner,
+    .faq-section, .community-section, .quote-section { padding: 80px 24px; }
+    .milestones-section { padding: 80px 24px; }
+    .milestone-item { grid-template-columns: 1fr; }
+    .milestone-item:nth-child(even) .milestone-img-wrap { order: 0; }
+    .milestone-item:nth-child(even) .milestone-content { order: 1; }
+    .tech-cards, .blog-grid { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; padding: 48px 24px; }
+    footer { padding: 48px 24px 32px; }
+    .footer-bottom { flex-direction: column; gap: 12px; text-align: center; padding: 0 24px; }
+    .mission-stats { grid-template-columns: 1fr; }
+    .blog-header { flex-direction: column; gap: 20px; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="stars-canvas"></canvas>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-icon"></div>
+    SkyLakes
+  </div>
+  <ul class="nav-links">
+    <li><a href="#mission">Mission</a></li>
+    <li><a href="#milestones">Milestones</a></li>
+    <li><a href="#tech">Technology</a></li>
+    <li><a href="#blog">Blog</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="btn-primary" style="font-size:0.65rem; padding:12px 24px;">Launch With Us</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-gradient"></div>
+  <div class="hero-grid-lines"></div>
+  <div class="hero-badge">🚀 India's Next-Generation Space Company</div>
+  <h1 class="hero-title">
+    <span>SkyLakes</span>
+    <span style="font-size:0.6em; -webkit-text-fill-color: var(--muted2); background:none; color: var(--muted2);">AeroSpace</span>
+  </h1>
+  <p class="hero-subtitle">Revolutionizing India's space industry with reusable rockets, cost-effective launches, and cutting-edge aerospace innovation.</p>
+  <div class="hero-ctas">
+    <a href="#mission" class="btn-primary">Discover Our Mission</a>
+    <a href="#milestones" class="btn-outline">View Milestones</a>
+  </div>
+  <div class="hero-scroll-indicator">
+    <div class="scroll-line"></div>
+    Scroll
+  </div>
+  <!-- floating rocket svg -->
+  <svg class="hero-rocket" viewBox="0 0 100 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M50 5 C50 5 70 40 70 100 L50 120 L30 100 C30 40 50 5 50 5Z" fill="rgba(249,115,22,0.8)"/>
+    <path d="M30 100 L10 140 L30 130Z" fill="rgba(249,115,22,0.4)"/>
+    <path d="M70 100 L90 140 L70 130Z" fill="rgba(249,115,22,0.4)"/>
+    <circle cx="50" cy="55" r="12" fill="rgba(255,255,255,0.2)"/>
+    <path d="M42 140 Q50 160 58 140" stroke="rgba(249,115,22,0.6)" stroke-width="2" fill="none"/>
+    <ellipse cx="50" cy="168" rx="8" ry="12" fill="rgba(249,115,22,0.3)" filter="blur(4px)"/>
+  </svg>
+</section>
+
+<div class="divider"></div>
+
+<!-- MISSION -->
+<section id="mission">
+  <div class="mission">
+    <div class="mission-visual reveal">
+      <div class="planet-container">
+        <div class="planet"></div>
+        <div class="planet-ring"></div>
+        <div class="planet-ring2"></div>
+      </div>
+    </div>
+    <div class="mission-text reveal" style="transition-delay:0.2s">
+      <div class="section-label">Our Mission</div>
+      <h2 class="section-title">Bridging India<br>to the Stars</h2>
+      <p class="mission-body">SkyLakes AeroSpace is at the forefront of revolutionizing India's aerospace industry — pioneering reusable rockets and reliable, cutting-edge solutions. Our mission: make space accessible, sustainable, and affordable, empowering India's presence in the global space race.</p>
+      <div class="mission-stats">
+        <div class="stat-card">
+          <div class="stat-num">72%</div>
+          <div class="stat-label">Cost Reduction</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">10x</div>
+          <div class="stat-label">Reusability</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">2026</div>
+          <div class="stat-label">First Launch</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- MILESTONES -->
+<section id="milestones">
+  <div class="milestones-section">
+    <div class="milestones-header reveal">
+      <div class="section-label">History & Ambition</div>
+      <h2 class="section-title">Milestones in Space</h2>
+    </div>
+    <div class="milestones-grid">
+
+      <div class="milestone-item reveal">
+        <div class="milestone-img-wrap">
+          <img class="milestone-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Mangalyaan_realistic_model.jpg/1280px-Mangalyaan_realistic_model.jpg" alt="Mangalyaan">
+          <div class="milestone-year-badge">2013</div>
+        </div>
+        <div class="milestone-content">
+          <div class="section-label">India's Pride</div>
+          <div class="milestone-title">Mangalyaan — Mars Orbiter Mission</div>
+          <p class="milestone-desc">India became the first Asian country to reach Mars orbit, completing the mission on its very first attempt — a feat no other space agency had achieved. SkyLakes draws inspiration from this audacious milestone.</p>
+        </div>
+      </div>
+
+      <div class="milestone-item reveal">
+        <div class="milestone-img-wrap">
+          <img class="milestone-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Chandrayaan-3_Mission_Profile.jpg/1280px-Chandrayaan-3_Mission_Profile.jpg" alt="Chandrayaan-3">
+          <div class="milestone-year-badge">2023</div>
+        </div>
+        <div class="milestone-content">
+          <div class="section-label">Lunar Triumph</div>
+          <div class="milestone-title">Chandrayaan-3 — South Pole Landing</div>
+          <p class="milestone-desc">India's Chandrayaan-3 made history as the first spacecraft to land near the lunar south pole — a triumph of Indian engineering that redefined what's possible at a fraction of global mission costs.</p>
+        </div>
+      </div>
+
+      <div class="milestone-item reveal">
+        <div class="milestone-img-wrap">
+          <img class="milestone-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/PSLV-C37_lifts_off.jpg/800px-PSLV-C37_lifts_off.jpg" alt="PSLV">
+          <div class="milestone-year-badge">2017</div>
+        </div>
+        <div class="milestone-content">
+          <div class="section-label">Record-Breaking</div>
+          <div class="milestone-title">104 Satellites — One Rocket</div>
+          <p class="milestone-desc">ISRO shattered the world record by launching 104 satellites on a single PSLV rocket, proving India's unmatched capability in cost-effective orbital delivery — the very foundation SkyLakes is built upon.</p>
+        </div>
+      </div>
+
+      <div class="milestone-item reveal">
+        <div class="milestone-img-wrap">
+          <div style="width:100%;height:100%;min-height:280px;background:linear-gradient(135deg,#0d1b2a,#1c3a5a);display:flex;align-items:center;justify-content:center;">
+            <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
+              <circle cx="60" cy="60" r="50" stroke="rgba(249,115,22,0.3)" stroke-width="1"/>
+              <path d="M60 10 C60 10 80 40 80 70 L60 85 L40 70 C40 40 60 10 60 10Z" fill="rgba(249,115,22,0.7)"/>
+              <circle cx="60" cy="40" r="10" fill="rgba(255,255,255,0.15)"/>
+              <path d="M52 85 Q60 100 68 85" stroke="rgba(249,115,22,0.5)" stroke-width="2" fill="none"/>
+            </svg>
+          </div>
+          <div class="milestone-year-badge">2026</div>
+        </div>
+        <div class="milestone-content">
+          <div class="section-label">The Future</div>
+          <div class="milestone-title">SkyLakes — First Reusable Launch</div>
+          <p class="milestone-desc">SkyLakes AeroSpace prepares for its inaugural reusable rocket launch — bringing SpaceX-level capabilities to India's commercial space sector, making orbital access more affordable than ever before.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- QUOTE -->
+<section class="quote-section">
+  <div class="quote-bg-text">SPACE</div>
+  <div class="quote-text reveal">
+    <span class="quote-mark">"</span>
+    If you want to shine like a sun, first burn like a sun. Space is not just a frontier — it is India's destiny.
+  </div>
+  <div class="quote-author reveal" style="transition-delay:0.3s">— Dr. APJ Abdul Kalam, Missile Man of India</div>
+</section>
+
+<!-- TECH -->
+<section id="tech">
+  <div class="tech-section">
+    <div class="tech-header reveal">
+      <div class="section-label">Our Technology</div>
+      <h2 class="section-title">Built to Fly Again<br>and Again</h2>
+    </div>
+    <div class="tech-cards">
+
+      <div class="tech-card reveal">
+        <svg class="tech-icon" viewBox="0 0 52 52" fill="none">
+          <path d="M26 4 C26 4 38 18 38 32 L26 40 L14 32 C14 18 26 4 26 4Z" stroke="currentColor" stroke-width="1.5" fill="rgba(249,115,22,0.1)"/>
+          <circle cx="26" cy="20" r="6" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M18 40 Q26 48 34 40" stroke="currentColor" stroke-width="1.5"/>
+        </svg>
+        <div class="tech-card-title">Reusable Rocket Systems</div>
+        <p class="tech-card-desc">Our proprietary propulsion technology enables up to 10 flights per vehicle, drastically cutting per-launch costs and enabling India to compete in the global commercial launch market.</p>
+      </div>
+
+      <div class="tech-card reveal" style="transition-delay:0.15s">
+        <svg class="tech-icon" viewBox="0 0 52 52" fill="none">
+          <rect x="8" y="18" width="36" height="24" rx="4" stroke="currentColor" stroke-width="1.5" fill="rgba(249,115,22,0.1)"/>
+          <path d="M18 18 V12 Q26 6 34 12 V18" stroke="currentColor" stroke-width="1.5"/>
+          <circle cx="26" cy="30" r="5" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M16 38 H36" stroke="currentColor" stroke-width="1"/>
+        </svg>
+        <div class="tech-card-title">Autonomous Precision Landing</div>
+        <p class="tech-card-desc">Real-time AI-guided landing systems bring boosters back to within 10 meters of target — making recovery reliable, safe, and repeatable across India's diverse terrain.</p>
+      </div>
+
+      <div class="tech-card reveal" style="transition-delay:0.3s">
+        <svg class="tech-icon" viewBox="0 0 52 52" fill="none">
+          <circle cx="26" cy="26" r="18" stroke="currentColor" stroke-width="1.5" fill="rgba(249,115,22,0.1)"/>
+          <path d="M8 26 H44 M26 8 V44" stroke="currentColor" stroke-width="1"/>
+          <ellipse cx="26" cy="26" rx="10" ry="18" stroke="currentColor" stroke-width="1" stroke-dasharray="3 3"/>
+        </svg>
+        <div class="tech-card-title">Low-Orbit Satellite Deployment</div>
+        <p class="tech-card-desc">Precision multi-payload deployment for LEO constellations — supporting India's booming satellite communication, earth observation, and IoT connectivity sectors.</p>
+      </div>
+
+      <div class="tech-card reveal">
+        <svg class="tech-icon" viewBox="0 0 52 52" fill="none">
+          <polygon points="26,6 46,38 6,38" stroke="currentColor" stroke-width="1.5" fill="rgba(249,115,22,0.1)"/>
+          <path d="M26 20 L26 30 M26 33 L26 35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <div class="tech-card-title">Green Propellant Tech</div>
+        <p class="tech-card-desc">Developing next-gen non-toxic, high-efficiency propellants to reduce environmental impact without compromising performance — because sustainable space is the only space.</p>
+      </div>
+
+      <div class="tech-card reveal" style="transition-delay:0.15s">
+        <svg class="tech-icon" viewBox="0 0 52 52" fill="none">
+          <rect x="10" y="10" width="32" height="32" rx="6" stroke="currentColor" stroke-width="1.5" fill="rgba(249,115,22,0.1)"/>
+          <path d="M18 26 L23 31 L34 20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <div class="tech-card-title">Mission Control Software</div>
+        <p class="tech-card-desc">In-house flight management and telemetry systems built for real-time decision making, ensuring mission success from launch to landing with zero-latency oversight.</p>
+      </div>
+
+      <div class="tech-card reveal" style="transition-delay:0.3s">
+        <svg class="tech-icon" viewBox="0 0 52 52" fill="none">
+          <circle cx="26" cy="26" r="10" stroke="currentColor" stroke-width="1.5" fill="rgba(249,115,22,0.1)"/>
+          <path d="M26 6 V14 M26 38 V46 M6 26 H14 M38 26 H46" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M12 12 L18 18 M34 34 L40 40 M40 12 L34 18 M18 34 L12 40" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
+        </svg>
+        <div class="tech-card-title">Advanced Materials R&D</div>
+        <p class="tech-card-desc">Carbon-composite airframes and heat-resistant alloys developed in partnership with IIT and DRDO labs — lighter, stronger, and built entirely in India.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- BLOG -->
+<section id="blog">
+  <div class="blog-section">
+    <div class="blog-inner">
+      <div class="blog-header reveal">
+        <div>
+          <div class="section-label">Latest Updates</div>
+          <h2 class="section-title">Beyond Earth Blog</h2>
+        </div>
+        <a href="#" class="btn-outline" style="white-space:nowrap">View All Posts</a>
+      </div>
+      <div class="blog-grid">
+        <div class="blog-card reveal">
+          <img class="blog-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/ISRO_headquarters.jpg/1280px-ISRO_headquarters.jpg" alt="Blog 1">
+          <div class="blog-body">
+            <span class="blog-tag">Technology</span>
+            <div class="blog-title">How Reusable Rockets Will Halve India's Launch Costs by 2027</div>
+            <p class="blog-excerpt">An inside look at SkyLakes' propulsion roadmap and what it means for commercial satellite operators across South Asia.</p>
+          </div>
+        </div>
+        <div class="blog-card reveal" style="transition-delay:0.15s">
+          <img class="blog-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/PSLV-C37_lifts_off.jpg/800px-PSLV-C37_lifts_off.jpg" alt="Blog 2">
+          <div class="blog-body">
+            <span class="blog-tag">Industry</span>
+            <div class="blog-title">India's Space Economy: From ₹16,000 Cr to ₹1 Trillion by 2040</div>
+            <p class="blog-excerpt">The Indian space sector is at an inflection point. SkyLakes breaks down the opportunities, challengers, and the massive growth ahead.</p>
+          </div>
+        </div>
+        <div class="blog-card reveal" style="transition-delay:0.3s">
+          <div style="width:100%;height:200px;background:linear-gradient(135deg,#0d1b2a 0%,#1e3a5f 100%);display:flex;align-items:center;justify-content:center;">
+            <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+              <circle cx="40" cy="40" r="30" stroke="rgba(249,115,22,0.4)" stroke-width="1"/>
+              <circle cx="40" cy="40" r="20" stroke="rgba(249,115,22,0.3)" stroke-width="1"/>
+              <circle cx="40" cy="40" r="8" fill="rgba(249,115,22,0.5)"/>
+              <path d="M40 10 V18 M40 62 V70 M10 40 H18 M62 40 H70" stroke="rgba(249,115,22,0.3)" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="blog-body">
+            <span class="blog-tag">Mission</span>
+            <div class="blog-title">SkyLakes Announces Partnership with Indian Defence Research Lab</div>
+            <p class="blog-excerpt">A new collaboration accelerating hypersonic vehicle research and dual-use aerospace technologies for national security and commercial applications.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="faq-section">
+    <div class="faq-header reveal">
+      <div class="section-label">Got Questions?</div>
+      <h2 class="section-title">Frequently Asked<br>Questions</h2>
+    </div>
+
+    <div class="faq-item reveal" onclick="toggleFaq(this)">
+      <div class="faq-q">
+        What makes SkyLakes rockets reusable?
+        <div class="faq-toggle">+</div>
+      </div>
+      <div class="faq-a">Our rockets feature autonomous propulsive landing systems, reinforced thermal protection, and modular components designed for rapid refurbishment. Each vehicle undergoes a comprehensive health check between flights, enabling up to 10 safe re-flights with turnaround times as short as 72 hours.</div>
+    </div>
+
+    <div class="faq-item reveal" onclick="toggleFaq(this)">
+      <div class="faq-q">
+        How does SkyLakes reduce launch costs?
+        <div class="faq-toggle">+</div>
+      </div>
+      <div class="faq-a">By recovering and reusing the most expensive parts of the rocket — the first stage and engine — we eliminate up to 70% of per-launch hardware costs. Combined with our India-based supply chain and indigenous manufacturing, we can offer launch prices far below the global average.</div>
+    </div>
+
+    <div class="faq-item reveal" onclick="toggleFaq(this)">
+      <div class="faq-q">
+        What payload capacity does SkyLakes offer?
+        <div class="faq-toggle">+</div>
+      </div>
+      <div class="faq-a">Our initial vehicle class targets LEO payloads of 1,500 kg with a rideshare-friendly configuration. We are developing a medium-lift variant targeting 6,000 kg to GTO, designed to serve the growing commercial geostationary satellite market.</div>
+    </div>
+
+    <div class="faq-item reveal" onclick="toggleFaq(this)">
+      <div class="faq-q">
+        Where is SkyLakes based and where will it launch from?
+        <div class="faq-toggle">+</div>
+      </div>
+      <div class="faq-a">SkyLakes AeroSpace is headquartered in Bengaluru, India's aerospace hub. Our primary launch site will leverage existing spaceport infrastructure on India's east coast, with plans for a dedicated private launch facility by 2028.</div>
+    </div>
+
+    <div class="faq-item reveal" onclick="toggleFaq(this)">
+      <div class="faq-q">
+        How can I partner with or invest in SkyLakes?
+        <div class="faq-toggle">+</div>
+      </div>
+      <div class="faq-a">We welcome partnerships with satellite operators, government agencies, academic institutions, and strategic investors who share our vision. Reach out via our contact form below — our business development team typically responds within 48 hours.</div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- COMMUNITY -->
+<section id="contact">
+  <div class="community-section">
+    <div class="community-inner">
+      <div class="reveal">
+        <div class="section-label">Stay Connected</div>
+        <h2 class="section-title">Join the SkyLakes<br>Community</h2>
+        <p class="community-sub">Be first to hear about launch updates, engineering breakthroughs, and India's next giant leap in space. No spam — only the stars.</p>
+      </div>
+      <div class="reveal" style="transition-delay:0.2s">
+        <div class="form-row">
+          <input class="form-input" type="text" placeholder="First Name">
+          <input class="form-input" type="text" placeholder="Last Name">
+        </div>
+        <input class="form-email" type="email" placeholder="Your Email Address">
+        <button class="btn-primary" style="width:100%;padding:18px;font-size:0.75rem;cursor:pointer;" onclick="handleSubmit(this)">
+          Launch Into the Network →
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="nav-logo">
+        <div class="nav-logo-icon"></div>
+        SkyLakes AeroSpace
+      </div>
+      <p class="footer-tagline">Reaching Further. Building Smarter.<br>India's commercial space future starts here.</p>
+      <div class="footer-social">
+        <a href="#" class="social-btn">𝕏</a>
+        <a href="#" class="social-btn">in</a>
+        <a href="#" class="social-btn">▶</a>
+        <a href="#" class="social-btn">ig</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Company</div>
+      <ul class="footer-links">
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Press</a></li>
+        <li><a href="#">Investors</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Technology</div>
+      <ul class="footer-links">
+        <li><a href="#">Rocket Systems</a></li>
+        <li><a href="#">Payloads</a></li>
+        <li><a href="#">Ground Systems</a></li>
+        <li><a href="#">R&D</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">About</div>
+      <p style="color:var(--muted);font-size:0.875rem;line-height:1.75;">SkyLakes AeroSpace is pioneering India's private space revolution — building the rockets that will carry India's ambitions to orbit and beyond.</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 SkyLakes AeroSpace Pvt. Ltd. All rights reserved.</div>
+    <div class="footer-made">Made in <span>India 🇮🇳</span> for the Universe</div>
+  </div>
+</footer>
+
+<script>
+// Stars
+const canvas = document.getElementById('stars-canvas');
+const ctx = canvas.getContext('2d');
+let stars = [];
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+function initStars() {
+  stars = [];
+  for (let i = 0; i < 300; i++) {
+    stars.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 1.5,
+      a: Math.random(),
+      speed: 0.0003 + Math.random() * 0.0008
+    });
+  }
+}
+function drawStars() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  stars.forEach(s => {
+    s.a += s.speed;
+    const alpha = 0.3 + 0.7 * Math.abs(Math.sin(s.a));
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255,255,255,${alpha * 0.7})`;
+    ctx.fill();
+  });
+  requestAnimationFrame(drawStars);
+}
+resizeCanvas(); initStars(); drawStars();
+window.addEventListener('resize', () => { resizeCanvas(); initStars(); });
+
+// Reveal on scroll
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+}, { threshold: 0.12 });
+reveals.forEach(r => observer.observe(r));
+
+// FAQ toggle
+function toggleFaq(item) {
+  const wasOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+  if (!wasOpen) item.classList.add('open');
+}
+
+// Form submit
+function handleSubmit(btn) {
+  btn.textContent = '✓ You\'re On The List!';
+  btn.style.background = '#16a34a';
+  btn.style.boxShadow = '0 0 30px rgba(22,163,74,0.4)';
+  btn.disabled = true;
+}
+</script>
+</body>
+</html>
