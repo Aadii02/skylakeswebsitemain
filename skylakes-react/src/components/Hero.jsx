@@ -6,10 +6,10 @@ export default function Hero() {
   return (
     <section className="hero">
       <div className="hero-bg-gradient"></div>
-  <div className="hero-earth-bg" style={{ position: 'absolute', inset: 0, backgroundImage: 'url(/earth-bg.png)', backgroundPosition: 'center center', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', opacity: 0.8, zIndex: 0, pointerEvents: 'none' }}></div>
+  <div className="hero-earth-bg" style={{ position: 'absolute', inset: 0, backgroundImage: `url(${import.meta.env.BASE_URL}earth-bg.png)`, backgroundPosition: 'center center', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', opacity: 0.8, zIndex: 0, pointerEvents: 'none' }}></div>
   <div className="hero-grid-lines"></div>
   <h1 className="hero-title" style={{ display: 'flex', justifyContent: 'center', margin: '0 0 12px 0' }}>
-    <img src="/logo.png" alt="SKYLX AeroSpace" style={{ width: '100%', maxWidth: '500px', height: 'auto', objectFit: 'contain' }} />
+    <img src={`${import.meta.env.BASE_URL}logo.png`} alt="SKYLX AeroSpace" style={{ width: '100%', maxWidth: '500px', height: 'auto', objectFit: 'contain' }} />
   </h1>
   <p className="hero-subtitle">Revolutionizing India's space industry with reusable rockets, cost-effective launches, and cutting-edge aerospace innovation.</p>
   <div className="hero-ctas">

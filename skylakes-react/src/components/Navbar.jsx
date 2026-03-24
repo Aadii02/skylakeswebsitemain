@@ -5,7 +5,7 @@ export default function Navbar() {
   return (
     <nav>
       <div className="nav-logo" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-    <img src="/logo.png" alt="SKYLX Logo" style={{ height: '72px', objectFit: 'contain' }} onError={(e) => { e.target.style.display = 'none'; document.getElementById('nav-fallback-text').style.display = 'block'; }} />
+    <img src={`${import.meta.env.BASE_URL}logo.png`} alt="SKYLX Logo" style={{ height: '72px', objectFit: 'contain' }} onError={(e) => { e.target.style.display = 'none'; document.getElementById('nav-fallback-text').style.display = 'block'; }} />
     <span id="nav-fallback-text" style={{ display: 'none' }}>SKYLX</span>
   </div>
   <ul className="nav-links">
