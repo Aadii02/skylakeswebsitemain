@@ -891,3 +891,84 @@
   .slide-btn:hover:not(.disabled) .slide-btn__label-default { transform: translateY(-100%); }
   .slide-btn:hover:not(.disabled) .slide-btn__label-hover   { transform: translateY(-100%); }
   .slide-btn:hover:not(.disabled) .slide-btn__icon          { color: var(--white); }
+
+/* ─── HAMBURGER BUTTON ─── */
+.nav-hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 4px;
+  z-index: 200;
+}
+.nav-hamburger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--white);
+  border-radius: 2px;
+  transition: 0.3s;
+}
+
+/* ─── MOBILE ≤ 768px ─── */
+@media (max-width: 768px) {
+  nav {
+    padding: 16px 20px;
+    flex-wrap: wrap;
+    background: rgba(4,6,13,0.97);
+  }
+  .nav-hamburger { display: flex; }
+  .nav-cta { display: none; }
+
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    gap: 0;
+    padding: 12px 0 16px;
+    border-top: 1px solid var(--border);
+    margin-top: 12px;
+  }
+  .nav-links.nav-open { display: flex; }
+  .nav-links li a {
+    display: block;
+    padding: 12px 4px;
+    font-size: 0.9rem;
+  }
+
+  .hero { padding: 100px 20px 60px; }
+  .hero-title img { max-width: 280px !important; }
+  .hero-subtitle { font-size: 0.9rem; line-height: 1.6; padding: 0 8px; }
+  .hero-ctas { flex-direction: column; align-items: center; gap: 12px; }
+  .hero-rocket { width: 60px; }
+
+  .milestones-section,
+  .tech-section,
+  .faq-section,
+  .community-section,
+  .quote-section { padding: 60px 20px; }
+
+  .mission-stats { grid-template-columns: 1fr 1fr; gap: 16px; }
+  .tech-cards, .blog-grid { grid-template-columns: 1fr; gap: 20px; }
+  .footer-grid { grid-template-columns: 1fr; gap: 24px; padding: 40px 20px; }
+  .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+  .form-row { grid-template-columns: 1fr; }
+  .divider { margin: 0 20px; }
+
+  h1, .section-title { font-size: clamp(1.6rem, 6vw, 2.4rem); }
+  h2 { font-size: clamp(1.2rem, 5vw, 1.8rem); }
+}
+
+/* ─── TABLET 769px–1024px ─── */
+@media (min-width: 769px) and (max-width: 1024px) {
+  nav { padding: 20px 32px; }
+  .hero { padding: 110px 40px 80px; }
+  .mission { padding: 80px 40px; }
+  .tech-cards { grid-template-columns: repeat(2, 1fr); }
+  .blog-grid { grid-template-columns: repeat(2, 1fr); }
+  .milestones-section,
+  .tech-section,
+  .faq-section { padding: 80px 40px; }
+}
