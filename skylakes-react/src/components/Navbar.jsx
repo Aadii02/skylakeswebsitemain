@@ -26,6 +26,7 @@ export default function Navbar() {
       <a href="#contact" className="btn-primary nav-cta" style={{ fontSize: '0.65rem', padding: '12px 24px' }}>
         Launch With Us
       </a>
+      <a href="#products">Products</a>
     </nav>
   );
 }
