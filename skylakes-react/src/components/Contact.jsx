@@ -2,10 +2,88 @@ import React, { useState } from 'react';
 import SlideButton from './SlideButton';
 
 export default function Contact() {
-  const [submitted, setSubmitted] = useState(false);
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: ''
+  });
+  const [status, setStatus] = useState({
+    submitted: false,
+    loading: false,
+    error: ''
+  });
 
-  const handleSubmit = () => {
-    setSubmitted(true);
+  const endpoint = import.meta.env.VITE_CONTACT_FORM_ENDPOINT;
+
+  const handleChange = (field) => (event) => {
+    setFormData((prev) => ({ ...prev, [field]: event.target.value }));
+    if (status.error) {
+      setStatus((prev) => ({ ...prev, error: '' }));
+    }
+  };
+
+  const validate = () => {
+    const firstName = formData.firstName.trim();
+    const email = formData.email.trim();
+
+    if (!firstName) {
+      return 'First name is required.';
+    }
+    if (!email) {
+      return 'Email is required.';
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return 'Please enter a valid email address.';
+    }
+    return '';
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const validationError = validate();
+    if (validationError) {
+      setStatus({ submitted: false, loading: false, error: validationError });
+      return;
+    }
+
+    if (!endpoint) {
+      setStatus({
+        submitted: false,
+        loading: false,
+        error: 'Signup endpoint is not configured yet. Set VITE_CONTACT_FORM_ENDPOINT to enable submissions.'
+      });
+      return;
+    }
+
+    setStatus({ submitted: false, loading: true, error: '' });
+
+    try {
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          firstName: formData.firstName.trim(),
+          lastName: formData.lastName.trim(),
+          email: formData.email.trim()
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Submission failed');
+      }
+
+      setStatus({ submitted: true, loading: false, error: '' });
+      setFormData({ firstName: '', lastName: '', email: '' });
+    } catch {
+      setStatus({
+        submitted: false,
+        loading: false,
+        error: 'We could not submit right now. Please try again or email contact@skylakes.space.'
+      });
+    }
   };
 
   return (
@@ -18,19 +96,51 @@ export default function Contact() {
             <p className="community-sub">Be first to hear about launch updates, engineering breakthroughs, and India's next giant leap in space. No spam — only the stars.</p>
           </div>
           <div className="reveal" style={{ transitionDelay: '0.2s' }}>
-            <div className="form-row">
-              <input className="form-input" type="text" placeholder="First Name" />
-              <input className="form-input" type="text" placeholder="Last Name" />
-            </div>
-            <input className="form-email" type="email" placeholder="Your Email Address" />
-            <SlideButton 
-              type="button"
-              onClick={handleSubmit} 
-              disabled={submitted} 
-              fullWidth={true}
-            >
-              {submitted ? "✓ You're On The List!" : "Launch Into the Network"}
-            </SlideButton>
+            <form onSubmit={handleSubmit} noValidate>
+              <div className="form-row">
+                <input
+                  className="form-input"
+                  type="text"
+                  placeholder="First Name"
+                  aria-label="First Name"
+                  value={formData.firstName}
+                  onChange={handleChange('firstName')}
+                  required
+                />
+                <input
+                  className="form-input"
+                  type="text"
+                  placeholder="Last Name"
+                  aria-label="Last Name"
+                  value={formData.lastName}
+                  onChange={handleChange('lastName')}
+                />
+              </div>
+              <input
+                className="form-email"
+                type="email"
+                placeholder="Your Email Address"
+                aria-label="Email Address"
+                value={formData.email}
+                onChange={handleChange('email')}
+                required
+              />
+              <SlideButton
+                type="submit"
+                disabled={status.loading || status.submitted}
+                fullWidth={true}
+              >
+                {status.loading
+                  ? 'Submitting...'
+                  : status.submitted
+                  ? "✓ You're On The List!"
+                  : 'Launch Into the Network'}
+              </SlideButton>
+            </form>
+
+            {status.error ? (
+              <p style={{ color: '#fca5a5', marginTop: '12px', fontSize: '0.9rem' }}>{status.error}</p>
+            ) : null}
 
             <div className="social-squares" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginTop: '32px' }}>
               <a href="mailto:Contact@skylakes.space" target="_blank" rel="noopener noreferrer" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '12px', padding: '24px 12px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '8px', color: 'var(--white)', textDecoration: 'none', transition: 'all 0.3s ease' }} onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(96,165,250,0.1)'; e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.color = 'var(--accent)'; }} onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.03)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.05)'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.color = 'var(--white)'; }}>

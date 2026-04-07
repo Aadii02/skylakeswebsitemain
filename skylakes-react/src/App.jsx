@@ -11,7 +11,6 @@ import Quote from './components/Quote';
 import FAQ from './components/FAQ';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
-import Products from './components/products';
 
 function App() {
   // Setup Intersection Observer for reveal animations
@@ -41,8 +40,6 @@ function App() {
       <div className="divider"></div>
       <Quote />
       <Tech />
-<div className="divider"></div>
-      <Products />
       <div className="divider"></div>
       <FAQ />
       <Contact />

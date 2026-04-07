@@ -12,28 +12,27 @@ export default function Footer() {
       </div>
       <p className="footer-tagline">Reaching Further. Building Smarter.<br/>India's commercial space future starts here.</p>
       <div className="footer-social">
-        <a href="#" className="social-btn">𝕏</a>
-        <a href="#" className="social-btn">in</a>
-        <a href="#" className="social-btn">▶</a>
-        <a href="#" className="social-btn">ig</a>
+        <a href="mailto:contact@skylakes.space" className="social-btn" aria-label="Email SKYLX">@</a>
+        <a href="https://www.linkedin.com/company/skylakes-aerospace/" target="_blank" rel="noopener noreferrer" className="social-btn" aria-label="SKYLX on LinkedIn">in</a>
+        <a href="https://www.instagram.com/skylx.space?igsh=bjBwMXgzdm84azg0" target="_blank" rel="noopener noreferrer" className="social-btn" aria-label="SKYLX on Instagram">ig</a>
       </div>
     </div>
     <div>
       <div className="footer-col-title">Company</div>
       <ul className="footer-links">
-        <li><a href="#">About Us</a></li>
-        <li><a href="#">Careers</a></li>
-        <li><a href="#">Press</a></li>
-        <li><a href="#">Investors</a></li>
+        <li><a href="#mission">About Us</a></li>
+        <li><a href="mailto:contact@skylakes.space?subject=Career%20Inquiry%20at%20SKYLX">Careers</a></li>
+        <li><a href="mailto:contact@skylakes.space?subject=Press%20Inquiry%20at%20SKYLX">Press</a></li>
+        <li><a href="mailto:contact@skylakes.space?subject=Investor%20Relations%20at%20SKYLX">Investors</a></li>
       </ul>
     </div>
     <div>
       <div className="footer-col-title">Technology</div>
       <ul className="footer-links">
-        <li><a href="#">Rocket Systems</a></li>
-        <li><a href="#">Payloads</a></li>
-        <li><a href="#">Ground Systems</a></li>
-        <li><a href="#">R&D</a></li>
+        <li><a href="#vehicles">Rocket Systems</a></li>
+        <li><a href="#vehicles">Payloads</a></li>
+        <li><a href="#tech">Ground Systems</a></li>
+        <li><a href="#tech">R&amp;D</a></li>
       </ul>
     </div>
     <div>
