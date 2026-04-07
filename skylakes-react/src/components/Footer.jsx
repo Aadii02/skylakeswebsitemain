@@ -14,7 +14,7 @@ export default function Footer() {
       <div className="footer-social">
         <a href="mailto:contact@skylakes.space" className="social-btn" aria-label="Email SKYLX">@</a>
         <a href="https://www.linkedin.com/company/skylakes-aerospace/" target="_blank" rel="noopener noreferrer" className="social-btn" aria-label="SKYLX on LinkedIn">in</a>
-        <a href="https://www.instagram.com/skylx.space?igsh=bjBwMXgzdm84azg0" target="_blank" rel="noopener noreferrer" className="social-btn" aria-label="SKYLX on Instagram">ig</a>
+        <a href="https://www.instagram.com/skylx.space/" target="_blank" rel="noopener noreferrer" className="social-btn" aria-label="SKYLX on Instagram">ig</a>
       </div>
     </div>
     <div>
