@@ -1,5 +1,5 @@
 import React from 'react';
-import './Products.css'; // create this or add styles to App.css
+import './products.css'; // create this or add styles to App.css
 
 const vehicles = [
   {
