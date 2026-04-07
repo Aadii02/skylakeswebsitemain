@@ -37,35 +37,22 @@ function App() {
 
     audio.volume = 0.3;
     audio.muted = true;
+    audio.setAttribute('webkit-playsinline', 'true');
 
-    const tryPlay = async () => {
-      try {
-        await audio.play();
-      } catch {
-        // Autoplay may still be blocked by browser policy.
-      }
-    };
-
-    const playWithSound = async () => {
+    const startAudioOnFirstTap = async () => {
       try {
         audio.muted = false;
         audio.volume = 0.3;
         await audio.play();
       } catch {
-        // If blocked, keep trying only on the next interaction.
+        // If playback is still blocked, the browser will require another user gesture.
       }
     };
 
-    tryPlay();
-
-    window.addEventListener('pointerdown', playWithSound, { once: true });
-    window.addEventListener('keydown', playWithSound, { once: true });
-    window.addEventListener('touchstart', playWithSound, { once: true });
+    document.addEventListener('pointerdown', startAudioOnFirstTap, { once: true, capture: true });
 
     return () => {
-      window.removeEventListener('pointerdown', playWithSound);
-      window.removeEventListener('keydown', playWithSound);
-      window.removeEventListener('touchstart', playWithSound);
+      document.removeEventListener('pointerdown', startAudioOnFirstTap, { capture: true });
     };
   }, []);
 
@@ -77,6 +64,7 @@ function App() {
         autoPlay
         muted
         playsInline
+        webkit-playsinline="true"
         preload="metadata"
         loop
       />
