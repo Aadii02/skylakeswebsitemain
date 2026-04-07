@@ -19,7 +19,9 @@ export default function Navbar() {
       <ul className={`nav-links ${open ? 'nav-open' : ''}`}>
         <li><a href="#mission" onClick={() => setOpen(false)}>Mission</a></li>
         <li><a href="#vehicles" onClick={() => setOpen(false)}>Vehicles</a></li>
+        <li><a href="#vehicles" onClick={() => setOpen(false)}>Products</a></li>
         <li><a href="#tech" onClick={() => setOpen(false)}>Technology</a></li>
+        <li><a href="#about" onClick={() => setOpen(false)}>About Us</a></li>
         <li><a href="#contact" onClick={() => setOpen(false)}>Contact</a></li>
       </ul>
 
