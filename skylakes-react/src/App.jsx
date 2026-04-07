@@ -41,9 +41,9 @@ function App() {
       <div className="divider"></div>
       <Quote />
       <Tech />
+<div className="divider"></div>
+      <Products />
       <div className="divider"></div>
-      <div className="divider"></div>
-<Products />
       <FAQ />
       <Contact />
       <Footer />
