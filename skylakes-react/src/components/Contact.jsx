@@ -5,7 +5,8 @@ export default function Contact() {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
-    email: ''
+    email: '',
+    message: ''
   });
   const [status, setStatus] = useState({
     submitted: false,
@@ -51,6 +52,7 @@ export default function Contact() {
 
     try {
       const fullName = `${formData.firstName.trim()} ${formData.lastName.trim()}`.trim();
+      const visitorMessage = formData.message.trim();
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
@@ -61,7 +63,7 @@ export default function Contact() {
           name: fullName,
           email: formData.email.trim(),
           subject: 'New SKYLX Community Signup',
-          message: `New community signup from ${fullName || 'Unknown Name'} (${formData.email.trim()}) via skylakes.space contact form.`
+          message: `New community signup from ${fullName || 'Unknown Name'} (${formData.email.trim()}) via skylakes.space contact form.\n\nVisitor message:\n${visitorMessage || 'No additional message provided.'}`
         })
       });
 
@@ -70,7 +72,7 @@ export default function Contact() {
       }
 
       setStatus({ submitted: true, loading: false, error: '' });
-      setFormData({ firstName: '', lastName: '', email: '' });
+      setFormData({ firstName: '', lastName: '', email: '', message: '' });
     } catch {
       setStatus({
         submitted: false,
@@ -118,6 +120,16 @@ export default function Contact() {
                 value={formData.email}
                 onChange={handleChange('email')}
                 required
+              />
+              <textarea
+                className="form-email"
+                placeholder="Your Message (Optional)"
+                aria-label="Message"
+                value={formData.message}
+                onChange={handleChange('message')}
+                rows={3}
+                maxLength={1000}
+                style={{ marginTop: '12px', minHeight: '96px', resize: 'vertical' }}
               />
               <SlideButton
                 type="submit"
