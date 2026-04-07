@@ -15,6 +15,7 @@ import Footer from './components/Footer';
 
 function App() {
   const bgAudioRef = useRef(null);
+  const audioStartedRef = useRef(false);
 
   // Setup Intersection Observer for reveal animations
   useEffect(() => {
@@ -37,22 +38,33 @@ function App() {
 
     audio.volume = 0.3;
     audio.muted = true;
+    audio.preload = 'auto';
     audio.setAttribute('webkit-playsinline', 'true');
+    audio.load();
 
-    const startAudioOnFirstTap = async () => {
+    const startAudioOnFirstGesture = async () => {
+      if (audioStartedRef.current) return;
+
+      audioStartedRef.current = true;
+
       try {
         audio.muted = false;
         audio.volume = 0.3;
         await audio.play();
       } catch {
-        // If playback is still blocked, the browser will require another user gesture.
+        audioStartedRef.current = false;
       }
     };
 
-    document.addEventListener('pointerdown', startAudioOnFirstTap, { once: true, capture: true });
+    const interactionEvents = ['pointerdown', 'touchstart', 'click'];
+    interactionEvents.forEach((eventName) => {
+      document.addEventListener(eventName, startAudioOnFirstGesture, { capture: true, passive: true });
+    });
 
     return () => {
-      document.removeEventListener('pointerdown', startAudioOnFirstTap, { capture: true });
+      interactionEvents.forEach((eventName) => {
+        document.removeEventListener(eventName, startAudioOnFirstGesture, { capture: true });
+      });
     };
   }, []);
 
