@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import './index.css';
 
 import StarsBackground from './components/StarsBackground';
@@ -14,6 +14,8 @@ import Contact from './components/Contact';
 import Footer from './components/Footer';
 
 function App() {
+  const bgAudioRef = useRef(null);
+
   // Setup Intersection Observer for reveal animations
   useEffect(() => {
     const reveals = document.querySelectorAll('.reveal');
@@ -29,8 +31,48 @@ function App() {
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    const audio = bgAudioRef.current;
+    if (!audio) return;
+
+    audio.volume = 0.1;
+
+    const tryPlay = async () => {
+      try {
+        await audio.play();
+      } catch {
+        // Autoplay may be blocked until user interaction.
+      }
+    };
+
+    const playOnFirstInteraction = async () => {
+      try {
+        await audio.play();
+      } catch {
+        // Keep silent if blocked.
+      }
+    };
+
+    tryPlay();
+    window.addEventListener('pointerdown', playOnFirstInteraction, { once: true });
+    window.addEventListener('keydown', playOnFirstInteraction, { once: true });
+    window.addEventListener('touchstart', playOnFirstInteraction, { once: true });
+
+    return () => {
+      window.removeEventListener('pointerdown', playOnFirstInteraction);
+      window.removeEventListener('keydown', playOnFirstInteraction);
+      window.removeEventListener('touchstart', playOnFirstInteraction);
+    };
+  }, []);
+
   return (
     <>
+      <audio
+        ref={bgAudioRef}
+        src={`${import.meta.env.BASE_URL}backgroundmusicmaster-ambient-dreamscape-378815.mp3`}
+        preload="auto"
+        loop
+      />
       <StarsBackground />
       <Navbar />
       <Hero />
