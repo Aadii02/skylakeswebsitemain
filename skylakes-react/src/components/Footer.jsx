@@ -7,7 +7,7 @@ export default function Footer() {
       <div className="footer-grid">
     <div className="footer-brand">
       <div className="nav-logo" style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-        <img src={`${import.meta.env.BASE_URL}logo.png`} alt="SKYLX Logo" style={{ height: '40px', objectFit: 'contain' }} onError={(e) => { e.target.style.display = 'none'; document.getElementById('footer-fallback-text').style.display = 'block'; }} />
+        <img src={`${import.meta.env.BASE_URL}logo.png`} alt="SKYLX Logo" style={{ height: '40px', objectFit: 'contain' }} loading="lazy" decoding="async" onError={(e) => { e.target.style.display = 'none'; document.getElementById('footer-fallback-text').style.display = 'block'; }} />
         <span id="footer-fallback-text" style={{ display: 'none', fontSize: '1.2rem' }}>SKYLX AeroSpace</span>
       </div>
       <p className="footer-tagline">Reaching Further. Building Smarter.<br/>India's commercial space future starts here.</p>

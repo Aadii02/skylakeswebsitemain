@@ -123,6 +123,8 @@ export default function TiltCard({
               inset: 0,
               zIndex: 0,
             }}
+            loading="lazy"
+            decoding="async"
           />
         )}
         

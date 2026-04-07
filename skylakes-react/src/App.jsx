@@ -77,7 +77,7 @@ function App() {
         autoPlay
         muted
         playsInline
-        preload="auto"
+        preload="metadata"
         loop
       />
       <StarsBackground />

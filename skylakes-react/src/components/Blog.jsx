@@ -15,7 +15,7 @@ export default function Blog() {
       </div>
       <div className="blog-grid">
         <div className="blog-card reveal">
-          <img className="blog-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/ISRO_headquarters.jpg/1280px-ISRO_headquarters.jpg" alt="Blog 1" />
+          <img className="blog-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/ISRO_headquarters.jpg/1280px-ISRO_headquarters.jpg" alt="Blog 1" loading="lazy" decoding="async" />
           <div className="blog-body">
             <span className="blog-tag">Technology</span>
             <div className="blog-title">How Reusable Rockets Will Halve India's Launch Costs by 2027</div>
@@ -23,7 +23,7 @@ export default function Blog() {
           </div>
         </div>
         <div className="blog-card reveal" style={{ transitionDelay: '0.15s' }}>
-          <img className="blog-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/PSLV-C37_lifts_off.jpg/800px-PSLV-C37_lifts_off.jpg" alt="Blog 2" />
+          <img className="blog-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/PSLV-C37_lifts_off.jpg/800px-PSLV-C37_lifts_off.jpg" alt="Blog 2" loading="lazy" decoding="async" />
           <div className="blog-body">
             <span className="blog-tag">Industry</span>
             <div className="blog-title">India's Space Economy: From ₹16,000 Cr to ₹1 Trillion by 2040</div>

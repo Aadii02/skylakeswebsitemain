@@ -8,6 +8,9 @@ export default function Navbar() {
       <div className="nav-logo" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
         <img src={`${import.meta.env.BASE_URL}logo.png`} alt="SKYLX Logo"
           style={{ height: '72px', objectFit: 'contain' }}
+          loading="eager"
+          fetchPriority="high"
+          decoding="async"
           onError={(e) => { e.target.style.display = 'none'; document.getElementById('nav-fallback-text').style.display = 'block'; }} />
         <span id="nav-fallback-text" style={{ display: 'none' }}>SKYLX</span>
       </div>
