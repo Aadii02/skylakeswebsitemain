@@ -13,7 +13,7 @@ export default function Contact() {
     error: ''
   });
 
-  const endpoint = import.meta.env.VITE_CONTACT_FORM_ENDPOINT;
+  const endpoint = import.meta.env.VITE_CONTACT_FORM_ENDPOINT || 'https://formsubmit.co/ajax/contact@skylakes.space';
 
   const handleChange = (field) => (event) => {
     setFormData((prev) => ({ ...prev, [field]: event.target.value }));
@@ -47,27 +47,21 @@ export default function Contact() {
       return;
     }
 
-    if (!endpoint) {
-      setStatus({
-        submitted: false,
-        loading: false,
-        error: 'Signup endpoint is not configured yet. Set VITE_CONTACT_FORM_ENDPOINT to enable submissions.'
-      });
-      return;
-    }
-
     setStatus({ submitted: false, loading: true, error: '' });
 
     try {
+      const fullName = `${formData.firstName.trim()} ${formData.lastName.trim()}`.trim();
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          Accept: 'application/json'
         },
         body: JSON.stringify({
-          firstName: formData.firstName.trim(),
-          lastName: formData.lastName.trim(),
-          email: formData.email.trim()
+          name: fullName,
+          email: formData.email.trim(),
+          subject: 'New SKYLX Community Signup',
+          message: `New community signup from ${fullName || 'Unknown Name'} (${formData.email.trim()}) via skylakes.space contact form.`
         })
       });
 

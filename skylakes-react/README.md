@@ -43,13 +43,15 @@ npm run lint
 
 ## Environment Variables
 
-Create a `.env` file in this folder and configure:
+The contact form now sends submissions to `contact@skylakes.space` by default using FormSubmit.
+
+If you want to override that destination/service, create a `.env` file in this folder and configure:
 
 ```env
 VITE_CONTACT_FORM_ENDPOINT=https://your-api-endpoint.example.com/contact
 ```
 
-- `VITE_CONTACT_FORM_ENDPOINT`: Backend endpoint that accepts `POST` JSON payload for contact signups.
+- `VITE_CONTACT_FORM_ENDPOINT`: Optional override endpoint that accepts `POST` JSON payload for contact signups.
 - Expected request body:
 
 ```json
@@ -60,4 +62,4 @@ VITE_CONTACT_FORM_ENDPOINT=https://your-api-endpoint.example.com/contact
 }
 ```
 
-If this variable is not set, the contact form will show a configuration error and will not fake a successful submission.
+If this variable is not set, the default destination remains `contact@skylakes.space` through FormSubmit.
