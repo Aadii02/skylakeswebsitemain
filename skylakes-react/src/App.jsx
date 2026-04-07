@@ -36,10 +36,15 @@ function App() {
     if (!audio) return;
 
     audio.volume = 0.3;
+    audio.muted = true;
 
     const tryPlay = async () => {
       try {
         await audio.play();
+        setTimeout(() => {
+          audio.muted = false;
+          audio.volume = 0.3;
+        }, 250);
       } catch {
         // Autoplay may still be blocked by browser policy.
       }
@@ -54,6 +59,7 @@ function App() {
         ref={bgAudioRef}
         src={`${import.meta.env.BASE_URL}backgroundmusicmaster-ambient-dreamscape-378815.mp3`}
         autoPlay
+        muted
         playsInline
         preload="auto"
         loop
