@@ -20,7 +20,7 @@ export default function Footer() {
     <div>
       <div className="footer-col-title">Company</div>
       <ul className="footer-links">
-        <li><a href="#mission">About Us</a></li>
+        <li><a href="#about">About Us</a></li>
         <li><a href="mailto:contact@skylakes.space?subject=Career%20Inquiry%20at%20SKYLX">Careers</a></li>
         <li><a href="mailto:contact@skylakes.space?subject=Press%20Inquiry%20at%20SKYLX">Press</a></li>
         <li><a href="mailto:contact@skylakes.space?subject=Investor%20Relations%20at%20SKYLX">Investors</a></li>
