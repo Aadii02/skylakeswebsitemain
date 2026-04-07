@@ -41,16 +41,32 @@ function App() {
     const tryPlay = async () => {
       try {
         await audio.play();
-        setTimeout(() => {
-          audio.muted = false;
-          audio.volume = 0.3;
-        }, 250);
       } catch {
         // Autoplay may still be blocked by browser policy.
       }
     };
 
+    const playWithSound = async () => {
+      try {
+        audio.muted = false;
+        audio.volume = 0.3;
+        await audio.play();
+      } catch {
+        // If blocked, keep trying only on the next interaction.
+      }
+    };
+
     tryPlay();
+
+    window.addEventListener('pointerdown', playWithSound, { once: true });
+    window.addEventListener('keydown', playWithSound, { once: true });
+    window.addEventListener('touchstart', playWithSound, { once: true });
+
+    return () => {
+      window.removeEventListener('pointerdown', playWithSound);
+      window.removeEventListener('keydown', playWithSound);
+      window.removeEventListener('touchstart', playWithSound);
+    };
   }, []);
 
   return (
