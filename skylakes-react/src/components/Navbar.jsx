@@ -21,12 +21,13 @@ export default function Navbar() {
         <li><a href="#vehicles" onClick={() => setOpen(false)}>Vehicles</a></li>
         <li><a href="#tech" onClick={() => setOpen(false)}>Technology</a></li>
         <li><a href="#contact" onClick={() => setOpen(false)}>Contact</a></li>
+        <li><a href="#products" onClick={() => setOpen(false)}>Products</a></li>
       </ul>
 
       <a href="#contact" className="btn-primary nav-cta" style={{ fontSize: '0.65rem', padding: '12px 24px' }}>
         Launch With Us
       </a>
-      <a href="#products">Products</a>
+     
     </nav>
   );
 }
