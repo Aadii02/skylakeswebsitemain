@@ -4,13 +4,16 @@ import './index.css';
 import StarsBackground from './components/StarsBackground';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
+import TrustBar from './components/TrustBar';
 import Mission from './components/Mission';
+import Traction from './components/Traction';
 import Milestones from './components/Milestones';
 import Tech from './components/Tech';
 import Quote from './components/Quote';
 import About from './components/About';
 import FAQ from './components/FAQ';
 import Contact from './components/Contact';
+import InvestorBanner from './components/InvestorBanner';
 import Footer from './components/Footer';
 
 function App() {
@@ -83,8 +86,10 @@ function App() {
       <StarsBackground />
       <Navbar />
       <Hero />
+      <TrustBar />
       <div className="divider"></div>
       <Mission />
+      <Traction />
       <div className="divider"></div>
       <Milestones />
       <div className="divider"></div>
@@ -95,6 +100,7 @@ function App() {
       <div className="divider"></div>
       <FAQ />
       <Contact />
+      <InvestorBanner />
       <Footer />
     </>
   );
