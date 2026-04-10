@@ -5,7 +5,7 @@ const badges = [
   '🇮🇳 Registered in India',
   '🛸 IN-SPACe Pipeline',
   '🏆 iDEX Eligible',
-  '📡 Faridabad, NCR'
+  '📡 Delhii NCR'
 ];
 
 export default function TrustBar() {
