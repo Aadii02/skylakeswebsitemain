@@ -12,9 +12,32 @@ export default function Footer() {
       </div>
       <p className="footer-tagline">Reaching Further. Building Smarter.<br/>India's commercial space future starts here.</p>
       <div className="footer-social">
-        <a href="mailto:contact@skylakes.space" className="social-btn" aria-label="Email SKYLX">@</a>
-        <a href="https://www.linkedin.com/company/skylakes-aerospace/" target="_blank" rel="noopener noreferrer" className="social-btn" aria-label="SKYLX on LinkedIn">in</a>
-        <a href="https://www.instagram.com/skylx.space/" target="_blank" rel="noopener noreferrer" className="social-btn" aria-label="SKYLX on Instagram">ig</a>
+        <a href="mailto:contact@skylakes.space" className="social-btn" aria-label="Email SKYLX">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+            <polyline points="3,7 12,13 21,7"></polyline>
+          </svg>
+        </a>
+        <a href="https://www.linkedin.com/company/skylakes-aerospace/" target="_blank" rel="noopener noreferrer" className="social-btn" aria-label="SKYLX on LinkedIn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+            <rect x="2" y="9" width="4" height="12"></rect>
+            <circle cx="4" cy="4" r="2"></circle>
+          </svg>
+        </a>
+        <a href="https://www.instagram.com/skylx.space/" target="_blank" rel="noopener noreferrer" className="social-btn" aria-label="SKYLX on Instagram">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+            <path d="M16 11.37a4 4 0 1 1-1.17-2.83A4 4 0 0 1 16 11.37z"></path>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+          </svg>
+        </a>
+        <a href="http://www.youtube.com/@skylakes.space02" target="_blank" rel="noopener noreferrer" className="social-btn" aria-label="SKYLX on YouTube">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <rect x="2" y="6" width="20" height="12" rx="3" ry="3"></rect>
+            <polygon points="10,9 16,12 10,15"></polygon>
+          </svg>
+        </a>
       </div>
     </div>
     <div>
