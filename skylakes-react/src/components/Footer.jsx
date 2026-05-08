@@ -1,15 +1,15 @@
 import React from 'react';
-
+import { Link } from 'react-router-dom';
 
 export default function Footer() {
   return (
     <footer>
       <div className="footer-grid">
     <div className="footer-brand">
-      <div className="nav-logo" style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+      <Link to="/" className="nav-logo" style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
         <img src={`${import.meta.env.BASE_URL}logo.png`} alt="SKYLX Logo" style={{ height: '40px', objectFit: 'contain' }} loading="lazy" decoding="async" onError={(e) => { e.target.style.display = 'none'; document.getElementById('footer-fallback-text').style.display = 'block'; }} />
         <span id="footer-fallback-text" style={{ display: 'none', fontSize: '1.2rem' }}>SKYLX AeroSpace</span>
-      </div>
+      </Link>
       <p className="footer-tagline">Reaching Further. Building Smarter.<br/>India's commercial space future starts here.</p>
       <div className="footer-social">
         <a href="mailto:contact@skylakes.space" className="social-btn" aria-label="Email SKYLX">
@@ -43,7 +43,7 @@ export default function Footer() {
     <div>
       <div className="footer-col-title">Company</div>
       <ul className="footer-links">
-        <li><a href="#about">About Us</a></li>
+        <li><a href="/#about">About Us</a></li>
         <li><a href="mailto:contact@skylakes.space?subject=Career%20Inquiry%20at%20SKYLX">Careers</a></li>
         <li><a href="mailto:contact@skylakes.space?subject=Press%20Inquiry%20at%20SKYLX">Press</a></li>
         <li><a href="mailto:contact@skylakes.space?subject=Investor%20Relations%20at%20SKYLX">Investors</a></li>
@@ -52,10 +52,10 @@ export default function Footer() {
     <div>
       <div className="footer-col-title">Technology</div>
       <ul className="footer-links">
-        <li><a href="#vehicles">Rocket Systems</a></li>
-        <li><a href="#vehicles">Payloads</a></li>
-        <li><a href="#tech">Ground Systems</a></li>
-        <li><a href="#tech">R&amp;D</a></li>
+        <li><Link to="/vehicles">Rocket Systems</Link></li>
+        <li><a href="/#vehicles">Payloads</a></li>
+        <li><a href="/#tech">Ground Systems</a></li>
+        <li><a href="/#tech">R&amp;D</a></li>
       </ul>
     </div>
     <div>

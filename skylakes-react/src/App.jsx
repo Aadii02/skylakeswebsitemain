@@ -1,26 +1,18 @@
 import React, { useEffect, useRef } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './index.css';
 
-import StarsBackground from './components/StarsBackground';
 import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import TrustBar from './components/TrustBar';
-import Mission from './components/Mission';
-import Traction from './components/Traction';
-import Milestones from './components/Milestones';
-import Tech from './components/Tech';
-import Quote from './components/Quote';
-import About from './components/About';
-import FAQ from './components/FAQ';
-import Contact from './components/Contact';
-import InvestorBanner from './components/InvestorBanner';
-import Footer from './components/Footer';
+import HomePage from './pages/HomePage';
+import ModelRocketsPage from './pages/ModelRocketsPage';
+import SubstemsPage from './pages/SubstemsPage';
+import BlogPage from './pages/BlogPage';
 
 function App() {
   const bgAudioRef = useRef(null);
   const audioStartedRef = useRef(false);
 
-  // Setup Intersection Observer for reveal animations
+  // Setup Intersection Observer for reveal animations (run on all routes)
   useEffect(() => {
     const reveals = document.querySelectorAll('.reveal');
     const observer = new IntersectionObserver((entries) => {
@@ -35,6 +27,7 @@ function App() {
     return () => observer.disconnect();
   }, []);
 
+  // Audio setup (runs on all routes)
   useEffect(() => {
     const audio = bgAudioRef.current;
     if (!audio) return;
@@ -83,25 +76,17 @@ function App() {
         preload="metadata"
         loop
       />
-      <StarsBackground />
-      <Navbar />
-      <Hero />
-      <TrustBar />
-      <div className="divider"></div>
-      <Mission />
-      <Traction />
-      <div className="divider"></div>
-      <Milestones />
-      <div className="divider"></div>
-      <Quote />
-      <Tech />
-      <div className="divider"></div>
-      <About />
-      <div className="divider"></div>
-      <FAQ />
-      <Contact />
-      <InvestorBanner />
-      <Footer />
+      <Router>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/vehicles" element={<ModelRocketsPage />} />
+          {/* backward-compatible redirect: old URL -> new /vehicles */}
+          <Route path="/vehicles/model-rockets" element={<Navigate to="/vehicles" replace />} />
+          <Route path="/products/substems" element={<SubstemsPage />} />
+          <Route path="/blog" element={<BlogPage />} />
+        </Routes>
+      </Router>
     </>
   );
 }
