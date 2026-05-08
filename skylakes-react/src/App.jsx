@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import './index.css';
 
 import Navbar from './components/Navbar';
@@ -11,6 +11,37 @@ import BlogPage from './pages/BlogPage';
 function App() {
   const bgAudioRef = useRef(null);
   const audioStartedRef = useRef(false);
+
+  function RouteEffects() {
+    const location = useLocation();
+
+    useEffect(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+
+      let observer = null;
+      const timer = window.setTimeout(() => {
+        const reveals = document.querySelectorAll('.reveal:not(.visible)');
+        observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+            }
+          });
+        }, { threshold: 0.08 });
+
+        reveals.forEach((element) => observer.observe(element));
+      }, 60);
+
+      return () => {
+        window.clearTimeout(timer);
+        if (observer) {
+          observer.disconnect();
+        }
+      };
+    }, [location.pathname]);
+
+    return null;
+  }
 
   // Setup Intersection Observer for reveal animations (run on all routes)
   useEffect(() => {
@@ -77,6 +108,7 @@ function App() {
         loop
       />
       <Router>
+        <RouteEffects />
         <Navbar />
         <Routes>
           <Route path="/" element={<HomePage />} />

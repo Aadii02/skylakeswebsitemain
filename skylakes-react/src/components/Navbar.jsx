@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [productsOpen, setProductsOpen] = useState(false);
   const dropdownTimeoutRef = useRef(null);
 
   const handleDropdownEnter = () => {
@@ -17,6 +18,10 @@ export default function Navbar() {
     dropdownTimeoutRef.current = setTimeout(() => {
       setDropdownOpen(false);
     }, 150);
+  };
+
+  const handleProductsClick = () => {
+    setProductsOpen((current) => !current);
   };
 
   return (
@@ -46,8 +51,28 @@ export default function Navbar() {
           onMouseLeave={handleDropdownLeave}
           style={{ position: 'relative' }}
         >
-          <a style={{ cursor: 'pointer' }}>Products</a>
-          {dropdownOpen && (
+          <button
+            type="button"
+            onClick={handleProductsClick}
+            aria-expanded={dropdownOpen || productsOpen}
+            className="nav-products-trigger"
+            style={{
+              background: 'none',
+              border: 'none',
+              color: 'var(--muted2)',
+              textDecoration: 'none',
+              fontSize: '0.8rem',
+              letterSpacing: '0.12em',
+              textTransform: 'uppercase',
+              transition: 'color 0.2s',
+              fontWeight: 500,
+              cursor: 'pointer',
+              padding: 0,
+            }}
+          >
+            Products
+          </button>
+          {(dropdownOpen || productsOpen) && (
             <ul className="dropdown-menu" style={{
               position: 'absolute',
               top: '100%',
@@ -61,9 +86,9 @@ export default function Navbar() {
               padding: '8px 0',
               marginTop: '8px'
             }}>
-              <li><Link to="/vehicles" onClick={() => { setOpen(false); setDropdownOpen(false); }} style={{ display: 'block', padding: '10px 16px', color: 'var(--white)', textDecoration: 'none', transition: 'all 0.2s' }}>Model Rockets</Link></li>
-              <li><Link to="/products/substems" onClick={() => { setOpen(false); setDropdownOpen(false); }} style={{ display: 'block', padding: '10px 16px', color: 'var(--white)', textDecoration: 'none', transition: 'all 0.2s' }}>Substems</Link></li>
-              <li><a href="https://shop.skylakes.io" target="_blank" rel="noopener noreferrer" onClick={() => { setOpen(false); setDropdownOpen(false); }} style={{ display: 'block', padding: '10px 16px', color: 'var(--white)', textDecoration: 'none', transition: 'all 0.2s' }}>Shop</a></li>
+              <li><Link to="/vehicles" onClick={() => { setOpen(false); setDropdownOpen(false); setProductsOpen(false); }} style={{ display: 'block', padding: '10px 16px', color: 'var(--white)', textDecoration: 'none', transition: 'all 0.2s' }}>Model Rockets</Link></li>
+              <li><Link to="/products/substems" onClick={() => { setOpen(false); setDropdownOpen(false); setProductsOpen(false); }} style={{ display: 'block', padding: '10px 16px', color: 'var(--white)', textDecoration: 'none', transition: 'all 0.2s' }}>Substems</Link></li>
+              <li><a href="https://shop.skylakes.io" target="_blank" rel="noopener noreferrer" onClick={() => { setOpen(false); setDropdownOpen(false); setProductsOpen(false); }} style={{ display: 'block', padding: '10px 16px', color: 'var(--white)', textDecoration: 'none', transition: 'all 0.2s' }}>Shop</a></li>
             </ul>
           )}
         </li>

@@ -3,7 +3,7 @@ import './products.css'; // create this or add styles to App.css
 
 const vehicles = [
   {
-    name: 'SKYLX-S',
+    name: 'SKYLX-S',  
     tag: 'Small Lift',
     payload: '~50 kg to LEO',
     cost: 'Sub ₹15Cr',
