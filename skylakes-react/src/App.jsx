@@ -7,6 +7,7 @@ import HomePage from './pages/HomePage';
 import ModelRocketsPage from './pages/ModelRocketsPage';
 import SubstemsPage from './pages/SubstemsPage';
 import BlogPage from './pages/BlogPage';
+import BlogPostPage from './pages/BlogPostPage';
 
 function App() {
   const bgAudioRef = useRef(null);
@@ -117,6 +118,7 @@ function App() {
           <Route path="/vehicles/model-rockets" element={<Navigate to="/vehicles" replace />} />
           <Route path="/products/substems" element={<SubstemsPage />} />
           <Route path="/blog" element={<BlogPage />} />
+          <Route path="/blog/:slug" element={<BlogPostPage />} />
         </Routes>
       </Router>
     </>

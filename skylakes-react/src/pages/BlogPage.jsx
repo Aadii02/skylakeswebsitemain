@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import StarsBackground from '../components/StarsBackground';
 import Footer from '../components/Footer';
+import posts from '../data/blogPosts';
 
 const featuredStory = {
   tag: 'Featured Analysis',
@@ -10,29 +11,7 @@ const featuredStory = {
     'SkyLakes Aerospace is engineering a reusable launch stack built around cost per kilogram, fast turnaround, and high-frequency access to orbit. This is the operating model that turns launch from a rare event into a repeatable service.',
 };
 
-const articles = [
-  {
-    tag: 'Technology',
-    title: 'What a reusable small-lift vehicle needs to win on cost/kg',
-    excerpt:
-      'A technical breakdown of stage recovery, turnaround time, and how vertical integration lowers mission cost without sacrificing reliability.',
-    meta: '6 min read · Engineering',
-  },
-  {
-    tag: 'Market',
-    title: 'The launch cadence gap: why frequency matters as much as payload',
-    excerpt:
-      'Customers do not just buy performance. They buy schedule certainty, integration speed, and the ability to launch often enough to scale programs.',
-    meta: '4 min read · Strategy',
-  },
-  {
-    tag: 'Mission',
-    title: 'Building a deep-tech brand that feels inevitable',
-    excerpt:
-      'SkyLakes is positioned to read as a precision engineering company, not a generic startup. The language, visuals, and product story should all reinforce that signal.',
-    meta: '5 min read · Brand',
-  },
-];
+const articles = posts;
 
 const signalCards = [
   {
@@ -48,6 +27,71 @@ const signalCards = [
     text: 'Propulsion, avionics, structures, and recovery systems under one engineering stack.',
   },
 ];
+
+function NewsletterForm() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [topics, setTopics] = useState('');
+  const [status, setStatus] = useState('idle');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setStatus('sending');
+    const url = 'https://formspree.io/f/YOUR_FORM_ID';
+    try {
+      const form = new FormData();
+      form.append('name', name);
+      form.append('email', email);
+      form.append('topics', topics);
+
+      const res = await fetch(url, {
+        method: 'POST',
+        body: form,
+        headers: {
+          Accept: 'application/json',
+        },
+      });
+
+      if (res.ok) {
+        setStatus('thanks');
+        setName('');
+        setEmail('');
+        setTopics('');
+      } else {
+        setStatus('error');
+      }
+    } catch (err) {
+      setStatus('error');
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="reveal" style={{ display: 'grid', gap: '16px', maxWidth: '720px', margin: '0 auto' }}>
+      <div className="form-row">
+        <input value={name} onChange={(e) => setName(e.target.value)} name="name" className="form-input" type="text" placeholder="Your name" aria-label="Your name" />
+        <input value={email} onChange={(e) => setEmail(e.target.value)} name="email" className="form-input" type="email" placeholder="Email address" aria-label="Email address" required />
+      </div>
+      <textarea
+        value={topics}
+        onChange={(e) => setTopics(e.target.value)}
+        name="topics"
+        className="form-email"
+        placeholder="What topics do you want updates on?"
+        aria-label="Topics of interest"
+        rows="4"
+        style={{ resize: 'vertical', marginBottom: '0' }}
+      />
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '14px', flexWrap: 'wrap', marginTop: '8px' }}>
+        <button className="btn-primary" type="submit">{status === 'sending' ? 'Sending…' : 'Join Updates'}</button>
+        <Link to="/vehicles" className="btn-outline" style={{ textDecoration: 'none' }}>
+          Explore Vehicles
+        </Link>
+      </div>
+      {status === 'thanks' && <div className="form-success" style={{ color: 'var(--accent)', textAlign: 'center', marginTop: '8px' }}>Thanks — we sent a confirmation to your email.</div>}
+      {status === 'error' && <div className="form-error" style={{ color: 'var(--accent)', textAlign: 'center', marginTop: '8px' }}>Something went wrong, please try again.</div>}
+    </form>
+  );
+}
 
 export default function BlogPage() {
   return (
@@ -105,8 +149,8 @@ export default function BlogPage() {
                   {featuredStory.excerpt}
                 </div>
                 <div className="blog-feature-cta" style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', justifyContent: 'center', marginTop: '28px' }}>
-                  <Link to="/vehicles" className="btn-primary" style={{ textDecoration: 'none' }}>
-                    Explore Vehicles
+                  <Link to="/blog/reusable-launch-economics" className="btn-primary" style={{ textDecoration: 'none' }}>
+                    Read Post
                   </Link>
                   <a href="#signals" className="btn-outline" style={{ textDecoration: 'none' }}>
                     Read More Posts
@@ -149,14 +193,19 @@ export default function BlogPage() {
                   <div className="section-label">Research Signals</div>
                   <h2 className="section-title">Engineering notes and market analysis</h2>
                 </div>
-                <Link to="/blog" className="btn-outline" style={{ whiteSpace: 'nowrap', textDecoration: 'none' }}>
+                <a href="#signals" className="btn-outline" style={{ whiteSpace: 'nowrap', textDecoration: 'none' }}>
                   View All Posts
-                </Link>
+                </a>
               </div>
 
               <div className="blog-grid">
-                {articles.map((article, index) => (
-                  <article key={article.title} className="blog-card reveal" style={{ transitionDelay: `${index * 0.12}s` }}>
+                {articles.map((post, index) => (
+                  <Link
+                    to={`/blog/${post.slug}`}
+                    key={post.slug}
+                    className="blog-card reveal"
+                    style={{ transitionDelay: `${index * 0.12}s`, textDecoration: 'none', color: 'inherit' }}
+                  >
                     <div
                       style={{
                         width: '100%',
@@ -173,18 +222,18 @@ export default function BlogPage() {
                       }}
                     >
                       <div style={{ textAlign: 'center' }}>
-                        <div className="blog-tag" style={{ marginBottom: '8px' }}>{article.tag}</div>
+                        <div className="blog-tag" style={{ marginBottom: '8px' }}>{post.tag}</div>
                         <div style={{ fontFamily: 'Barlow Condensed, sans-serif', fontSize: '2rem', textTransform: 'uppercase', lineHeight: 1.05 }}>
                           {index + 1}
                         </div>
                       </div>
                     </div>
                     <div className="blog-body">
-                      <div style={{ color: 'var(--muted)', fontSize: '0.74rem', letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: '10px' }}>{article.meta}</div>
-                      <div className="blog-title" style={{ fontSize: '1rem' }}>{article.title}</div>
-                      <p className="blog-excerpt">{article.excerpt}</p>
+                      <div style={{ color: 'var(--muted)', fontSize: '0.74rem', letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: '10px' }}>{post.meta}</div>
+                      <div className="blog-title" style={{ fontSize: '1rem' }}>{post.title}</div>
+                      <p className="blog-excerpt">{post.excerpt}</p>
                     </div>
-                  </article>
+                  </Link>
                 ))}
               </div>
             </div>
@@ -201,25 +250,7 @@ export default function BlogPage() {
                   Get concise updates on reusable launch architecture, vehicle development, and the business of lowering cost per kilogram to orbit.
                 </p>
               </div>
-              <div className="reveal" style={{ display: 'grid', gap: '16px', maxWidth: '720px', margin: '0 auto' }}>
-                <div className="form-row">
-                  <input className="form-input" type="text" placeholder="Your name" aria-label="Your name" />
-                  <input className="form-input" type="email" placeholder="Email address" aria-label="Email address" />
-                </div>
-                <textarea
-                  className="form-email"
-                  placeholder="What topics do you want updates on?"
-                  aria-label="Topics of interest"
-                  rows="4"
-                  style={{ resize: 'vertical', marginBottom: '0' }}
-                />
-                <div style={{ display: 'flex', justifyContent: 'center', gap: '14px', flexWrap: 'wrap', marginTop: '8px' }}>
-                  <button className="btn-primary" type="button">Join Updates</button>
-                  <Link to="/vehicles" className="btn-outline" style={{ textDecoration: 'none' }}>
-                    Explore Vehicles
-                  </Link>
-                </div>
-              </div>
+              <NewsletterForm />
             </div>
           </div>
         </section>
