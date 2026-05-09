@@ -38,6 +38,11 @@ export default function Footer() {
             <polygon points="10,9 16,12 10,15"></polygon>
           </svg>
         </a>
+        <a href="https://x.com/Skylakes_space" target="_blank" rel="noopener noreferrer" className="social-btn" aria-label="SKYLX on X.com">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M18.244 2h3.866l-8.44 9.648L23 22h-6.828l-5.337-6.959L4.94 22H1.072l8.845-10.116L1 2h6.99l4.79 6.255L18.244 2Zm-1.062 18h2.02L5.89 3.95H3.73L17.182 20Z" />
+          </svg>
+        </a>
       </div>
     </div>
     <div>
