@@ -1,16 +1,15 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 
+const Globe3D = lazy(() => import('./Globe3D'));
 
 export default function Mission() {
   return (
     <section id="mission">
       <div className="mission">
     <div className="mission-visual reveal">
-      <div className="planet-container">
-        <div className="planet"></div>
-        <div className="planet-ring"></div>
-        <div className="planet-ring2"></div>
-      </div>
+      <Suspense fallback={<div className="globe-canvas" />}>
+        <Globe3D />
+      </Suspense>
     </div>
     <div className="mission-text reveal" style={{ transitionDelay: '0.2s' }}>
       <div className="section-label">Our Mission</div>

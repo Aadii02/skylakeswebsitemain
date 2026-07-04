@@ -7,12 +7,15 @@ export default function Hero() {
     <section className="hero">
       <div className="hero-bg-gradient"></div>
   <div className="hero-earth-bg" style={{ position: 'absolute', inset: 0, backgroundImage: `url(${import.meta.env.BASE_URL}earth-bg.png)`, backgroundPosition: 'center center', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', opacity: 0.8, zIndex: 0, pointerEvents: 'none' }}></div>
+  <div className="hero-aurora">
+    <span></span><span></span><span></span>
+  </div>
   <div className="hero-grid-lines"></div>
   <h1 className="hero-title" style={{ display: 'flex', justifyContent: 'center', margin: '0 0 12px 0' }}>
     <img
       src={`${import.meta.env.BASE_URL}logo.png`}
       alt="SKYLX AeroSpace"
-      style={{ width: '100%', maxWidth: '500px', height: 'auto', objectFit: 'contain' }}
+      style={{ width: '100%', maxWidth: '540px', height: 'auto', objectFit: 'contain' }}
       loading="eager"
       fetchPriority="high"
       decoding="async"
@@ -34,6 +37,11 @@ export default function Hero() {
     <path d="M42 140 Q50 160 58 140" stroke="rgba(96,165,250,0.6)" strokeWidth="2" fill="none"/>
     <ellipse cx="50" cy="168" rx="8" ry="12" fill="rgba(96,165,250,0.3)" filter="blur(4px)"/>
   </svg>
+
+  <div className="hero-scroll-indicator">
+    <span>Scroll</span>
+    <div className="scroll-line"></div>
+  </div>
     </section>
   );
 }

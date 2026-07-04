@@ -203,6 +203,8 @@ export default function BlogPage() {
                   <Link
                     to={`/blog/${post.slug}`}
                     key={post.slug}
+
+                    
                     className="blog-card reveal"
                     style={{ transitionDelay: `${index * 0.12}s`, textDecoration: 'none', color: 'inherit' }}
                   >

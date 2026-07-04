@@ -1,5 +1,6 @@
 import React from 'react';
 import TiltCard from './TiltCard';
+import Carousel from './Carousel';
 
 
 export default function Milestones() {
@@ -14,10 +15,11 @@ export default function Milestones() {
           </p>
         </div>
         
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '32px', maxWidth: '1200px', margin: '0 auto' }}>
-          
+        <div className="reveal" style={{ maxWidth: '1200px', margin: '0 auto' }}>
+        <Carousel autoPlay={7000}>
+
           {/* SKYLX-S */}
-          <TiltCard className="stat-card reveal" style={{ textAlign: 'left', padding: '32px', height: '100%' }}>
+          <TiltCard className="stat-card" style={{ textAlign: 'left', padding: '32px', height: '100%' }}>
             <h3 style={{ color: 'var(--white)', fontSize: '1.6rem', marginBottom: '12px' }}>SKYLX-S <span style={{ color: 'var(--muted)', fontSize: '1rem' }}>Small LV</span></h3>
             <p style={{ color: 'var(--accent)', fontSize: '0.95rem', fontWeight: 'bold', marginBottom: '24px' }}>Dedicated, affordable access to orbit</p>
             
@@ -41,7 +43,7 @@ export default function Milestones() {
           </TiltCard>
 
           {/* SKYLX-M */}
-          <TiltCard className="stat-card reveal" style={{ textAlign: 'left', padding: '32px', height: '100%' }}>
+          <TiltCard className="stat-card" style={{ textAlign: 'left', padding: '32px', height: '100%' }}>
             <h3 style={{ color: 'var(--white)', fontSize: '1.6rem', marginBottom: '12px' }}>SKYLX-M <span style={{ color: 'var(--muted)', fontSize: '1rem' }}>Medium LV</span></h3>
             <p style={{ color: 'var(--accent)', fontSize: '0.95rem', fontWeight: 'bold', marginBottom: '24px' }}>The versatile, high-cadence workhorse</p>
             
@@ -65,7 +67,7 @@ export default function Milestones() {
           </TiltCard>
 
           {/* SKYLX-H */}
-          <TiltCard className="stat-card reveal" style={{ textAlign: 'left', padding: '32px', height: '100%' }}>
+          <TiltCard className="stat-card" style={{ textAlign: 'left', padding: '32px', height: '100%' }}>
             <h3 style={{ color: 'var(--white)', fontSize: '1.6rem', marginBottom: '12px' }}>SKYLX-H <span style={{ color: 'var(--muted)', fontSize: '1rem' }}>Heavy LV</span></h3>
             <p style={{ color: 'var(--accent)', fontSize: '0.95rem', fontWeight: 'bold', marginBottom: '24px' }}>Maximum performance. Built for the largest missions</p>
             
@@ -88,6 +90,7 @@ export default function Milestones() {
             <p style={{ color: 'var(--muted2)', fontSize: '0.9rem', lineHeight: '1.5' }}>Very large commercial satellites, national security payloads, space station modules, lunar cargo missions, Mars trajectory.</p>
           </TiltCard>
 
+        </Carousel>
         </div>
       </div>
     </section>

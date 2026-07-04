@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'r
 import './index.css';
 
 import Navbar from './components/Navbar';
+import ScrollProgress from './components/ScrollProgress';
+import BackToTop from './components/BackToTop';
 import HomePage from './pages/HomePage';
 import ModelRocketsPage from './pages/ModelRocketsPage';
 import SubstemsPage from './pages/SubstemsPage';
@@ -17,7 +19,19 @@ function App() {
     const location = useLocation();
 
     useEffect(() => {
-      window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+      // Scroll to the section named in the hash (works across pages),
+      // otherwise reset to the top on route change.
+      if (location.hash) {
+        const id = location.hash.slice(1);
+        window.setTimeout(() => {
+          const target = document.getElementById(id);
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 80);
+      } else {
+        window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+      }
 
       let observer = null;
       const timer = window.setTimeout(() => {
@@ -39,7 +53,7 @@ function App() {
           observer.disconnect();
         }
       };
-    }, [location.pathname]);
+    }, [location.pathname, location.hash]);
 
     return null;
   }
@@ -110,7 +124,9 @@ function App() {
       />
       <Router>
         <RouteEffects />
+        <ScrollProgress />
         <Navbar />
+        <BackToTop />
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/vehicles" element={<ModelRocketsPage />} />

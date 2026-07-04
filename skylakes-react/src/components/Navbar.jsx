@@ -1,11 +1,21 @@
-import React, { useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+// eslint-disable-next-line no-unused-vars -- motion is used as <motion.*> JSX
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [productsOpen, setProductsOpen] = useState(false);
   const dropdownTimeoutRef = useRef(null);
+  const location = useLocation();
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   const handleDropdownEnter = () => {
     if (dropdownTimeoutRef.current) {
@@ -20,94 +30,132 @@ export default function Navbar() {
     }, 150);
   };
 
-  const handleProductsClick = () => {
-    setProductsOpen((current) => !current);
+  const closeAll = () => {
+    setOpen(false);
+    setDropdownOpen(false);
   };
 
+  const isActive = (path) => location.pathname === path;
+
   return (
-    <nav>
-      <div className="nav-logo" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-        <Link to="/">
+    <header className={`nav-shell ${scrolled ? 'nav-scrolled' : ''}`}>
+      <nav className="nav-pill">
+        <Link to="/" className="nav-logo" onClick={closeAll}>
           <img src={`${import.meta.env.BASE_URL}logo.png`} alt="SKYLX Logo"
-            style={{ height: '72px', objectFit: 'contain' }}
             loading="eager"
             fetchPriority="high"
             decoding="async"
             onError={(e) => { e.target.style.display = 'none'; document.getElementById('nav-fallback-text').style.display = 'block'; }} />
           <span id="nav-fallback-text" style={{ display: 'none' }}>SKYLX</span>
         </Link>
-      </div>
 
-      <button className="nav-hamburger" onClick={() => setOpen(!open)} aria-label="Toggle menu">
-        <span></span><span></span><span></span>
-      </button>
-
-      <ul className={`nav-links ${open ? 'nav-open' : ''}`}>
-        <li><a href="#mission" onClick={() => setOpen(false)}>Mission</a></li>
-        <li><Link to="/vehicles" onClick={() => setOpen(false)}>Vehicles</Link></li>
-        <li 
-          className="nav-dropdown"
-          onMouseEnter={handleDropdownEnter}
-          onMouseLeave={handleDropdownLeave}
-          style={{ position: 'relative' }}
-        >
-          <button
-            type="button"
-            onClick={handleProductsClick}
-            aria-expanded={dropdownOpen || productsOpen}
-            className="nav-products-trigger"
-            style={{
-              background: 'none',
-              border: 'none',
-              color: 'var(--muted2)',
-              textDecoration: 'none',
-              fontSize: '0.8rem',
-              letterSpacing: '0.12em',
-              textTransform: 'uppercase',
-              transition: 'color 0.2s',
-              fontWeight: 500,
-              cursor: 'pointer',
-              padding: 0,
-            }}
+        <ul className="nav-links">
+          <li><Link className="nav-link" to="/#mission" onClick={closeAll}>Mission</Link></li>
+          <li><Link className={`nav-link ${isActive('/vehicles') ? 'active' : ''}`} to="/vehicles" onClick={closeAll}>Vehicles</Link></li>
+          <li
+            className="nav-dropdown"
+            onMouseEnter={handleDropdownEnter}
+            onMouseLeave={handleDropdownLeave}
           >
-            Products
-          </button>
-          {(dropdownOpen || productsOpen) && (
-            <ul className="dropdown-menu" style={{
-              position: 'absolute',
-              top: '100%',
-              left: '0',
-              backgroundColor: 'var(--dark)',
-              borderRadius: '8px',
-              border: '1px solid var(--border)',
-              minWidth: '180px',
-              zIndex: 1000,
-              listStyle: 'none',
-              padding: '8px 0',
-              marginTop: '8px'
-            }}>
-              <li><Link to="/vehicles" onClick={() => { setOpen(false); setDropdownOpen(false); setProductsOpen(false); }} style={{ display: 'block', padding: '10px 16px', color: 'var(--white)', textDecoration: 'none', transition: 'all 0.2s' }}>Model Rockets</Link></li>
-              <li><Link to="/products/substems" onClick={() => { setOpen(false); setDropdownOpen(false); setProductsOpen(false); }} style={{ display: 'block', padding: '10px 16px', color: 'var(--white)', textDecoration: 'none', transition: 'all 0.2s' }}>Substems</Link></li>
-              <li><a href="https://shop.skylakes.io" target="_blank" rel="noopener noreferrer" onClick={() => { setOpen(false); setDropdownOpen(false); setProductsOpen(false); }} style={{ display: 'block', padding: '10px 16px', color: 'var(--white)', textDecoration: 'none', transition: 'all 0.2s' }}>Shop</a></li>
-            </ul>
-          )}
-        </li>
-        <li><a href="#tech" onClick={() => setOpen(false)}>Technology</a></li>
-        <li><a href="#about" onClick={() => setOpen(false)}>About Us</a></li>
-        <li><a href="#contact" onClick={() => setOpen(false)}>Contact</a></li>
-        <li><Link to="/blog" onClick={() => setOpen(false)}>Blog</Link></li>
-      </ul>
+            <button
+              type="button"
+              onClick={() => setDropdownOpen((current) => !current)}
+              aria-expanded={dropdownOpen}
+              className={`nav-link nav-products-trigger ${location.pathname.startsWith('/products') ? 'active' : ''}`}
+            >
+              Products
+              <svg className={`nav-caret ${dropdownOpen ? 'flipped' : ''}`} viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                <path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+            <AnimatePresence>
+              {dropdownOpen && (
+                <motion.ul
+                  className="dropdown-menu"
+                  initial={{ opacity: 0, y: 10, scale: 0.97 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 10, scale: 0.97 }}
+                  transition={{ duration: 0.18, ease: 'easeOut' }}
+                >
+                  <li><Link to="/vehicles" onClick={closeAll}>Model Rockets</Link></li>
+                  <li><Link to="/products/substems" onClick={closeAll}>Substems</Link></li>
+                  <li><a href="https://shop.skylakes.io" target="_blank" rel="noopener noreferrer" onClick={closeAll}>Shop</a></li>
+                </motion.ul>
+              )}
+            </AnimatePresence>
+          </li>
+          <li><Link className="nav-link" to="/#tech" onClick={closeAll}>Technology</Link></li>
+          <li><Link className="nav-link" to="/#about" onClick={closeAll}>About Us</Link></li>
+          <li><Link className="nav-link" to="/#contact" onClick={closeAll}>Contact</Link></li>
+          <li><Link className={`nav-link ${location.pathname.startsWith('/blog') ? 'active' : ''}`} to="/blog" onClick={closeAll}>Blog</Link></li>
+        </ul>
 
-      <a href="#contact" className="btn-primary nav-cta" style={{ fontSize: '0.65rem', padding: '12px 24px' }}>
-        Launch With Us
-      </a>
-    </nav>
+        <div className="nav-right">
+          <Link to="/#contact" className="btn-primary nav-cta" onClick={closeAll}>
+            Launch With Us
+          </Link>
+          <button
+            className={`nav-hamburger ${open ? 'is-open' : ''}`}
+            onClick={() => setOpen(!open)}
+            aria-label="Toggle menu"
+            aria-expanded={open}
+          >
+            <span></span><span></span><span></span>
+          </button>
+        </div>
+      </nav>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            className="nav-mobile-panel"
+            initial={{ opacity: 0, y: -14 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -14 }}
+            transition={{ duration: 0.22, ease: 'easeOut' }}
+          >
+            <ul className="nav-mobile-links">
+              {[
+                { to: '/#mission', label: 'Mission' },
+                { to: '/vehicles', label: 'Vehicles' },
+                { to: '/#tech', label: 'Technology' },
+                { to: '/#about', label: 'About Us' },
+                { to: '/#contact', label: 'Contact' },
+                { to: '/blog', label: 'Blog' },
+              ].map((item, i) => (
+                <motion.li
+                  key={item.label}
+                  initial={{ opacity: 0, x: -16 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.05 + i * 0.05, duration: 0.25 }}
+                >
+                  <Link to={item.to} onClick={closeAll}>{item.label}</Link>
+                </motion.li>
+              ))}
+              <motion.li
+                initial={{ opacity: 0, x: -16 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.35, duration: 0.25 }}
+              >
+                <span className="nav-mobile-sub-label">Products</span>
+                <ul className="nav-mobile-sublinks">
+                  <li><Link to="/vehicles" onClick={closeAll}>Model Rockets</Link></li>
+                  <li><Link to="/products/substems" onClick={closeAll}>Substems</Link></li>
+                  <li><a href="https://shop.skylakes.io" target="_blank" rel="noopener noreferrer" onClick={closeAll}>Shop</a></li>
+                </ul>
+              </motion.li>
+              <motion.li
+                initial={{ opacity: 0, x: -16 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.4, duration: 0.25 }}
+                className="nav-mobile-cta-row"
+              >
+                <Link to="/#contact" className="btn-primary" onClick={closeAll}>Launch With Us</Link>
+              </motion.li>
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </header>
   );
 }
-
-
-
-
-
-
-
