@@ -1,15 +1,24 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, useEffect, useState } from 'react';
 
 const Globe3D = lazy(() => import('./Globe3D'));
 
 export default function Mission() {
+  // Mount the lazy globe only after hydration: renderToString can't resolve
+  // Suspense boundaries, so rendering it during hydration throws React #419.
+  const [showGlobe, setShowGlobe] = useState(false);
+  useEffect(() => setShowGlobe(true), []);
+
   return (
     <section id="mission">
       <div className="mission">
     <div className="mission-visual reveal">
-      <Suspense fallback={<div className="globe-canvas" />}>
-        <Globe3D />
-      </Suspense>
+      {showGlobe ? (
+        <Suspense fallback={<div className="globe-canvas" />}>
+          <Globe3D />
+        </Suspense>
+      ) : (
+        <div className="globe-canvas" />
+      )}
     </div>
     <div className="mission-text reveal" style={{ transitionDelay: '0.2s' }}>
       <div className="section-label">Our Mission</div>

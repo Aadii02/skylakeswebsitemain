@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import './index.css';
+import useDocumentMeta from './hooks/useDocumentMeta';
 
 import Navbar from './components/Navbar';
 import ScrollProgress from './components/ScrollProgress';
@@ -14,6 +15,8 @@ import BlogPostPage from './pages/BlogPostPage';
 function App() {
   const bgAudioRef = useRef(null);
   const audioStartedRef = useRef(false);
+
+  useDocumentMeta();
 
   function RouteEffects() {
     const location = useLocation();
@@ -122,21 +125,19 @@ function App() {
         preload="metadata"
         loop
       />
-      <Router>
-        <RouteEffects />
-        <ScrollProgress />
-        <Navbar />
-        <BackToTop />
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/vehicles" element={<ModelRocketsPage />} />
-          {/* backward-compatible redirect: old URL -> new /vehicles */}
-          <Route path="/vehicles/model-rockets" element={<Navigate to="/vehicles" replace />} />
-          <Route path="/products/substems" element={<SubstemsPage />} />
-          <Route path="/blog" element={<BlogPage />} />
-          <Route path="/blog/:slug" element={<BlogPostPage />} />
-        </Routes>
-      </Router>
+      <RouteEffects />
+      <ScrollProgress />
+      <Navbar />
+      <BackToTop />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/vehicles" element={<ModelRocketsPage />} />
+        {/* backward-compatible redirect: old URL -> new /vehicles */}
+        <Route path="/vehicles/model-rockets" element={<Navigate to="/vehicles" replace />} />
+        <Route path="/products/substems" element={<SubstemsPage />} />
+        <Route path="/blog" element={<BlogPage />} />
+        <Route path="/blog/:slug" element={<BlogPostPage />} />
+      </Routes>
     </>
   );
 }

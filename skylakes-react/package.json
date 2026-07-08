@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "postbuild": "node scripts/copy-404.cjs",
+    "build": "vite build && vite build --ssr src/entry-server.jsx --outDir dist-server",
+    "postbuild": "node scripts/prerender.mjs && node scripts/copy-404.cjs",
     "lint": "eslint .",
     "preview": "vite preview"
   },

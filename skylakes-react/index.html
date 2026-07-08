@@ -1,25 +1,35 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <script>
-  (function(){
-    var redirect = sessionStorage.redirect;
-    delete sessionStorage.redirect;
-    if (redirect && redirect !== location.href) {
-      history.replaceState(null, null, redirect);
-    }
-  })();
-</script>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SKYLX AeroSpace</title>
+    <title>SkyLakes Aerospace — Reusable Launch Vehicles | SKYLX</title>
+    <meta name="description" content="Revolutionizing India's space industry with reusable rockets, cost-effective launches, and cutting-edge aerospace innovation." />
+    <meta name="theme-color" content="#04060d" />
+    <!--app-head-->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "SkyLakes Aerospace",
+        "alternateName": "SKYLX",
+        "url": "https://skylakes.space",
+        "logo": "https://skylakes.space/logo.png",
+        "email": "contact@skylakes.space",
+        "sameAs": [
+          "https://www.linkedin.com/company/skylakes-aerospace/",
+          "https://www.instagram.com/skylx.space/",
+          "https://x.com/Skylakes_space"
+        ]
+      }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root"><!--app-html--></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
