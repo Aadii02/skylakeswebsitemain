@@ -1,0 +1,277 @@
+/* SKYLX vehicle family — blueprint lineup. Palette: existing CSS vars only. */
+
+.vf-wrap {
+  max-width: 1120px;
+  margin: 0 auto;
+  --vf-u: 1px; /* height unit: silhouettes are 240/372/504 units tall */
+}
+
+.vf-stage {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: clamp(24px, 6vw, 88px);
+  padding: 48px 24px 0;
+  background-image:
+    repeating-linear-gradient(to right, var(--border) 0 1px, transparent 1px 56px),
+    repeating-linear-gradient(to bottom, var(--border) 0 1px, transparent 1px 56px);
+  background-size: 100% 100%;
+  border-radius: 8px 8px 0 0;
+}
+
+.vf-padline {
+  max-width: 1072px;
+  margin: 0 24px;
+  border-top: 1px solid rgba(96, 165, 250, 0.35);
+  box-shadow: 0 0 18px var(--accent-glow);
+  opacity: 0;
+  transition: opacity 0.8s ease 1.4s;
+}
+
+.reveal.visible .vf-padline {
+  opacity: 1;
+}
+
+.vf-scale-note {
+  text-align: right;
+  margin: 10px 24px 0;
+  color: var(--muted);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-family: 'Montserrat', monospace;
+}
+
+/* --- silhouette buttons --- */
+
+.vf-vehicle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  padding: 8px 6px 14px;
+  cursor: pointer;
+  color: var(--accent);
+  border-radius: 6px;
+}
+
+.vf-vehicle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.vf-svg {
+  display: block;
+  stroke: var(--accent);
+  stroke-width: 1.5;
+  opacity: 0.5;
+  transition: opacity 0.3s ease, filter 0.3s ease;
+  margin-bottom: 14px;
+}
+
+.vf-vehicle:hover .vf-svg,
+.vf-vehicle:focus-visible .vf-svg,
+.vf-vehicle[aria-pressed='true'] .vf-svg {
+  opacity: 1;
+}
+
+.vf-vehicle[aria-pressed='true'] .vf-svg {
+  filter: drop-shadow(0 0 12px var(--accent-glow));
+}
+
+.vf-svg-s { height: calc(240 * var(--vf-u)); }
+.vf-svg-m { height: calc(372 * var(--vf-u)); }
+.vf-svg-h { height: calc(504 * var(--vf-u)); }
+
+.vf-detail { stroke-opacity: 0.35; }
+.vf-dash { stroke-dasharray: 2 6; }
+
+.vf-vehicle-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 800;
+  font-size: 1.15rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted2);
+  transition: color 0.3s ease;
+}
+
+.vf-vehicle[aria-pressed='true'] .vf-vehicle-name,
+.vf-vehicle:hover .vf-vehicle-name {
+  color: var(--white);
+}
+
+.vf-vehicle-payload {
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-family: 'Montserrat', monospace;
+}
+
+.vf-vehicle[aria-pressed='true'] .vf-vehicle-payload {
+  color: var(--accent);
+}
+
+/* --- draw-in on scroll reveal (S -> M -> H) --- */
+
+.vf-draw {
+  stroke-dasharray: 1600;
+  stroke-dashoffset: 1600;
+}
+
+.vf-vehicle-1 .vf-draw { transition: stroke-dashoffset 1.4s ease 0.1s; }
+.vf-vehicle-2 .vf-draw { transition: stroke-dashoffset 1.4s ease 0.35s; }
+.vf-vehicle-3 .vf-draw { transition: stroke-dashoffset 1.4s ease 0.6s; }
+
+.reveal.visible .vf-draw {
+  stroke-dashoffset: 0;
+}
+
+.vf-detail {
+  opacity: 0;
+  transition: opacity 0.8s ease 1.2s;
+}
+
+.reveal.visible .vf-detail {
+  opacity: 1;
+}
+
+/* --- spec panel --- */
+
+.vf-panel {
+  max-width: 860px;
+  margin: 36px auto 0;
+  padding: 28px 32px;
+  background: linear-gradient(180deg, rgba(96, 165, 250, 0.06), rgba(11, 17, 32, 0.6));
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  text-align: left;
+}
+
+.vf-panel-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 16px;
+  margin-bottom: 18px;
+}
+
+.vf-panel-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 800;
+  font-size: 1.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--white);
+  margin: 0;
+}
+
+.vf-panel-tagline {
+  color: var(--muted);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.vf-panel-subtitle {
+  color: var(--accent);
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.vf-panel-hero {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.vf-panel-hero-num {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900;
+  font-size: clamp(2rem, 4vw, 3rem);
+  color: var(--accent);
+  line-height: 1;
+}
+
+.vf-panel-hero-label {
+  color: var(--muted);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-family: 'Montserrat', monospace;
+}
+
+.vf-panel-specs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 8px 32px;
+  margin-bottom: 18px;
+}
+
+.vf-spec-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 8px;
+}
+
+.vf-spec-label { color: var(--muted2); font-size: 0.9rem; }
+.vf-spec-value { color: var(--white); font-size: 0.9rem; text-align: right; }
+
+.vf-panel-targets {
+  color: var(--muted2);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin: 0 0 18px;
+}
+
+.vf-panel-targets-label {
+  color: var(--white);
+  font-weight: 600;
+}
+
+.vf-panel-link {
+  display: inline-block;
+  color: var(--accent);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 10px 22px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.vf-panel-link:hover,
+.vf-panel-link:focus-visible {
+  border-color: var(--accent);
+  box-shadow: 0 0 16px var(--accent-glow);
+}
+
+.vf-panel-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* --- responsive --- */
+
+@media (max-width: 900px) {
+  .vf-wrap { --vf-u: 0.68px; }
+  .vf-stage { gap: clamp(16px, 5vw, 48px); padding-top: 36px; }
+}
+
+@media (max-width: 600px) {
+  .vf-wrap { --vf-u: 0.44px; }
+  .vf-vehicle-name { font-size: 0.95rem; }
+  .vf-vehicle-payload { font-size: 0.6rem; }
+  .vf-panel { padding: 22px 18px; margin-top: 28px; }
+  .vf-panel-specs { grid-template-columns: 1fr; }
+  .vf-scale-note { text-align: center; }
+}

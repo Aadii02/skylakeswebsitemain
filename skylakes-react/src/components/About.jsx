@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function About() {
   return (
-    <section id="about" style={{ padding: '120px 24px' }}>
+    <section id="about" style={{ padding: 'clamp(80px, 10vw, 120px) 24px' }}>
       <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
         <div className="reveal" style={{ textAlign: 'center', marginBottom: '48px' }}>
           <div className="section-label">About Us</div>

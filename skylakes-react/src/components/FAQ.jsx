@@ -21,7 +21,7 @@ export default function FAQ() {
     },
     {
       q: "Where is SKYLX based and where will it launch from?",
-      a: "SKYLX AeroSpace is headquartered in Bengaluru, India. Our primary launch operations leverage existing spaceport infrastructure on India's east coast alongside offshore drone-ship recovery systems."
+      a: "SKYLX AeroSpace is headquartered in Delhi NCR, India. Our primary launch operations leverage existing spaceport infrastructure on India's east coast alongside offshore drone-ship recovery systems."
     },
     {
       q: "How can I book a ride on an upcoming launch?",
@@ -31,10 +31,10 @@ export default function FAQ() {
 
   return (
     <section id="faq">
-      <div className="faq-section" style={{ maxWidth: '800px', margin: '0 auto', padding: '120px 20px' }}>
+      <div className="faq-section" style={{ maxWidth: '800px', margin: '0 auto', padding: 'clamp(80px, 10vw, 120px) 20px' }}>
         <div className="faq-header reveal">
           <div className="section-label">Got Questions?</div>
-          <h2 className="section-title" style={{ fontSize: '2.8rem', marginBottom: '16px' }}>Frequently Asked</h2>
+          <h2 className="section-title" style={{ marginBottom: '16px' }}>Frequently Asked</h2>
           <p style={{ color: 'var(--muted)', fontSize: '1.05rem' }}>Everything you need to know about our approach to space access.</p>
         </div>
 

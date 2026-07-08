@@ -2,11 +2,11 @@ import React from 'react';
 import './Traction.css';
 
 const milestones = [
-  '✅ Propellant characterization tests completed',
-  '✅ Flight Computer Tested',
-  '🚀 Pre-seed raise: ₹3Cr SAFE Note — actively fundraising',
-  '👥 Team: 2 co-founders (Aaditya Goswami, CEO + Ayush Seth, COO)',
-  '🎯 Target market: Sub-₹40Cr LEO segment — first-mover in India'
+  { label: 'Propulsion', text: 'Propellant characterization tests completed' },
+  { label: 'Avionics', text: 'Flight computer tested' },
+  { label: 'Funding', text: 'Pre-seed raise: ₹3Cr SAFE Note — actively fundraising' },
+  { label: 'Team', text: '2 co-founders — Aaditya Goswami (CEO) & Ayush Seth (COO)' },
+  { label: 'Market', text: 'First-mover in India’s sub-₹40Cr LEO segment' },
 ];
 
 export default function Traction() {
@@ -21,12 +21,15 @@ export default function Traction() {
         <div className="traction-grid">
           {milestones.map((item, index) => (
             <div
-              key={item}
+              key={item.label}
               className="stat-card reveal traction-card"
               style={{ transitionDelay: (index * 0.1) + 's' }}
             >
               <div className="traction-card-icon" aria-hidden="true">●</div>
-              <p className="traction-card-text">{item}</p>
+              <div>
+                <div className="traction-card-label">{item.label}</div>
+                <p className="traction-card-text">{item.text}</p>
+              </div>
             </div>
           ))}
         </div>

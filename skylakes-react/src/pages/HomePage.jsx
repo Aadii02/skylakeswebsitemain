@@ -3,8 +3,9 @@ import StarsBackground from '../components/StarsBackground';
 import Hero from '../components/Hero';
 import Marquee from '../components/Marquee';
 import Mission from '../components/Mission';
-import Milestones from '../components/Milestones';
+import VehicleFamily from '../components/VehicleFamily';
 import Tech from '../components/Tech';
+import Traction from '../components/Traction';
 import Quote from '../components/Quote';
 import About from '../components/About';
 import FAQ from '../components/FAQ';
@@ -19,10 +20,12 @@ export default function HomePage() {
       <Marquee />
       <Mission />
       <div className="divider"></div>
-      <Milestones />
+      <VehicleFamily />
       <div className="divider"></div>
       <Quote />
       <Tech />
+      <div className="divider"></div>
+      <Traction />
       <div className="divider"></div>
       <About />
       <div className="divider"></div>
