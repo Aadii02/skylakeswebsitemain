@@ -139,6 +139,32 @@
   opacity: 1;
 }
 
+/* --- card figure variant (/vehicles page) --- */
+
+.vf-card-figure {
+  --vf-u: 0.42px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 226px;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+  background-image:
+    repeating-linear-gradient(to right, var(--border) 0 1px, transparent 1px 36px),
+    repeating-linear-gradient(to bottom, var(--border) 0 1px, transparent 1px 36px);
+}
+
+.vf-card-figure .vf-svg {
+  opacity: 0.85;
+  margin-bottom: 0;
+}
+
+.stat-card:hover .vf-card-figure .vf-svg {
+  opacity: 1;
+  filter: drop-shadow(0 0 12px var(--accent-glow));
+}
+
 /* --- spec panel --- */
 
 .vf-panel {

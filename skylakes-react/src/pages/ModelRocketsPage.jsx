@@ -1,6 +1,7 @@
 import React from 'react';
 import { getVehicleCategory } from '../data/vehicles';
 import TiltCard from '../components/TiltCard';
+import VehicleSilhouette from '../components/VehicleSilhouette';
 import StarsBackground from '../components/StarsBackground';
 import Footer from '../components/Footer';
 
@@ -37,6 +38,9 @@ export default function ModelRocketsPage() {
                   transitionDelay: `${idx * 0.15}s`,
                 }}
               >
+                <div className="vf-card-figure" aria-hidden="true">
+                  <VehicleSilhouette vehicleId={vehicle.id} />
+                </div>
                 <h3 style={{ color: 'var(--white)', fontSize: '1.6rem', marginBottom: '12px' }}>
                   {vehicle.name} <span style={{ color: 'var(--muted)', fontSize: '1rem' }}>{vehicle.tagline}</span>
                 </h3>
