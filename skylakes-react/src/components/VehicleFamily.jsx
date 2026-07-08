@@ -6,9 +6,9 @@ import './VehicleFamily.css';
 const vehicles = vehicleCategories['model-rockets'].vehicles;
 
 /*
- * Blueprint silhouettes for the SKYLX family. Cores per vehicle follow the
- * documented first-stage spec (S: single, M: dual, H: triple). Relative
- * heights are illustrative — no real vehicle dimensions are published yet.
+ * Blueprint silhouettes for the SKYLX family — single-stick vehicles that
+ * grow taller and wider S -> M -> H. Proportions are illustrative; no real
+ * vehicle dimensions are published yet.
  */
 
 function SilhouetteS() {
@@ -26,40 +26,29 @@ function SilhouetteS() {
 
 function SilhouetteM() {
   return (
-    <svg className="vf-svg vf-svg-m" viewBox="0 0 120 372" fill="none" aria-hidden="true">
-      {/* upper stage + fairing riding on the dual-core first stage */}
-      <path className="vf-draw" d="M60 4 C68 16 72 28 72 44 L72 96 L48 96 L48 44 C48 28 52 16 60 4 Z" vectorEffect="non-scaling-stroke" />
-      <path className="vf-draw" d="M48 96 L26 120 L94 120 L72 96" vectorEffect="non-scaling-stroke" />
-      {/* core A */}
-      <path className="vf-draw" d="M26 120 L46 120 L46 342 L41 354 L31 354 L26 342 Z" vectorEffect="non-scaling-stroke" />
-      <path className="vf-draw" d="M26 336 L14 368 M31 354 L29 364 L43 364 L41 354" vectorEffect="non-scaling-stroke" />
-      {/* core B */}
-      <path className="vf-draw" d="M74 120 L94 120 L94 342 L89 354 L79 354 L74 342 Z" vectorEffect="non-scaling-stroke" />
-      <path className="vf-draw" d="M94 336 L106 368 M79 354 L77 364 L91 364 L89 354" vectorEffect="non-scaling-stroke" />
-      {/* grid fins on the outer faces */}
-      <path className="vf-draw" d="M19 128 h7 v14 h-7 Z M94 128 h7 v14 h-7 Z" vectorEffect="non-scaling-stroke" />
-      <path className="vf-detail" d="M48 44 L72 44 M26 152 L46 152 M74 152 L94 152 M26 220 Q36 228 46 220 M74 220 Q84 228 94 220" vectorEffect="non-scaling-stroke" />
-      <path className="vf-detail vf-dash" d="M36 128 L36 348 M84 128 L84 348" vectorEffect="non-scaling-stroke" />
+    <svg className="vf-svg vf-svg-m" viewBox="0 0 72 372" fill="none" aria-hidden="true">
+      <path className="vf-draw" d="M36 4 C46 20 49 40 49 64 L49 338 L43 352 L29 352 L23 338 L23 64 C23 40 26 20 36 4 Z" vectorEffect="non-scaling-stroke" />
+      <path className="vf-draw" d="M23 328 L8 366 M49 328 L64 366" vectorEffect="non-scaling-stroke" />
+      <path className="vf-draw" d="M30 352 L27 364 L45 364 L42 352" vectorEffect="non-scaling-stroke" />
+      <path className="vf-draw" d="M15 100 h8 v16 h-8 Z M49 100 h8 v16 h-8 Z" vectorEffect="non-scaling-stroke" />
+      <path className="vf-detail" d="M23 96 L49 96 M23 160 Q36 170 49 160 M23 240 Q36 250 49 240" vectorEffect="non-scaling-stroke" />
+      <path className="vf-detail vf-dash" d="M36 14 L36 346" vectorEffect="non-scaling-stroke" />
     </svg>
   );
 }
 
 function SilhouetteH() {
   return (
-    <svg className="vf-svg vf-svg-h" viewBox="0 0 140 504" fill="none" aria-hidden="true">
-      {/* payload fairing + center core */}
-      <path className="vf-draw" d="M70 6 C80 20 86 40 86 66 L86 130 L54 130 L54 66 C60 40 60 20 70 6 Z" vectorEffect="non-scaling-stroke" />
-      <path className="vf-draw" d="M54 130 L59 146 L81 146 L86 130" vectorEffect="non-scaling-stroke" />
-      <path className="vf-draw" d="M59 146 L81 146 L81 460 L76 472 L64 472 L59 460 Z" vectorEffect="non-scaling-stroke" />
-      <path className="vf-draw" d="M59 454 L47 488 M81 454 L93 488 M64 472 L62 482 L78 482 L76 472" vectorEffect="non-scaling-stroke" />
-      {/* side boosters */}
-      <path className="vf-draw" d="M23 154 C29 162 34 170 34 182 L34 460 L29 472 L17 472 L12 460 L12 182 C12 170 17 162 23 154 Z" vectorEffect="non-scaling-stroke" />
-      <path className="vf-draw" d="M117 154 C123 162 128 170 128 182 L128 460 L123 472 L111 472 L106 460 L106 182 C106 170 111 162 117 154 Z" vectorEffect="non-scaling-stroke" />
-      <path className="vf-draw" d="M12 454 L2 488 M34 454 L44 488 M106 454 L96 488 M128 454 L138 488" vectorEffect="non-scaling-stroke" />
-      {/* grid fins on the outer faces */}
-      <path className="vf-draw" d="M5 190 h7 v16 h-7 Z M128 190 h7 v16 h-7 Z" vectorEffect="non-scaling-stroke" />
-      <path className="vf-detail" d="M59 200 L81 200 M12 260 Q23 268 34 260 M106 260 Q117 268 128 260 M59 320 Q70 328 81 320" vectorEffect="non-scaling-stroke" />
-      <path className="vf-detail vf-dash" d="M70 16 L70 466 M23 164 L23 466 M117 164 L117 466" vectorEffect="non-scaling-stroke" />
+    <svg className="vf-svg vf-svg-h" viewBox="0 0 112 504" fill="none" aria-hidden="true">
+      {/* wide payload fairing over a single heavy core */}
+      <path className="vf-draw" d="M56 6 C70 24 84 48 84 88 L84 160 L28 160 L28 88 C28 48 42 24 56 6 Z" vectorEffect="non-scaling-stroke" />
+      <path className="vf-draw" d="M28 160 L34 184 L78 184 L84 160" vectorEffect="non-scaling-stroke" />
+      <path className="vf-draw" d="M34 184 L78 184 L78 452 L71 468 L41 468 L34 452 Z" vectorEffect="non-scaling-stroke" />
+      <path className="vf-draw" d="M34 440 L16 486 M78 440 L96 486" vectorEffect="non-scaling-stroke" />
+      <path className="vf-draw" d="M41 468 L38 481 L48 481 L45 468 M52 468 L50 481 L62 481 L60 468 M67 468 L64 481 L74 481 L71 468" vectorEffect="non-scaling-stroke" />
+      <path className="vf-draw" d="M26 196 h8 v18 h-8 Z M78 196 h8 v18 h-8 Z" vectorEffect="non-scaling-stroke" />
+      <path className="vf-detail" d="M34 250 L78 250 M34 310 Q56 322 78 310 M34 380 Q56 392 78 380" vectorEffect="non-scaling-stroke" />
+      <path className="vf-detail vf-dash" d="M56 18 L56 460" vectorEffect="non-scaling-stroke" />
     </svg>
   );
 }

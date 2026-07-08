@@ -33,8 +33,8 @@ export default function Mission() {
           <div className="stat-card" style={{ padding: 'clamp(22px, 4vw, 32px) clamp(18px, 3.5vw, 28px)', textAlign: 'left' }}>
             <h4 style={{ fontFamily: 'Montserrat, sans-serif', fontSize: 'clamp(1.1rem, 4vw, 1.4rem)', fontWeight: '700', marginBottom: '16px', color: 'var(--white)' }}>Current Cost</h4>
             <p style={{ fontSize: '1.1rem', color: 'var(--muted2)', lineHeight: '1.8' }}>
-              ISRO: <strong style={{ color: 'var(--accent)' }}>$9K–$10K/kg</strong><br/>
-              SpaceX: <strong style={{ color: 'var(--accent)' }}>$8K–$9K/kg</strong>
+              Government launchers: <strong style={{ color: 'var(--accent)' }}>$9K–$10K/kg</strong><br/>
+              Global commercial: <strong style={{ color: 'var(--accent)' }}>$8K–$9K/kg</strong>
             </p>
           </div>
           <div className="stat-card" style={{ padding: 'clamp(22px, 4vw, 32px) clamp(18px, 3.5vw, 28px)', textAlign: 'left' }}>
