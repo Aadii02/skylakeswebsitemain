@@ -41,6 +41,7 @@ export default function Navbar() {
     <header className={`nav-shell ${scrolled ? 'nav-scrolled' : ''}`}>
       <nav className="nav-pill">
         <ul className="nav-links">
+          <li><Link className={`nav-link ${isActive('/') ? 'active' : ''}`} to="/" onClick={closeAll}>Home</Link></li>
           <li><Link className="nav-link" to="/#mission" onClick={closeAll}>Mission</Link></li>
           <li><Link className={`nav-link ${isActive('/vehicles') ? 'active' : ''}`} to="/vehicles" onClick={closeAll}>Vehicles</Link></li>
           <li
@@ -108,6 +109,7 @@ export default function Navbar() {
           >
             <ul className="nav-mobile-links">
               {[
+                { to: '/', label: 'Home' },
                 { to: '/#mission', label: 'Mission' },
                 { to: '/vehicles', label: 'Vehicles' },
                 { to: '/tools', label: 'Tools' },
