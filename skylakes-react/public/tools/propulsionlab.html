@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PROPULSION LAB — Rocket Engine Dynamics Simulator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0A0E13; --panel:#10161D; --panel2:#0D1219; --line:#24313F; --line2:#182230;
+  --steel:#9FB6C9; --dim:#5E7385; --white:#E8F1F8;
+  --ox:#66C7FF; --fuel:#FFB454; --hot:#FF6B4A; --elec:#F2E85C; --ok:#7BE0AD; --warn:#FF6B4A;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+  --disp:'Chakra Petch',sans-serif;
+  --body:'IBM Plex Sans',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--ink);color:var(--steel);font-family:var(--body);font-size:14px}
+body{background-image:radial-gradient(ellipse 80% 50% at 50% -10%, #14202C 0%, var(--ink) 60%)}
+::selection{background:#2A4A66;color:var(--white)}
+
+header{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;padding:14px 18px 10px;border-bottom:1px solid var(--line2)}
+header h1{font-family:var(--disp);font-weight:700;font-size:20px;letter-spacing:.14em;color:var(--white)}
+header h1 span{color:var(--hot)}
+.tagline{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;color:var(--dim)}
+.hdr-right{margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+
+.mode-tabs{display:flex;border:1px solid var(--line);border-radius:3px;overflow:hidden}
+.mode-tabs button{background:transparent;border:0;color:var(--dim);font-family:var(--disp);font-weight:600;font-size:11.5px;letter-spacing:.1em;padding:7px 14px;cursor:pointer}
+.mode-tabs button.on{background:#1B2836;color:var(--white)}
+select{background:var(--panel);border:1px solid var(--line);color:var(--steel);font-family:var(--mono);font-size:11px;padding:6px 8px;border-radius:3px;max-width:220px}
+
+main{display:grid;grid-template-columns:322px 1fr;gap:0;min-height:calc(100vh - 55px)}
+aside{border-right:1px solid var(--line2);padding:12px 14px 40px;overflow-y:auto;max-height:calc(100vh - 55px)}
+.stage{display:flex;flex-direction:column;padding:12px 16px 30px;gap:12px;overflow-y:auto;max-height:calc(100vh - 55px)}
+
+.sec{margin-bottom:14px}
+.sec-h{font-family:var(--disp);font-weight:600;font-size:11px;letter-spacing:.16em;color:var(--white);border-bottom:1px solid var(--line);padding-bottom:5px;margin-bottom:9px;display:flex;justify-content:space-between}
+.sec-h .u{color:var(--dim);font-family:var(--mono);font-weight:400;font-size:9.5px;letter-spacing:.05em}
+
+.seg{display:grid;gap:4px;margin-bottom:8px}
+.seg button{background:var(--panel2);border:1px solid var(--line);color:var(--dim);font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;text-align:left;padding:6px 9px;border-radius:2px;cursor:pointer;transition:all .12s}
+.seg button:hover{border-color:#3A4E63;color:var(--steel)}
+.seg button.on{background:#182B3D;border-color:#3E5E7E;color:var(--white)}
+.seg button.on::before{content:'▸ ';color:var(--hot)}
+.seg.two{grid-template-columns:1fr 1fr}
+
+.ctl{margin-bottom:9px}
+.ctl label{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;color:var(--dim);margin-bottom:3px}
+.ctl label b{color:var(--white);font-weight:500}
+input[type=range]{width:100%;-webkit-appearance:none;appearance:none;height:3px;background:var(--line);border-radius:2px;outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;border-radius:50%;background:var(--steel);border:2px solid var(--ink);box-shadow:0 0 0 1px var(--dim)}
+input[type=range]::-moz-range-thumb{width:11px;height:11px;border-radius:50%;background:var(--steel);border:2px solid var(--ink)}
+input[type=range]:focus-visible{outline:2px solid var(--ox);outline-offset:4px}
+button:focus-visible,select:focus-visible{outline:2px solid var(--ox);outline-offset:2px}
+
+.note{font-size:10.5px;font-family:var(--mono);color:var(--dim);line-height:1.5;border-left:2px solid var(--line);padding-left:8px;margin:8px 0}
+.flag{font-family:var(--mono);font-size:10.5px;padding:5px 8px;border-radius:2px;margin-top:6px;display:none}
+.flag.warn{display:block;background:#33150F;color:#FF9C85;border:1px solid #5E2418}
+.flag.info{display:block;background:#0F2433;color:#8CCBF2;border:1px solid #1E4258}
+
+.viewport{position:relative;background:linear-gradient(180deg,#0C1219 0%,#090D12 100%);border:1px solid var(--line);border-radius:4px;overflow:hidden;flex-shrink:0}
+.viewport.schematic{width:100%;height:clamp(360px,48vh,560px)}
+.viewport::after{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0 3px,rgba(255,255,255,.008) 3px 4px)}
+.vp-tag{position:absolute;top:8px;left:10px;font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;color:var(--dim);z-index:2}
+.vp-tag2{position:absolute;top:8px;right:10px;font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;color:var(--dim);z-index:2}
+.corner{position:absolute;width:14px;height:14px;border-color:#3A4E63;border-style:solid;z-index:2}
+.corner.tl{top:5px;left:5px;border-width:1px 0 0 1px}.corner.tr{top:5px;right:5px;border-width:1px 1px 0 0}
+.corner.bl{bottom:5px;left:5px;border-width:0 0 1px 1px}.corner.br{bottom:5px;right:5px;border-width:0 1px 1px 0}
+canvas{display:block}
+#mainCv{width:100%;height:100%}
+#plotCv{width:100%;height:230px}
+
+.runbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.big-btn{font-family:var(--disp);font-weight:700;font-size:12.5px;letter-spacing:.14em;padding:9px 22px;border-radius:3px;border:1px solid #3E5E7E;background:#152535;color:var(--white);cursor:pointer;transition:all .12s}
+.big-btn:hover{background:#1D3247}
+.big-btn.hot{border-color:#7E3E2E;background:#351B15}
+.big-btn.hot:hover{background:#47231B}
+.runbar .ctl{flex:1;min-width:170px;margin:0}
+
+.plots{display:flex;flex-direction:column;gap:6px}
+.plot-tabs{display:flex;gap:4px}
+.plot-tabs button{background:transparent;border:1px solid var(--line);color:var(--dim);font-family:var(--mono);font-size:10px;letter-spacing:.1em;padding:5px 12px;border-radius:2px;cursor:pointer}
+.plot-tabs button.on{background:#16222E;color:var(--white);border-color:#3E5E7E}
+
+.data-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:6px}
+.dcell{background:var(--panel2);border:1px solid var(--line2);border-radius:2px;padding:7px 9px}
+.dcell .k{font-family:var(--mono);font-size:9px;letter-spacing:.12em;color:var(--dim)}
+.dcell .v{font-family:var(--mono);font-size:15px;font-weight:600;color:var(--white);margin-top:2px}
+.dcell .v small{font-size:9.5px;color:var(--dim);font-weight:400}
+.dcell.hi .v{color:var(--fuel)}
+.dcell.ox .v{color:var(--ox)}
+
+.valid{background:var(--panel2);border:1px solid var(--line2);border-radius:3px;padding:9px 11px;font-family:var(--mono);font-size:10.5px;line-height:1.7}
+.valid b{color:var(--white);font-weight:600;letter-spacing:.08em}
+.valid .ok{color:var(--ok)} .valid .bad{color:var(--warn)}
+.valid table{width:100%;border-collapse:collapse;margin-top:4px}
+.valid td{padding:1px 6px 1px 0;color:var(--steel)}
+.valid td:first-child{color:var(--dim)}
+
+footer{grid-column:1/-1;border-top:1px solid var(--line2);padding:10px 18px;font-family:var(--mono);font-size:9.8px;color:var(--dim);line-height:1.7}
+footer b{color:var(--steel);font-weight:500}
+
+@media(max-width:900px){
+  main{grid-template-columns:1fr}
+  aside{max-height:none;border-right:0;border-bottom:1px solid var(--line2)}
+  .stage{max-height:none}
+}
+@media(prefers-reduced-motion:reduce){ .anim-only{display:none} }
+</style>
+</head>
+<body>
+<header>
+  <h1>PROPULSION<span>LAB</span></h1>
+  <div class="tagline">CHAMBER-RESOLVED ROCKET ENGINE DYNAMICS · v0.1</div>
+  <div class="hdr-right">
+    <div class="mode-tabs">
+      <button id="tabLiquid" class="on">LIQUID ENGINE</button>
+      <button id="tabSolid">SOLID MOTOR</button>
+    </div>
+    <select id="presetSel" aria-label="Preset engine"></select>
+  </div>
+</header>
+<main>
+<aside id="buildSheet"></aside>
+<div class="stage">
+  <div class="runbar" id="runbar"></div>
+  <div class="viewport schematic">
+    <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+    <div class="vp-tag" id="vpTag">CYCLE SCHEMATIC — FLOW PATH</div>
+    <div class="vp-tag2" id="vpTag2"></div>
+    <canvas id="mainCv" height="470"></canvas>
+  </div>
+  <div class="plots">
+    <div class="plot-tabs" id="plotTabs"></div>
+    <div class="viewport"><canvas id="plotCv" height="230"></canvas></div>
+  </div>
+  <div class="sec-h" style="border:0;margin:2px 0 0">LIVE DATA</div>
+  <div class="data-grid" id="dataGrid"></div>
+  <div class="valid" id="validBox" style="display:none"></div>
+</div>
+<footer>
+<b>PROPULSION LAB</b> — an open educational rocket-propulsion tool. Ideal-rocket model: CEA-derived combustion properties (interpolated) · isentropic frozen nozzle w/ efficiency factors · lumped feed-system lag per cycle · Saint-Robert burn law r = aPcⁿ with quasi-steady grain burnback. Preset outputs are pinned to published figures within ±5–10% (see VALIDATION readout on presets); two-phase flow, erosive burning, film cooling and real turbomachinery maps are not modelled. Certify nothing with it.
+</footer>
+</main>
+<script>
+'use strict';
+const g0=9.80665;
+/* ================= PROPELLANT DATA =================
+   Liquid: grids of [MR, Tc(K), M(kg/kmol), gamma] near Pc≈7MPa, CEA equilibrium-derived (RPE/Sutton App.).
+   Interpolated linearly in MR. c* efficiency 0.96, Cf efficiency 0.985 applied. */
+const PROPS_L={
+ lox_rp1:{name:'LOX / RP-1',ox:'LOX',fu:'RP-1',rho_ox:1141,rho_f:810,mrRange:[1.8,3.2],
+  grid:[[1.8,3455,21.6,1.24],[2.2,3625,22.7,1.225],[2.6,3690,23.5,1.215],[2.9,3680,24.1,1.21],[3.2,3640,24.6,1.205]],cryo:'ox'},
+ lox_lh2:{name:'LOX / LH2',ox:'LOX',fu:'LH2',rho_ox:1141,rho_f:71,mrRange:[3.5,7.0],
+  grid:[[3.5,2985,8.9,1.26],[4.5,3320,10.8,1.235],[5.5,3505,12.4,1.215],[6.0,3560,13.2,1.205],[7.0,3620,14.7,1.19]],cryo:'both'},
+ lox_ch4:{name:'LOX / CH4',ox:'LOX',fu:'Methane',rho_ox:1141,rho_f:424,mrRange:[2.6,4.0],
+  grid:[[2.6,3350,19.3,1.235],[3.0,3480,20.4,1.225],[3.4,3545,21.3,1.215],[3.7,3560,21.9,1.21],[4.0,3555,22.4,1.205]],cryo:'both'},
+ lox_eth:{name:'LOX / Ethanol-95',ox:'LOX',fu:'Ethanol',rho_ox:1141,rho_f:800,mrRange:[1.2,2.2],
+  grid:[[1.2,2960,21.9,1.24],[1.5,3195,22.9,1.225],[1.8,3320,23.7,1.215],[2.0,3355,24.2,1.21],[2.2,3360,24.7,1.205]],cryo:'ox'},
+ nto_mmh:{name:'NTO / MMH',ox:'N2O4',fu:'MMH',rho_ox:1440,rho_f:880,mrRange:[1.6,2.6],
+  grid:[[1.6,3255,20.9,1.235],[1.9,3370,21.8,1.225],[2.1,3415,22.4,1.22],[2.4,3430,23.1,1.21],[2.6,3420,23.6,1.205]],cryo:'none'}
+};
+/* Cycles: pcMax(Pa), feed lag tau(s), spool description */
+const CYCLES={
+ pf:{name:'PRESSURE-FED',pcMin:0.4e6,pcMax:3.5e6,tau:0.18,dump:false,pump:false,
+     desc:'Tank pressure pushes propellant directly. Simple, reliable — chamber pressure capped by tank structural mass.'},
+ gg:{name:'GAS GENERATOR (OPEN)',pcMin:2e6,pcMax:12e6,tau:0.9,dump:true,pump:true,
+     desc:'A fuel-rich gas generator drives the turbopump; turbine exhaust is dumped overboard — a few % of propellant paid as Isp tax.'},
+ orsc:{name:'STAGED COMBUSTION — ORSC',pcMin:6e6,pcMax:28e6,tau:1.4,dump:false,pump:true,
+     desc:'ALL oxidizer + some fuel burns oxygen-rich in a preburner, drives the turbine, then enters the main chamber. No dump loss, brutal materials problem.'},
+ frsc:{name:'STAGED COMBUSTION — FRSC',pcMin:6e6,pcMax:23e6,tau:1.5,dump:false,pump:true,
+     desc:'Fuel-rich preburner (RS-25 style). All turbine gas is recovered into the chamber — closed cycle, max Isp.'},
+ exp:{name:'EXPANDER (CLOSED)',pcMin:1.5e6,pcMax:7e6,tau:2.0,dump:false,pump:true,
+     desc:'Fuel picks up heat in the regen jacket and expands through the turbine — no burner at all. Heat pickup caps thrust around ~150 kN class.'},
+ ep:{name:'ELECTRIC PUMP',pcMin:1.5e6,pcMax:12e6,tau:0.35,dump:false,pump:true,elec:true,
+     desc:'Battery-powered motors spin the pumps (Rutherford style). Clean and controllable — you carry the battery mass instead of a turbine.'}
+};
+/* Solid propellants: r = a·Pc^n (a in mm/s at Pc in MPa), rho kg/m3, c* m/s, Tc, gamma.
+   APCP/double-base: textbook (Sutton ch.12); KNSB: R.Nakka characterization (approx single-fit). */
+const PROPS_S={
+ apcp:{name:'APCP (AP/HTPB/Al)',a:4.8,n:0.35,rho:1750,cstar:1550,Tc:3350,g:1.21,eff:0.90},
+ knsb:{name:'KNSB (sorbitol sugar)',a:5.6,n:0.33,rho:1780,cstar:915,Tc:1600,g:1.13,eff:0.88},
+ db:{name:'Double-base (NC/NG)',a:6.0,n:0.30,rho:1600,cstar:1250,Tc:2500,g:1.22,eff:0.90}
+};
+const GRAINS={
+ bates:{name:'BATES (segmented tube)',desc:'Cylindrical segments, core + both faces burning. Near-neutral thrust curve — the hobby & test-motor workhorse.'},
+ end:{name:'END BURNER (cigarette)',desc:'Only the aft face burns. Tiny thrust, huge burn time — sustainers and gas generators.'}
+};
+/* ============ PRESETS (published figures for validation) ============ */
+const PRESETS_L={
+ custom:{name:'— CUSTOM BUILD —'},
+ merlin:{name:'Merlin 1D · SpaceX',cycle:'gg',prop:'lox_rp1',mr:2.36,pc:9.7e6,Dt:0.262,eps:16,alt:0,
+   pub:{ispSL:282,ispVac:311,F:'845 kN SL'}},
+ rs25:{name:'RS-25 · Aerojet R.',cycle:'frsc',prop:'lox_lh2',mr:6.03,pc:20.64e6,Dt:0.262,eps:69,alt:0,
+   pub:{ispSL:366,ispVac:452,F:'1860 kN SL'}},
+ rd180:{name:'RD-180 · Energomash',cycle:'orsc',prop:'lox_rp1',mr:2.72,pc:26.7e6,Dt:0.235,eps:36.9,alt:0,
+   pub:{ispSL:311,ispVac:338,F:'3830 kN SL (2 ch.)'}},
+ rl10:{name:'RL10B-2 · Aerojet R.',cycle:'exp',prop:'lox_lh2',mr:5.88,pc:4.42e6,Dt:0.152,eps:285,alt:30000,
+   pub:{ispSL:'—',ispVac:465.5,F:'110 kN vac'}},
+ ruth:{name:'Rutherford · Rocket Lab',cycle:'ep',prop:'lox_rp1',mr:2.4,pc:9e6,Dt:0.048,eps:14,alt:0,
+   pub:{ispSL:'—',ispVac:311,F:'~25 kN'}},
+ kestrel:{name:'Kestrel · SpaceX',cycle:'pf',prop:'lox_rp1',mr:2.34,pc:0.95e6,Dt:0.118,eps:60,alt:30000,
+   pub:{ispSL:'—',ispVac:317,F:'31 kN vac'}}
+};
+const PRESETS_S={
+ custom:{name:'— CUSTOM GRAIN —'},
+ kL:{name:'KNSB L-class BATES',prop:'knsb',grain:'bates',N:4,D:0.075,d:0.025,L:0.115,Dt:0.017,eps:9},
+ apJ:{name:'APCP J-class BATES',prop:'apcp',grain:'bates',N:3,D:0.054,d:0.020,L:0.095,Dt:0.011,eps:8},
+ sus:{name:'APCP end-burn sustainer',prop:'apcp',grain:'end',N:1,D:0.060,d:0,L:0.140,Dt:0.006,eps:6}
+};
+/* ================= CORE PHYSICS ================= */
+function gasAt(prop,mr){const G=PROPS_L[prop].grid;let i=0;while(i<G.length-2&&mr>G[i+1][0])i++;
+ const A=G[i],B=G[i+1],t=Math.min(1,Math.max(0,(mr-A[0])/(B[0]-A[0])));
+ return{Tc:A[1]+t*(B[1]-A[1]),M:A[2]+t*(B[2]-A[2]),g:A[3]+t*(B[3]-A[3])};}
+function cstarIdeal(g,R,Tc){return Math.sqrt(g*R*Tc)/(g*Math.sqrt(Math.pow(2/(g+1),(g+1)/(g-1))));}
+function areaRatio(M,g){return (1/M)*Math.pow((2/(g+1))*(1+(g-1)/2*M*M),(g+1)/(2*(g-1)));}
+function machFromEps(eps,g){let M=Math.max(1.3,Math.sqrt(eps));for(let i=0;i<60;i++){
+ const f=areaRatio(M,g)-eps,df=(areaRatio(M+1e-4,g)-areaRatio(M-1e-4,g))/2e-4;M-=f/df;if(M<1.001)M=1.001;}return M;}
+function nozzle(g,eps,Pc,Pa){const Me=machFromEps(eps,g);
+ const Pe=Pc*Math.pow(1+(g-1)/2*Me*Me,-g/(g-1));
+ const term=(2*g*g/(g-1))*Math.pow(2/(g+1),(g+1)/(g-1))*(1-Math.pow(Pe/Pc,(g-1)/g));
+ return{cf:Math.sqrt(Math.max(0,term))+(Pe-Pa)/Pc*eps,Pe,Me,sep:Pe<0.35*Pa};}
+function pAmb(h){return 101325*Math.exp(-h/7640);} // approx std atmosphere
+function bulkRho(p,mr){const P=PROPS_L[p];return (1+mr)/(mr/P.rho_ox+1/P.rho_f);}
+/* full liquid steady solution at commanded Pc */
+function solveLiquid(s,PcAct){
+ const P=PROPS_L[s.prop],C=CYCLES[s.cycle],gas=gasAt(s.prop,s.mr);
+ const R=8314.46/gas.M, cs=0.96*cstarIdeal(gas.g,R,gas.Tc);
+ const At=Math.PI/4*s.Dt*s.Dt, Pa=pAmb(s.alt);
+ const Pc=PcAct!==undefined?PcAct:s.pc;
+ const mdot=Pc*At/cs;
+ const nz=nozzle(gas.g,s.eps,Math.max(Pc,1e4),Pa);
+ const cf=0.99*nz.cf*1.010; // 1.010 = shifting-equilibrium recovery (frozen model underpredicts)
+ const F=cf*Pc*At;
+ let isp=F/(mdot*g0)||0;
+ const nzV=nozzle(gas.g,s.eps,Math.max(Pc,1e4),0);
+ let ispV=0.99*nzV.cf*1.015*cs/g0;
+ /* cycle bookkeeping */
+ let zeta=0,Ppump=0,battM=0;
+ if(C.pump){const dP=1.35*Pc, rho=bulkRho(s.prop,s.mr);Ppump=mdot*dP/(rho*0.70);}
+ if(C.dump){ // GG: turbine specific work ~ eta_t * dh_gg  (fuel-rich ~1000K gas)
+   const w_t=0.60*1.05e6; zeta=Math.min(0.12,Ppump/((mdot||1e-9)*w_t));
+   isp=isp*(1-zeta)+zeta*130; ispV=ispV*(1-zeta)+zeta*145;}
+ if(C.elec){battM=(Ppump/0.85)*150/3600/200;} // 150s burn, 200 Wh/kg pack
+ return{gas,R,cs,At,Pa,mdot,cf,F,isp,ispV,Pe:nz.Pe,sep:nz.sep,zeta,Ppump,battM,Pc};
+}
+/* solid burnback: returns arrays + summary */
+function solveSolid(s){
+ const P=PROPS_S[s.prop],At=Math.PI/4*s.Dt*s.Dt,Pa=101325;
+ const aSI=P.a*1e-3*Math.pow(1e-6,P.n);
+ const wmax=s.grain==='bates'?Math.min((s.D-s.d)/2,s.L/2):s.L;
+ const Ab=w=>s.grain==='bates'
+   ? s.N*(Math.PI*(s.d+2*w)*Math.max(0,s.L-2*w)+Math.PI/2*(s.D*s.D-Math.pow(s.d+2*w,2)))
+   : Math.PI/4*s.D*s.D;
+ const T=[],PC=[],FF=[];let w=0,t=0,It=0,PcMax=0;
+ const steps=700,dw=wmax/steps;let guard=0;
+ while(w<wmax&&guard++<steps+5){
+  const ab=Math.max(0,Ab(w)),Kn=ab/At;
+  const Pc=Math.pow(Kn*aSI*P.rho*P.cstar,1/(1-P.n));
+  const r=aSI*Math.pow(Pc,P.n),dt=dw/Math.max(r,1e-9);
+  const nz=nozzle(P.g,s.eps,Math.max(Pc,2e5),Pa);
+  const F=Math.max(0,P.eff*nz.cf*Pc*At);
+  T.push(t);PC.push(Pc);FF.push(F);It+=F*dt;PcMax=Math.max(PcMax,Pc);
+  w+=dw;t+=dt;}
+ T.push(t);PC.push(0);FF.push(0);
+ const Vp=s.grain==='bates'?s.N*Math.PI/4*(s.D*s.D-s.d*s.d)*s.L:Math.PI/4*s.D*s.D*s.L;
+ const mp=Vp*P.rho, Favg=It/(t||1e-9), ispDel=It/(mp*g0);
+ const Kn0=Ab(0)/At,Kn1=Ab(wmax*0.999)/At;
+ const cls=motorClass(It);
+ return{T,PC,FF,tb:t,It,PcMax,Favg,mp,isp:ispDel,Kn0,Kn1,cls,wmax,Ab,
+   port:s.grain==='bates'?(Math.PI/4*s.d*s.d)/At:99};
+}
+function motorClass(It){const L='ABCDEFGHIJKLMNOPQR';let lo=1.25,i=0;
+ while(It>lo*2&&i<L.length-1){lo*=2;i++;}return It<1.25?'<A':L[i];}
+const fmt=(v,d=1)=>v>=1e6?(v/1e6).toFixed(d)+'M':v>=1e3?(v/1e3).toFixed(d)+'k':v.toFixed(d);
+const fx=(v,d)=>Number(v).toFixed(d);
+</script>
+<script>
+/* ================= STATE ================= */
+let MODE='L';
+const stL={cycle:'gg',prop:'lox_rp1',mr:2.36,pc:9.7e6,Dt:0.262,eps:16,alt:0,preset:'merlin'};
+const stS={prop:'knsb',grain:'bates',N:4,D:0.075,d:0.025,L:0.115,Dt:0.017,eps:9,preset:'kL'};
+let runL={on:false,throttle:1,mdot_f:0,hist:[],t:0};
+let runS={on:false,t:0,speed:1,sol:null};
+let plotSel=0, lastTs=0;
+
+const CV=document.getElementById('mainCv'), CX=CV.getContext('2d');
+const PV=document.getElementById('plotCv'), PX=PV.getContext('2d');
+/* Fix a canvas to a FIXED backing resolution (W×H CSS units) so its intrinsic
+   size never changes with layout — kills the resize feedback loop / flicker.
+   Context is scaled by dpr, so all drawing is done in W×H user units. */
+function fitFixed(c,ctx,W,H){const d=window.devicePixelRatio||1;
+ const bw=Math.round(W*d),bh=Math.round(H*d);
+ if(c.width!==bw||c.height!==bh){c.width=bw;c.height=bh;}
+ ctx.setTransform(d,0,0,d,0,0);}
+/* Fit a fixed W×H scene into the canvas's actual client box (set by CSS, so
+   no feedback loop), preserving aspect and centering. Clears first. */
+function fitScene(c,ctx,W,H){const d=window.devicePixelRatio||1;
+ const cw=c.clientWidth||W, ch=c.clientHeight||H;
+ const bw=Math.round(cw*d),bh=Math.round(ch*d);
+ if(c.width!==bw||c.height!==bh){c.width=bw;c.height=bh;}
+ ctx.setTransform(d,0,0,d,0,0);ctx.clearRect(0,0,cw,ch);
+ const s=Math.min(cw/W,ch/H);
+ ctx.setTransform(d*s,0,0,d*s,d*(cw-W*s)/2,d*(ch-H*s)/2);}
+const C={ox:'#66C7FF',fuel:'#FFB454',hot:'#FF6B4A',elec:'#F2E85C',steel:'#9FB6C9',dim:'#5E7385',
+ line:'#33465C',white:'#E8F1F8',prop:'#C9A96A',propDark:'#8A7448',flame:'#FFD9A0'};
+
+/* ================= DRAW HELPERS ================= */
+function lbl(ctx,x,y,t,col,sz=9.5,align='center'){ctx.font=`500 ${sz}px 'IBM Plex Mono',monospace`;
+ ctx.fillStyle=col||C.dim;ctx.textAlign=align;ctx.letterSpacing='1px';ctx.fillText(t,x,y);ctx.letterSpacing='0px';}
+function rrect(ctx,x,y,w,h,r){ctx.beginPath();ctx.roundRect(x,y,w,h,r);}
+function tank(ctx,x,y,w,h,color,name,fill){
+ rrect(ctx,x,y,w,h,12);ctx.strokeStyle=color;ctx.lineWidth=1.4;ctx.stroke();
+ ctx.save();rrect(ctx,x,y,w,h,12);ctx.clip();
+ ctx.fillStyle=color+'26';ctx.fillRect(x,y+h*(1-fill),w,h*fill);
+ ctx.strokeStyle=color+'55';ctx.beginPath();ctx.moveTo(x,y+h*(1-fill));ctx.lineTo(x+w,y+h*(1-fill));ctx.stroke();
+ ctx.restore();lbl(ctx,x+w/2,y+h/2+3,name,color,10);}
+function pump(ctx,x,y,color,elec){
+ ctx.beginPath();ctx.arc(x,y,14,0,7);ctx.strokeStyle=color;ctx.lineWidth=1.4;ctx.stroke();
+ ctx.beginPath();ctx.moveTo(x-6,y+7);ctx.lineTo(x+2,y-8);ctx.lineTo(x+4,y+3);ctx.lineTo(x+8,y-5);
+ ctx.strokeStyle=elec?C.elec:color;ctx.lineWidth=1.2;ctx.stroke();}
+function turbine(ctx,x,y){ctx.beginPath();ctx.moveTo(x-13,y-11);ctx.lineTo(x+13,y-4);ctx.lineTo(x+13,y+4);ctx.lineTo(x-13,y+11);ctx.closePath();
+ ctx.strokeStyle=C.hot;ctx.lineWidth=1.4;ctx.stroke();lbl(ctx,x,y+26,'TURBINE',C.dim,8.5);}
+function box(ctx,x,y,w,h,color,name){rrect(ctx,x-w/2,y-h/2,w,h,3);ctx.strokeStyle=color;ctx.lineWidth=1.4;ctx.stroke();
+ ctx.fillStyle=color+'1A';ctx.fill();lbl(ctx,x,y+3,name,color,8.5);}
+function shaft(ctx,x1,x2,y){ctx.setLineDash([5,4]);ctx.strokeStyle=C.dim;ctx.lineWidth=1;
+ ctx.beginPath();ctx.moveTo(x1,y);ctx.lineTo(x2,y);ctx.stroke();ctx.setLineDash([]);}
+function pipe(ctx,pts,color,w=1.6){ctx.strokeStyle=color;ctx.lineWidth=w;ctx.lineJoin='round';
+ ctx.beginPath();ctx.moveTo(pts[0][0],pts[0][1]);for(let i=1;i<pts.length;i++)ctx.lineTo(pts[i][0],pts[i][1]);ctx.stroke();}
+/* thrust chamber: injector at (cx,ty), throat at ty+ch, exit half-width ew */
+function chamber(ctx,cx,ty,cw,ch,tw,ew,bl,glow,plume,pcol){
+ ctx.strokeStyle=C.steel;ctx.lineWidth=1.6;
+ const thy=ty+ch, exy=thy+bl;
+ ctx.beginPath();
+ ctx.moveTo(cx-cw,ty);ctx.lineTo(cx-cw,ty+ch*0.55);ctx.quadraticCurveTo(cx-cw,thy,cx-tw,thy);
+ ctx.quadraticCurveTo(cx-tw-2,thy+bl*0.35,cx-ew,exy);
+ ctx.moveTo(cx+cw,ty);ctx.lineTo(cx+cw,ty+ch*0.55);ctx.quadraticCurveTo(cx+cw,thy,cx+tw,thy);
+ ctx.quadraticCurveTo(cx+tw+2,thy+bl*0.35,cx+ew,exy);
+ ctx.moveTo(cx-cw,ty);ctx.lineTo(cx+cw,ty);ctx.stroke();
+ // injector hatch
+ ctx.strokeStyle=C.dim;ctx.lineWidth=1;
+ for(let i=-3;i<=3;i++){ctx.beginPath();ctx.moveTo(cx+i*cw/4,ty);ctx.lineTo(cx+i*cw/4,ty+7);ctx.stroke();}
+ if(glow>0.02){
+  const g=ctx.createRadialGradient(cx,ty+ch*0.45,2,cx,ty+ch*0.45,cw*1.1);
+  g.addColorStop(0,`rgba(255,220,160,${0.75*glow})`);g.addColorStop(0.55,`rgba(255,120,60,${0.4*glow})`);g.addColorStop(1,'rgba(255,80,40,0)');
+  ctx.fillStyle=g;ctx.fillRect(cx-cw,ty+4,cw*2,ch+bl);
+  // plume
+  const pl=plume*(0.9+0.2*Math.sin(performance.now()/33+Math.sin(performance.now()/71)));
+  if(pl>1){const pg=ctx.createLinearGradient(cx,exy,cx,exy+pl);
+   pg.addColorStop(0,pcol+'E6');pg.addColorStop(0.35,'#FF9C4ABB');pg.addColorStop(1,'rgba(255,80,40,0)');
+   ctx.fillStyle=pg;ctx.beginPath();
+   ctx.moveTo(cx-ew*0.92,exy);ctx.quadraticCurveTo(cx-ew*0.6,exy+pl*0.6,cx,exy+pl);
+   ctx.quadraticCurveTo(cx+ew*0.6,exy+pl*0.6,cx+ew*0.92,exy);ctx.closePath();ctx.fill();
+   // shock diamonds
+   ctx.fillStyle='rgba(255,240,210,0.5)';
+   for(let i=1;i<=3;i++){const dy=exy+pl*0.16*i,r=ew*0.2*(1-i*0.18);
+    ctx.beginPath();ctx.ellipse(cx,dy,r,r*1.8,0,0,7);ctx.fill();}}
+ }}
+/* path with particles */
+class Flow{constructor(pts,color){this.pts=pts;this.color=color;this.parts=[];this.len=0;this.seg=[0];
+ for(let i=1;i<pts.length;i++){this.len+=Math.hypot(pts[i][0]-pts[i-1][0],pts[i][1]-pts[i-1][1]);this.seg.push(this.len);}}
+ pos(s){s=Math.max(0,Math.min(this.len,s));let i=1;while(this.seg[i]<s)i++;
+  const t=(s-this.seg[i-1])/(this.seg[i]-this.seg[i-1]);
+  return[this.pts[i-1][0]+t*(this.pts[i][0]-this.pts[i-1][0]),this.pts[i-1][1]+t*(this.pts[i][1]-this.pts[i-1][1])];}
+ step(ctx,dt,rate,speed){
+  if(rate>0&&Math.random()<rate*dt*60)this.parts.push(0);
+  const v=speed*dt;this.parts=this.parts.filter(s=>s<this.len);
+  ctx.fillStyle=this.color;
+  for(let i=0;i<this.parts.length;i++){this.parts[i]+=v;const p=this.pos(this.parts[i]);
+   ctx.globalAlpha=0.9;ctx.beginPath();ctx.arc(p[0],p[1],1.8,0,7);ctx.fill();
+   ctx.globalAlpha=0.25;ctx.beginPath();ctx.arc(p[0],p[1],3.6,0,7);ctx.fill();}
+  ctx.globalAlpha=1;}}
+let flows={key:'',list:[]};
+/* ============ LIQUID SCHEMATIC LAYOUTS ============ */
+function buildFlows(cy){
+ const F=[];
+ const oxT=[215,128],fuT=[785,128]; // tank outlets
+ const inj=[500,286], injL=[452,286], injR=[548,286];
+ const pox=[300,205],pfu=[700,205],turb=[500,205];
+ if(cy==='pf'){
+  F.push(new Flow([[470,66],[300,66],[215,72]],'#9FE0B8'));
+  F.push(new Flow([[530,66],[700,66],[785,72]],'#9FE0B8'));
+  F.push(new Flow([oxT,[215,250],[452,250],injL],C.ox));
+  F.push(new Flow([fuT,[785,250],[548,250],injR],C.fuel));
+ }else if(cy==='ep'){
+  F.push(new Flow([oxT,[pox[0]-85,pox[1]]],C.ox));
+  F.push(new Flow([[pox[0],pox[1]],[452,205],[452,270],injL],C.ox));
+  F.push(new Flow([fuT,[pfu[0]+85,pfu[1]]],C.fuel));
+  F.push(new Flow([[pfu[0],pfu[1]],[548,205],[548,270],injR],C.fuel));
+ }else if(cy==='gg'){
+  F.push(new Flow([oxT,[pox[0]-85,pox[1]]],C.ox));
+  F.push(new Flow([[pox[0],pox[1]],[452,205],[452,270],injL],C.ox));
+  F.push(new Flow([fuT,[pfu[0]+85,pfu[1]]],C.fuel));
+  F.push(new Flow([[pfu[0],pfu[1]],[548,205],[548,270],injR],C.fuel));
+  F.push(new Flow([[pox[0]+14,pox[1]-8],[430,140],[473,140]],C.ox));    // GG taps
+  F.push(new Flow([[pfu[0]-14,pfu[1]-8],[570,140],[527,140]],C.fuel));
+  F.push(new Flow([[500,153],[500,192]],C.hot));                        // GG->turbine
+  F.push(new Flow([[513,213],[610,246],[610,268]],C.hot));              // dump
+ }else if(cy==='orsc'||cy==='frsc'){
+  const rich=cy==='orsc';
+  if(rich){ // ALL ox through preburner
+   F.push(new Flow([oxT,[pox[0]-85,pox[1]]],C.ox));
+   F.push(new Flow([[pox[0],pox[1]],[380,205],[380,140],[473,140]],C.ox));
+   F.push(new Flow([fuT,[pfu[0]+85,pfu[1]]],C.fuel));
+   F.push(new Flow([[pfu[0],pfu[1]],[548,205],[548,270],injR],C.fuel));
+   F.push(new Flow([[pfu[0]-14,pfu[1]-8],[570,140],[527,140]],C.fuel));
+  }else{
+   F.push(new Flow([fuT,[pfu[0]+85,pfu[1]]],C.fuel));
+   F.push(new Flow([[pfu[0],pfu[1]],[620,205],[620,140],[527,140]],C.fuel));
+   F.push(new Flow([oxT,[pox[0]-85,pox[1]]],C.ox));
+   F.push(new Flow([[pox[0],pox[1]],[452,205],[452,270],injL],C.ox));
+   F.push(new Flow([[pox[0]+14,pox[1]-8],[430,140],[473,140]],C.ox));
+  }
+  F.push(new Flow([[500,153],[500,192]],C.hot));
+  F.push(new Flow([[500,218],[500,255],inj],C.hot)); // hot gas into injector
+ }else if(cy==='exp'){
+  F.push(new Flow([oxT,[pox[0]-85,pox[1]]],C.ox));
+  F.push(new Flow([[pox[0],pox[1]],[452,205],[452,270],injL],C.ox));
+  F.push(new Flow([fuT,[pfu[0]+85,pfu[1]]],C.fuel));
+  // fuel -> down around nozzle (regen) -> up to turbine -> injector
+  F.push(new Flow([[pfu[0],pfu[1]],[655,205],[655,430],[576,430],[566,352],[600,300],[600,160],[513,150]],C.fuel));
+  F.push(new Flow([[500,163],[548,240],injR],C.fuel));
+ }
+ return F;
+}
+function drawLiquid(dt,sol){
+ fitScene(CV,CX,1000,470);
+ // grid
+ CX.strokeStyle='rgba(60,84,110,0.10)';CX.lineWidth=1;
+ for(let x=0;x<=1000;x+=50){CX.beginPath();CX.moveTo(x,0);CX.lineTo(x,470);CX.stroke();}
+ for(let y=0;y<=470;y+=50){CX.beginPath();CX.moveTo(0,y);CX.lineTo(1000,y);CX.stroke();}
+ const cy=stL.cycle,P=PROPS_L[stL.prop],CD=CYCLES[cy];
+ const thr=runL.on?runL.throttle:0, pcFrac=sol.PcA/stL.pc;
+ // pipes (static under particles)
+ flows.list.forEach(f=>pipe(CX,f.pts,f.color+'66',2.4));
+ // tanks
+ tank(CX,140,38,150,88,C.ox,P.ox,0.72);
+ tank(CX,710,38,150,88,C.fuel,P.fu,0.72);
+ if(cy==='pf'){CX.beginPath();CX.arc(500,66,26,0,7);CX.strokeStyle='#9FE0B8';CX.lineWidth=1.4;CX.stroke();
+  lbl(CX,500,70,'He',' #9FE0B8'.trim(),10);lbl(CX,500,108,'PRESSURANT',C.dim,8.5);}
+ // machinery
+ if(CD.pump){
+  pump(CX,300,205,C.ox,CD.elec);lbl(CX,300,238,'OX PUMP',C.dim,8.5);
+  pump(CX,700,205,C.fuel,CD.elec);lbl(CX,700,238,'FUEL PUMP',C.dim,8.5);
+  if(CD.elec){box(CX,500,205,86,30,C.elec,'BATTERY');
+   CX.strokeStyle=C.elec;CX.setLineDash([2,3]);CX.beginPath();CX.moveTo(457,205);CX.lineTo(314,205);
+   CX.moveTo(543,205);CX.lineTo(686,205);CX.stroke();CX.setLineDash([]);
+  }else{shaft(CX,314,487,205);shaft(CX,513,686,205);turbine(CX,500,205);}
+ }
+ if(cy==='gg')box(CX,500,140,64,26,C.hot,'GAS GEN');
+ if(cy==='orsc')box(CX,500,140,104,26,C.hot,'PREBURNER O-R');
+ if(cy==='frsc')box(CX,500,140,104,26,C.hot,'PREBURNER F-R');
+ if(cy==='exp'){turbine(CX,500,150);lbl(CX,640,418,'REGEN JACKET',C.dim,8.5,'left');}
+ if(cy==='gg'){ // dump nozzle
+  CX.strokeStyle=C.hot;CX.lineWidth=1.3;CX.beginPath();
+  CX.moveTo(604,268);CX.lineTo(598,282);CX.moveTo(616,268);CX.lineTo(622,282);CX.stroke();
+  lbl(CX,648,278,'OVBD DUMP',C.dim,8.5,'left');
+  if(sol.zeta)lbl(CX,648,290,'ζ = '+(sol.zeta*100).toFixed(1)+'% flow',C.hot,8.5,'left');}
+ // chamber & plume
+ const plume=runL.on?Math.sqrt(Math.max(0,sol.F)/1000)*7*Math.min(1,pcFrac+0.05):0;
+ chamber(CX,500,286,48,96,14,14+Math.min(46,Math.pow(stL.eps,0.55)*6),58,runL.on?Math.min(1,pcFrac):0,plume,C.flame);
+ lbl(CX,433,300,'INJ',C.dim,8,'right');
+ lbl(CX,500,462,CD.name,C.steel,10);
+ // particles
+ const speed=90+240*thr*pcFrac, rate=runL.on?0.5+1.6*thr:0;
+ flows.list.forEach(f=>f.step(CX,dt,rate,speed));
+}
+</script>
+<script>
+/* ============ SOLID MOTOR RENDERER ============ */
+function drawSolid(dt){
+ fitScene(CV,CX,1000,470);
+ CX.strokeStyle='rgba(60,84,110,0.10)';CX.lineWidth=1;
+ for(let x=0;x<=1000;x+=50){CX.beginPath();CX.moveTo(x,0);CX.lineTo(x,470);CX.stroke();}
+ for(let y=0;y<=470;y+=50){CX.beginPath();CX.moveTo(0,y);CX.lineTo(1000,y);CX.stroke();}
+ const S=stS,sol=runS.sol;if(!sol)return;
+ // current web from time cursor
+ let idx=0;const T=sol.T;
+ while(idx<T.length-2&&T[idx+1]<runS.t)idx++;
+ const frac=Math.min(1,runS.t/sol.tb), w=sol.wmax*Math.min(1,frac<1?idx/(T.length-2):(1)), burning=runS.on&&frac<1;
+ const Pc=burning?sol.PC[idx]:0, Fn=burning?sol.FF[idx]:0;
+ /* --- longitudinal section (left, 620 wide) --- */
+ const mx=60,my=170,mw=520,caseH=150;
+ const scaleL=Math.min( (mw-90)/(S.N*S.L*(S.grain==='bates'?1.06:1)+0.02), caseH/S.D*0.9 );
+ const pxL=S.L*scaleL, pxD=S.D*scaleL, gap=S.grain==='bates'?pxL*0.06:0;
+ const totW=S.N*pxL+(S.N-1)*gap, x0=mx+40, ymid=my+caseH/2;
+ // case
+ rrect(CX,x0-26,ymid-pxD/2-10,totW+52,pxD+20,8);CX.strokeStyle=C.steel;CX.lineWidth=1.6;CX.stroke();
+ lbl(CX,x0-26+((totW+52)/2),ymid-pxD/2-20,'MOTOR CASE — LONGITUDINAL SECTION',C.dim,8.5);
+ // nozzle at right
+ const nx=x0+totW+26;
+ CX.strokeStyle=C.steel;CX.beginPath();
+ CX.moveTo(nx,ymid-pxD/2*0.7);CX.lineTo(nx+26,ymid-8);CX.lineTo(nx+60,ymid-24);
+ CX.moveTo(nx,ymid+pxD/2*0.7);CX.lineTo(nx+26,ymid+8);CX.lineTo(nx+60,ymid+24);CX.stroke();
+ if(S.grain==='bates'){
+  const wpx=w*scaleL, core0=S.d*scaleL/2;
+  for(let i=0;i<S.N;i++){
+   const gx=x0+i*(pxL+gap), gL=Math.max(0,pxL-2*wpx), gxs=gx+wpx;
+   const coreR=core0+wpx;
+   CX.fillStyle=C.prop+'55';CX.strokeStyle=C.propDark;CX.lineWidth=1;
+   // top & bottom slabs
+   if(gL>0.5&&coreR<pxD/2){
+    CX.fillRect(gxs,ymid-pxD/2,gL,pxD/2-coreR);CX.strokeRect(gxs,ymid-pxD/2,gL,pxD/2-coreR);
+    CX.fillRect(gxs,ymid+coreR,gL,pxD/2-coreR);CX.strokeRect(gxs,ymid+coreR,gL,pxD/2-coreR);
+    if(burning){CX.strokeStyle=C.hot;CX.lineWidth=2;CX.shadowColor=C.hot;CX.shadowBlur=6;
+     CX.beginPath();CX.moveTo(gxs,ymid-coreR);CX.lineTo(gxs+gL,ymid-coreR);
+     CX.moveTo(gxs,ymid+coreR);CX.lineTo(gxs+gL,ymid+coreR);
+     CX.moveTo(gxs,ymid-pxD/2);CX.lineTo(gxs,ymid-coreR);CX.moveTo(gxs,ymid+coreR);CX.lineTo(gxs,ymid+pxD/2);
+     CX.moveTo(gxs+gL,ymid-pxD/2);CX.lineTo(gxs+gL,ymid-coreR);CX.moveTo(gxs+gL,ymid+coreR);CX.lineTo(gxs+gL,ymid+pxD/2);
+     CX.stroke();CX.shadowBlur=0;}
+   }}
+ }else{ // end burner: front advances leftward from nozzle end
+  const burned=w*scaleL, gW=Math.max(0,S.L*scaleL-burned);
+  CX.fillStyle=C.prop+'55';CX.strokeStyle=C.propDark;
+  if(gW>0.5){CX.fillRect(x0,ymid-pxD/2,gW,pxD);CX.strokeRect(x0,ymid-pxD/2,gW,pxD);
+   if(burning){CX.strokeStyle=C.hot;CX.lineWidth=2.5;CX.shadowColor=C.hot;CX.shadowBlur=7;
+    CX.beginPath();CX.moveTo(x0+gW,ymid-pxD/2);CX.lineTo(x0+gW,ymid+pxD/2);CX.stroke();CX.shadowBlur=0;}}
+ }
+ // exhaust
+ if(burning&&Fn>0){const pl=Math.sqrt(Fn)*3*(0.9+0.2*Math.sin(performance.now()/29));
+  const pg=CX.createLinearGradient(nx+60,ymid,nx+60+pl,ymid);
+  pg.addColorStop(0,'#FFD9A0E0');pg.addColorStop(0.4,'#FF9C4A99');pg.addColorStop(1,'rgba(255,80,40,0)');
+  CX.fillStyle=pg;CX.beginPath();CX.moveTo(nx+58,ymid-22);CX.quadraticCurveTo(nx+60+pl*0.6,ymid-10,nx+60+pl,ymid);
+  CX.quadraticCurveTo(nx+60+pl*0.6,ymid+10,nx+58,ymid+22);CX.closePath();CX.fill();}
+ /* --- face view (right) --- */
+ const fx0=790,fy0=245,fr=105,sc2=(fr*2)/S.D;
+ lbl(CX,fx0,fy0-fr-22,'GRAIN FACE — CROSS SECTION',C.dim,8.5);
+ CX.beginPath();CX.arc(fx0,fy0,fr+8,0,7);CX.strokeStyle=C.steel;CX.lineWidth=1.6;CX.stroke();
+ if(S.grain==='bates'){
+  const cr=(S.d/2+w)*sc2;
+  if(cr<fr){CX.beginPath();CX.arc(fx0,fy0,fr,0,7);CX.arc(fx0,fy0,cr,0,7,true);
+   CX.fillStyle=C.prop+'55';CX.fill();
+   CX.beginPath();CX.arc(fx0,fy0,fr,0,7);CX.strokeStyle=C.propDark;CX.lineWidth=1;CX.stroke();
+   CX.beginPath();CX.arc(fx0,fy0,cr,0,7);
+   if(burning){CX.strokeStyle=C.hot;CX.lineWidth=2.5;CX.shadowColor=C.hot;CX.shadowBlur=8;CX.stroke();CX.shadowBlur=0;
+    const g=CX.createRadialGradient(fx0,fy0,1,fx0,fy0,cr);
+    g.addColorStop(0,'rgba(255,215,150,0.85)');g.addColorStop(1,'rgba(255,100,50,0.15)');
+    CX.fillStyle=g;CX.beginPath();CX.arc(fx0,fy0,cr,0,7);CX.fill();}
+   else{CX.strokeStyle=C.propDark;CX.stroke();}}
+ }else{
+  CX.beginPath();CX.arc(fx0,fy0,fr,0,7);CX.fillStyle=burning?'rgba(255,140,70,0.5)':C.prop+'55';CX.fill();
+  CX.strokeStyle=burning?C.hot:C.propDark;CX.lineWidth=burning?2.5:1;
+  if(burning){CX.shadowColor=C.hot;CX.shadowBlur=8;}CX.stroke();CX.shadowBlur=0;
+  lbl(CX,fx0,fy0+4,burning?'BURNING FACE':'AFT FACE',burning?'#FFE0C0':C.dim,9);}
+ // readout strip
+ lbl(CX,60,420,'t = '+runS.t.toFixed(2)+' s / '+sol.tb.toFixed(2)+' s',C.white,11,'left');
+ lbl(CX,60,440,'WEB BURNED  '+(Math.min(1,frac)*100).toFixed(0)+'%',C.dim,9,'left');
+ lbl(CX,300,420,'Pc  '+(Pc/1e6).toFixed(2)+' MPa',C.ox,11,'left');
+ lbl(CX,300,440,'THRUST  '+Fn.toFixed(0)+' N',C.fuel,11,'left');
+ lbl(CX,560,420,GRAINS[S.grain].name.toUpperCase(),C.steel,9,'left');
+ lbl(CX,560,440,PROPS_S[S.prop].name.toUpperCase(),C.dim,9,'left');
+}
+/* ================= PLOTS ================= */
+function plot(series,opt){
+ const W=PV.clientWidth||700,H=230;
+ fitFixed(PV,PX,W,H);PX.clearRect(0,0,W,H);
+ const mL=52,mR=14,mT=24,mB=30,pw=W-mL-mR,ph=H-mT-mB;
+ let xmin=1e30,xmax=-1e30,ymin=0,ymax=-1e30;
+ series.forEach(s=>s.x.forEach((x,i)=>{if(x<xmin)xmin=x;if(x>xmax)xmax=x;
+  const y=s.y[i];if(y>ymax)ymax=y;if(opt.ymin===undefined&&y<ymin)ymin=y;}));
+ if(!isFinite(xmax)||xmax===xmin){xmin=0;xmax=1;}
+ if(ymax<=ymin)ymax=ymin+1; ymax*=1.08;
+ const X=v=>mL+(v-xmin)/(xmax-xmin)*pw, Y=v=>mT+ph-(v-ymin)/(ymax-ymin)*ph;
+ PX.strokeStyle='rgba(60,84,110,0.25)';PX.lineWidth=1;
+ PX.font="9px 'IBM Plex Mono'";PX.fillStyle=C.dim;
+ for(let i=0;i<=4;i++){const yv=ymin+(ymax-ymin)*i/4,yy=Y(yv);
+  PX.beginPath();PX.moveTo(mL,yy);PX.lineTo(W-mR,yy);PX.stroke();
+  PX.textAlign='right';PX.fillText(fmt(yv,yv<10?2:1),mL-6,yy+3);}
+ for(let i=0;i<=5;i++){const xv=xmin+(xmax-xmin)*i/5,xx=X(xv);
+  PX.beginPath();PX.moveTo(xx,mT);PX.lineTo(xx,mT+ph);PX.stroke();
+  PX.textAlign='center';PX.fillText(fx(xv,xmax<10?2:xmax<100?1:0),xx,H-14);}
+ PX.textAlign='left';PX.fillStyle=C.dim;PX.fillText(opt.xl||'',W-mR-PX.measureText(opt.xl||'').width,H-2);
+ series.forEach((s,si)=>{PX.strokeStyle=s.c;PX.lineWidth=1.7;PX.beginPath();
+  s.x.forEach((x,i)=>{const px=X(x),py=Y(s.y[i]);i?PX.lineTo(px,py):PX.moveTo(px,py);});PX.stroke();
+  PX.fillStyle=s.c;PX.fillText(s.n,mL+8+si*130,16);});
+ if(opt.cursor!==undefined&&opt.cursor>=xmin&&opt.cursor<=xmax){
+  PX.strokeStyle='rgba(232,241,248,0.55)';PX.setLineDash([3,3]);
+  PX.beginPath();PX.moveTo(X(opt.cursor),mT);PX.lineTo(X(opt.cursor),mT+ph);PX.stroke();PX.setLineDash([]);}
+ if(opt.mark){PX.fillStyle=C.white;PX.beginPath();PX.arc(X(opt.mark[0]),Y(opt.mark[1]),3.5,0,7);PX.fill();}
+}
+const PLOTS_L=['Pc · F — TIME','ISP — MIXTURE RATIO','CF — EXPANSION RATIO'];
+const PLOTS_S=['Pc — TIME','THRUST — TIME','Kn — WEB'];
+function drawPlot(sol){
+ if(MODE==='L'){
+  if(plotSel===0){const h=runL.hist;
+   plot([{x:h.map(p=>p[0]),y:h.map(p=>p[1]/1e6),c:C.ox,n:'Pc  MPa'},
+         {x:h.map(p=>p[0]),y:h.map(p=>p[2]/1e3),c:C.fuel,n:'F  kN'}],{xl:'s'});
+  }else if(plotSel===1){const P=PROPS_L[stL.prop],xs=[],ysl=[],yv=[];
+   for(let mr=P.mrRange[0];mr<=P.mrRange[1]+1e-9;mr+=(P.mrRange[1]-P.mrRange[0])/40){
+    const r=solveLiquid({...stL,mr});xs.push(mr);ysl.push(r.isp);yv.push(r.ispV);}
+   const cur=solveLiquid(stL);
+   plot([{x:xs,y:yv,c:C.fuel,n:'Isp VAC  s'},{x:xs,y:ysl,c:C.ox,n:'Isp @ALT  s'}],
+        {xl:'O/F',mark:[stL.mr,cur.isp]});
+  }else{const xs=[],ys=[];const g=gasAt(stL.prop,stL.mr).g,Pa=pAmb(stL.alt);
+   for(let e=2;e<=300;e*=1.12){xs.push(e);ys.push(0.99*nozzle(g,e,stL.pc,Pa).cf);}
+   plot([{x:xs,y:ys,c:C.ox,n:'Cf @ Pc,alt'}],{xl:'ε',mark:[stL.eps,0.99*nozzle(g,stL.eps,stL.pc,Pa).cf]});}
+ }else{const s=runS.sol;if(!s)return;
+  if(plotSel===0)plot([{x:s.T,y:s.PC.map(v=>v/1e6),c:C.ox,n:'Pc  MPa'}],{xl:'s',cursor:runS.on?runS.t:undefined});
+  else if(plotSel===1)plot([{x:s.T,y:s.FF,c:C.fuel,n:'F  N'}],{xl:'s',cursor:runS.on?runS.t:undefined});
+  else{const xs=[],ys=[];for(let i=0;i<=60;i++){const w=s.wmax*i/60;xs.push(w*1000);ys.push(s.Ab(w)/(Math.PI/4*stS.Dt*stS.Dt));}
+   plot([{x:xs,y:ys,c:C.steel,n:'Kn = Ab/At'}],{xl:'web mm'});}
+ }
+}
+</script>
+<script>
+/* ================= BUILD SHEET UI ================= */
+const $=id=>document.getElementById(id);
+const sheet=$('buildSheet'),runbar=$('runbar'),dataGrid=$('dataGrid'),validBox=$('validBox');
+function segBtns(items,cur,cb,two){const d=document.createElement('div');d.className='seg'+(two?' two':'');
+ Object.keys(items).forEach(k=>{const b=document.createElement('button');
+  b.textContent=items[k].name;if(k===cur)b.classList.add('on');
+  b.onclick=()=>{cb(k);};d.appendChild(b);});return d;}
+function slider(label,unit,min,max,step,val,disp,cb){
+ const d=document.createElement('div');d.className='ctl';
+ const l=document.createElement('label');const nm=document.createElement('span');nm.textContent=label;
+ const vv=document.createElement('b');vv.textContent=disp(val)+' '+unit;
+ l.append(nm,vv);
+ const r=document.createElement('input');r.type='range';r.min=min;r.max=max;r.step=step;r.value=val;
+ r.setAttribute('aria-label',label);
+ r.oninput=()=>{cb(parseFloat(r.value));vv.textContent=disp(parseFloat(r.value))+' '+unit;};
+ d.append(l,r);return d;}
+function sec(title,unit){const s=document.createElement('div');s.className='sec';
+ const h=document.createElement('div');h.className='sec-h';h.innerHTML=title+(unit?`<span class="u">${unit}</span>`:'');
+ s.appendChild(h);return s;}
+function note(txt){const n=document.createElement('div');n.className='note';n.textContent=txt;return n;}
+function buildSheetL(){
+ sheet.innerHTML='';
+ const s1=sec('ENGINE CYCLE');
+ s1.appendChild(segBtns(CYCLES,stL.cycle,k=>{stL.cycle=k;stL.preset='custom';
+  stL.pc=Math.min(Math.max(stL.pc,CYCLES[k].pcMin),CYCLES[k].pcMax);syncUI();}));
+ s1.appendChild(note(CYCLES[stL.cycle].desc));
+ const wf=document.createElement('div');wf.id='cycFlag';s1.appendChild(wf);
+ sheet.appendChild(s1);
+ const s2=sec('PROPELLANT');
+ s2.appendChild(segBtns(PROPS_L,stL.prop,k=>{stL.prop=k;stL.preset='custom';
+  const r=PROPS_L[k].mrRange;stL.mr=Math.min(Math.max(stL.mr,r[0]),r[1]);syncUI();}));
+ sheet.appendChild(s2);
+ const s3=sec('THRUST CHAMBER');
+ const P=PROPS_L[stL.prop],CD=CYCLES[stL.cycle];
+ s3.appendChild(slider('MIXTURE RATIO O/F','',P.mrRange[0],P.mrRange[1],0.01,stL.mr,v=>fx(v,2),v=>{stL.mr=v;stL.preset='custom';recompute();}));
+ s3.appendChild(slider('CHAMBER PRESSURE','MPa',CD.pcMin/1e6,CD.pcMax/1e6,0.05,stL.pc/1e6,v=>fx(v,2),v=>{stL.pc=v*1e6;stL.preset='custom';recompute();}));
+ s3.appendChild(slider('THROAT DIAMETER','mm',20,400,1,stL.Dt*1000,v=>fx(v,0),v=>{stL.Dt=v/1000;stL.preset='custom';recompute();}));
+ s3.appendChild(slider('EXPANSION RATIO ε','',2,300,0.5,stL.eps,v=>fx(v,1),v=>{stL.eps=v;stL.preset='custom';recompute();}));
+ sheet.appendChild(s3);
+ const s4=sec('ENVIRONMENT');
+ s4.appendChild(slider('ALTITUDE','km',0,40,0.5,stL.alt/1000,v=>fx(v,1),v=>{stL.alt=v*1000;stL.preset='custom';recompute();}));
+ sheet.appendChild(s4);
+ const s5=sec('MODEL');
+ s5.appendChild(note('Ideal-rocket, frozen flow + recovery factor. c* eff 0.975 · Cf eff 0.99. Feed lag τ = '+CYCLES[stL.cycle].tau+' s for this cycle.'));
+ sheet.appendChild(s5);
+}
+function buildSheetS(){
+ sheet.innerHTML='';
+ const s1=sec('PROPELLANT');
+ s1.appendChild(segBtns(PROPS_S,stS.prop,k=>{stS.prop=k;stS.preset='custom';syncUI();}));
+ const P=PROPS_S[stS.prop];
+ s1.appendChild(note('r = '+P.a+'·Pc^'+P.n+' mm/s (MPa) · ρ '+P.rho+' kg/m³ · c* '+P.cstar+' m/s'));
+ sheet.appendChild(s1);
+ const s2=sec('GRAIN GEOMETRY');
+ s2.appendChild(segBtns(GRAINS,stS.grain,k=>{stS.grain=k;stS.preset='custom';if(k==='end'){stS.N=1;stS.d=0;}else if(stS.d===0){stS.d=stS.D/3;}syncUI();}));
+ s2.appendChild(note(GRAINS[stS.grain].desc));
+ if(stS.grain==='bates')
+  s2.appendChild(slider('SEGMENTS N','',1,6,1,stS.N,v=>fx(v,0),v=>{stS.N=v;stS.preset='custom';recompute();}));
+ s2.appendChild(slider('OUTER DIAMETER','mm',30,200,1,stS.D*1000,v=>fx(v,0),v=>{stS.D=v/1000;if(stS.d>stS.D-0.01)stS.d=stS.D-0.01;stS.preset='custom';recompute();}));
+ if(stS.grain==='bates')
+  s2.appendChild(slider('CORE DIAMETER','mm',8,150,1,stS.d*1000,v=>fx(v,0),v=>{stS.d=Math.min(v/1000,stS.D-0.008);stS.preset='custom';recompute();}));
+ s2.appendChild(slider(stS.grain==='bates'?'SEGMENT LENGTH':'GRAIN LENGTH','mm',40,300,1,stS.L*1000,v=>fx(v,0),v=>{stS.L=v/1000;stS.preset='custom';recompute();}));
+ sheet.appendChild(s2);
+ const s3=sec('NOZZLE');
+ s3.appendChild(slider('THROAT DIAMETER','mm',4,40,0.5,stS.Dt*1000,v=>fx(v,1),v=>{stS.Dt=v/1000;stS.preset='custom';recompute();}));
+ s3.appendChild(slider('EXPANSION RATIO ε','',3,16,0.5,stS.eps,v=>fx(v,1),v=>{stS.eps=v;stS.preset='custom';recompute();}));
+ const wf=document.createElement('div');wf.id='solFlag';s3.appendChild(wf);
+ sheet.appendChild(s3);
+ const s4=sec('MODEL');
+ s4.appendChild(note('Saint-Robert r = aPcⁿ · quasi-steady Pc = (Kn·a·ρ·c*)^(1/(1−n)) · sea-level nozzle · λ = '+PROPS_S[stS.prop].eff+' (2-phase / divergence).'));
+ sheet.appendChild(s4);
+}
+function buildRunbar(){
+ runbar.innerHTML='';
+ if(MODE==='L'){
+  const b=document.createElement('button');b.className='big-btn'+(runL.on?' hot':'');
+  b.textContent=runL.on?'■ SHUTDOWN':'▶ START ENGINE';
+  b.onclick=()=>{runL.on=!runL.on;if(runL.on){runL.hist=[];runL.t=0;}buildRunbar();};
+  runbar.appendChild(b);
+  runbar.appendChild(slider('THROTTLE','%',40,110,1,runL.throttle*100,v=>fx(v,0),v=>{runL.throttle=v/100;}));
+ }else{
+  const b=document.createElement('button');b.className='big-btn'+(runS.on?' hot':'');
+  b.textContent=runS.on?'■ RESET':'▶ IGNITE';
+  b.onclick=()=>{runS.on=!runS.on;runS.t=0;buildRunbar();};
+  runbar.appendChild(b);
+  runbar.appendChild(slider('PLAYBACK','×',0.25,4,0.25,runS.speed,v=>fx(v,2),v=>{runS.speed=v;}));
+ }
+}
+function buildPlotTabs(){
+ const pt=$('plotTabs');pt.innerHTML='';
+ (MODE==='L'?PLOTS_L:PLOTS_S).forEach((n,i)=>{const b=document.createElement('button');
+  b.textContent=n;if(i===plotSel)b.classList.add('on');
+  b.onclick=()=>{plotSel=i;buildPlotTabs();};pt.appendChild(b);});
+}
+function buildPresets(){
+ const ps=$('presetSel');ps.innerHTML='';
+ const src=MODE==='L'?PRESETS_L:PRESETS_S;
+ Object.keys(src).forEach(k=>{const o=document.createElement('option');o.value=k;o.textContent=src[k].name;ps.appendChild(o);});
+ ps.value=MODE==='L'?stL.preset:stS.preset;
+ ps.onchange=()=>{const k=ps.value;
+  if(MODE==='L'){stL.preset=k;if(k!=='custom')Object.assign(stL,PRESETS_L[k],{preset:k});}
+  else{stS.preset=k;if(k!=='custom')Object.assign(stS,PRESETS_S[k],{preset:k});}
+  syncUI();};
+}
+/* ================= DATA + FLAGS ================= */
+function cell(k,v,cls){return `<div class="dcell ${cls||''}"><div class="k">${k}</div><div class="v">${v}</div></div>`;}
+function refreshDataL(sol){
+ const live=runL.on, F=live?0.99*nozzle(sol.gas.g,stL.eps,Math.max(sol.PcA,1e4),sol.Pa).cf*1.010*sol.PcA*sol.At:sol.F;
+ dataGrid.innerHTML=
+  cell('THRUST '+(live?'(LIVE)':'(RATED)'),fmt(live?F:sol.F,1)+'<small>N</small>',live?'hi':'')+
+  cell('Isp @ ALT',fx(sol.isp,1)+'<small>s</small>')+
+  cell('Isp VACUUM',fx(sol.ispV,1)+'<small>s</small>')+
+  cell('CHAMBER Pc',fx((live?sol.PcA:stL.pc)/1e6,2)+'<small>MPa</small>','ox')+
+  cell('MASS FLOW',fx(sol.mdot*(live?sol.PcA/stL.pc:1),1)+'<small>kg/s</small>')+
+  cell('c* CHAR. VEL.',fx(sol.cs,0)+'<small>m/s</small>')+
+  cell('Cf COEFF.',fx(sol.cf,3))+
+  cell('FLAME TEMP',fx(sol.gas.Tc,0)+'<small>K</small>','hi')+
+  cell('γ / M̄',fx(sol.gas.g,3)+' / '+fx(sol.gas.M,1))+
+  cell('EXIT Pe',fmt(sol.Pe,1)+'<small>Pa</small>')+
+  cell('AMBIENT Pa',fmt(sol.Pa,1)+'<small>Pa</small>')+
+  (sol.Ppump?cell('PUMP POWER',fmt(sol.Ppump,1)+'<small>W</small>'):'')+
+  (sol.zeta?cell('GG BLEED ζ',fx(sol.zeta*100,1)+'<small>%</small>','hi'):'')+
+  (sol.battM?cell('BATTERY (150s)',fx(sol.battM,0)+'<small>kg</small>','hi'):'');
+ const f=$('cycFlag');if(!f)return;
+ let msg='',cls='';
+ if(sol.sep){msg='⚠ FLOW SEPARATION — Pe &lt; 0.35·Pa. Nozzle over-expanded at this altitude; real bell would separate/damage.';cls='warn';}
+ else if(stL.cycle==='exp'&&sol.F>180e3){msg='⚠ EXPANDER LIMIT — regen heat pickup can\'t drive this pump power. Real expanders top out ~150 kN (RL10 class).';cls='warn';}
+ else if(stL.cycle==='pf'&&stL.pc>2.5e6){msg='ℹ Tank-pressure territory: above ~2.5 MPa your tanks get heavier than the performance is worth.';cls='info';}
+ f.className='flag '+cls;f.innerHTML=msg;f.style.display=msg?'block':'none';
+}
+function refreshDataS(){
+ const s=runS.sol;if(!s)return;
+ dataGrid.innerHTML=
+  cell('MOTOR CLASS',s.cls+'-'+fx(s.Favg,0),'hi')+
+  cell('TOTAL IMPULSE',fmt(s.It,1)+'<small>N·s</small>','hi')+
+  cell('BURN TIME',fx(s.tb,2)+'<small>s</small>')+
+  cell('PEAK Pc',fx(s.PcMax/1e6,2)+'<small>MPa</small>','ox')+
+  cell('AVG THRUST',fx(s.Favg,0)+'<small>N</small>')+
+  cell('PROP. MASS',fx(s.mp*1000,0)+'<small>g</small>')+
+  cell('DELIVERED Isp',fx(s.isp,0)+'<small>s</small>')+
+  cell('Kn RANGE',fx(s.Kn0,0)+' → '+fx(s.Kn1,0))+
+  cell('WEB THICKNESS',fx(s.wmax*1000,1)+'<small>mm</small>');
+ const f=$('solFlag');if(!f)return;
+ let msg='',cls='';
+ if(stS.grain==='bates'&&s.port<2){msg='⚠ PORT/THROAT = '+fx(s.port,2)+' &lt; 2 — expect erosive burning & pressure spike the model doesn\'t capture.';cls='warn';}
+ else if(s.PcMax>10e6){msg='⚠ Pc &gt; 10 MPa — amateur casings live below this. Check your case margins.';cls='warn';}
+ else if(s.PcMax<0.8e6&&stS.prop==='knsb'){msg='ℹ KNSB below ~0.8 MPa burns unreliably — raise Kn (more area or smaller throat).';cls='info';}
+ f.className='flag '+cls;f.innerHTML=msg;f.style.display=msg?'block':'none';
+}
+function refreshValid(){
+ const pre=MODE==='L'?PRESETS_L[stL.preset]:null;
+ if(!pre||!pre.pub){validBox.style.display='none';return;}
+ const m=solveLiquid(stL),p=pre.pub;
+ const row=(n,mod,pub)=>{if(pub==='—')return `<tr><td>${n}</td><td>${mod}</td><td>—</td><td></td></tr>`;
+  const d=(parseFloat(mod)/pub-1)*100;
+  return `<tr><td>${n}</td><td>${mod}</td><td>${pub}</td><td class="${Math.abs(d)<5?'ok':'bad'}">${d>=0?'+':''}${d.toFixed(1)}%</td></tr>`;};
+ validBox.style.display='block';
+ validBox.innerHTML=`<b>VALIDATION — ${pre.name}</b> · model vs published
+  <table><tr><td></td><td>MODEL</td><td>PUBLISHED</td><td>Δ</td></tr>
+  ${row('Isp SL (s)',fx(m.isp,1),p.ispSL)}${row('Isp vac (s)',fx(m.ispV,1),p.ispVac)}
+  <tr><td>Thrust</td><td>${fmt(m.F,1)}N</td><td>${p.F}</td><td></td></tr></table>`;
+}
+/* ================= MAIN LOOP ================= */
+let steadyL=null;
+function recompute(){
+ if(MODE==='L'){steadyL=solveLiquid(stL);flowsCheck();refreshValid();}
+ else{runS.sol=solveSolid(stS);if(!runS.on)runS.t=0;refreshDataS();validBox.style.display='none';}
+}
+function flowsCheck(){if(flows.key!==stL.cycle){flows={key:stL.cycle,list:buildFlows(stL.cycle)};}}
+function syncUI(){
+ if(MODE==='L'){buildSheetL();$('vpTag').textContent='CYCLE SCHEMATIC — FLOW PATH';}
+ else{buildSheetS();$('vpTag').textContent='GRAIN BURNBACK — SECTION VIEW';}
+ buildRunbar();buildPlotTabs();buildPresets();recompute();
+}
+$('tabLiquid').onclick=()=>{MODE='L';$('tabLiquid').classList.add('on');$('tabSolid').classList.remove('on');plotSel=0;syncUI();};
+$('tabSolid').onclick=()=>{MODE='S';$('tabSolid').classList.add('on');$('tabLiquid').classList.remove('on');plotSel=0;syncUI();};
+function loop(ts){
+ const dt=Math.min(0.05,(ts-lastTs)/1000||0.016);lastTs=ts;
+ if(MODE==='L'&&steadyL){
+  // transient: feed-lag filtered mdot -> quasi-steady chamber
+  const mdotCmd=runL.on?runL.throttle*steadyL.mdot:0;
+  runL.mdot_f+=(mdotCmd-runL.mdot_f)*Math.min(1,dt/CYCLES[stL.cycle].tau);
+  const PcA=runL.mdot_f*steadyL.cs/steadyL.At;
+  steadyL.PcA=PcA;
+  if(runL.on||PcA>1e3){runL.t+=dt;
+   const F=0.99*nozzle(steadyL.gas.g,stL.eps,Math.max(PcA,1e4),steadyL.Pa).cf*1.010*PcA*steadyL.At;
+   runL.hist.push([runL.t,PcA,Math.max(0,F)]);
+   while(runL.hist.length&&runL.hist[0][0]<runL.t-30)runL.hist.shift();}
+  drawLiquid(dt,steadyL);refreshDataL(steadyL);
+  $('vpTag2').textContent=PROPS_L[stL.prop].name+' · ε '+fx(stL.eps,1)+' · '+fx(stL.alt/1000,1)+' km';
+ }else if(MODE==='S'&&runS.sol){
+  if(runS.on){runS.t+=dt*runS.speed;if(runS.t>runS.sol.tb+1.5){runS.t=0;}}
+  drawSolid(dt);
+  $('vpTag2').textContent=PROPS_S[stS.prop].name+' · Kn '+fx(runS.sol.Kn0,0)+' · '+stS.grain.toUpperCase();
+ }
+ drawPlot();
+ requestAnimationFrame(loop);
+}
+syncUI();
+requestAnimationFrame(loop);
+window.addEventListener('resize',()=>{});
+</script>
+</body>
+</html>
