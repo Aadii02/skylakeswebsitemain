@@ -11,6 +11,7 @@ import ModelRocketsPage from './pages/ModelRocketsPage';
 import SubstemsPage from './pages/SubstemsPage';
 import BlogPage from './pages/BlogPage';
 import BlogPostPage from './pages/BlogPostPage';
+import ToolsPage from './pages/ToolsPage';
 
 function App() {
   const bgAudioRef = useRef(null);
@@ -135,6 +136,7 @@ function App() {
         {/* backward-compatible redirect: old URL -> new /vehicles */}
         <Route path="/vehicles/model-rockets" element={<Navigate to="/vehicles" replace />} />
         <Route path="/products/substems" element={<SubstemsPage />} />
+        <Route path="/tools" element={<ToolsPage />} />
         <Route path="/blog" element={<BlogPage />} />
         <Route path="/blog/:slug" element={<BlogPostPage />} />
       </Routes>

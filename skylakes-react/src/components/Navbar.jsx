@@ -40,15 +40,6 @@ export default function Navbar() {
   return (
     <header className={`nav-shell ${scrolled ? 'nav-scrolled' : ''}`}>
       <nav className="nav-pill">
-        <Link to="/" className="nav-logo" onClick={closeAll}>
-          <img src={`${import.meta.env.BASE_URL}logo.png`} alt="SKYLX Logo"
-            loading="eager"
-            fetchPriority="high"
-            decoding="async"
-            onError={(e) => { e.target.style.display = 'none'; document.getElementById('nav-fallback-text').style.display = 'block'; }} />
-          <span id="nav-fallback-text" style={{ display: 'none' }}>SKYLX</span>
-        </Link>
-
         <ul className="nav-links">
           <li><Link className="nav-link" to="/#mission" onClick={closeAll}>Mission</Link></li>
           <li><Link className={`nav-link ${isActive('/vehicles') ? 'active' : ''}`} to="/vehicles" onClick={closeAll}>Vehicles</Link></li>
@@ -84,6 +75,7 @@ export default function Navbar() {
               )}
             </AnimatePresence>
           </li>
+          <li><Link className={`nav-link ${isActive('/tools') ? 'active' : ''}`} to="/tools" onClick={closeAll}>Tools</Link></li>
           <li><Link className="nav-link" to="/#tech" onClick={closeAll}>Technology</Link></li>
           <li><Link className="nav-link" to="/#about" onClick={closeAll}>About Us</Link></li>
           <li><Link className="nav-link" to="/#contact" onClick={closeAll}>Contact</Link></li>
@@ -118,6 +110,7 @@ export default function Navbar() {
               {[
                 { to: '/#mission', label: 'Mission' },
                 { to: '/vehicles', label: 'Vehicles' },
+                { to: '/tools', label: 'Tools' },
                 { to: '/#tech', label: 'Technology' },
                 { to: '/#about', label: 'About Us' },
                 { to: '/#contact', label: 'Contact' },

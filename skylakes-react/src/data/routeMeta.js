@@ -27,6 +27,13 @@ const staticRoutes = [
       'Advanced propulsion, avionics, and structural subsystems engineered for reliability, reusability, and rapid iteration.',
   },
   {
+    path: '/tools',
+    outFile: 'tools.html',
+    title: 'Engineering Tools — SkyLakes Aerospace',
+    description:
+      'Interactive engineering tools built inside SkyLakes to design our launch vehicles — propulsion, trajectory, structures and thermal analysis, open for anyone to explore.',
+  },
+  {
     path: '/blog',
     outFile: 'blog.html',
     title: 'Blog — SkyLakes Aerospace',
