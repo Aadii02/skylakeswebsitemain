@@ -8,7 +8,6 @@ import ScrollProgress from './components/ScrollProgress';
 import BackToTop from './components/BackToTop';
 import HomePage from './pages/HomePage';
 import ModelRocketsPage from './pages/ModelRocketsPage';
-import SubstemsPage from './pages/SubstemsPage';
 import BlogPage from './pages/BlogPage';
 import BlogPostPage from './pages/BlogPostPage';
 import ToolsPage from './pages/ToolsPage';
@@ -135,7 +134,8 @@ function App() {
         <Route path="/vehicles" element={<ModelRocketsPage />} />
         {/* backward-compatible redirect: old URL -> new /vehicles */}
         <Route path="/vehicles/model-rockets" element={<Navigate to="/vehicles" replace />} />
-        <Route path="/products/substems" element={<SubstemsPage />} />
+        {/* page removed: old URL was in the published sitemap, send visitors home */}
+        <Route path="/products/substems" element={<Navigate to="/" replace />} />
         <Route path="/tools" element={<ToolsPage />} />
         <Route path="/blog" element={<BlogPage />} />
         <Route path="/blog/:slug" element={<BlogPostPage />} />

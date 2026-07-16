@@ -70,7 +70,6 @@ export default function Navbar() {
                   transition={{ duration: 0.18, ease: 'easeOut' }}
                 >
                   <li><Link to="/vehicles" onClick={closeAll}>Model Rockets</Link></li>
-                  <li><Link to="/products/substems" onClick={closeAll}>Substems</Link></li>
                   <li><a href="https://shop.skylakes.io" target="_blank" rel="noopener noreferrer" onClick={closeAll}>Shop</a></li>
                 </motion.ul>
               )}
@@ -135,7 +134,6 @@ export default function Navbar() {
                 <span className="nav-mobile-sub-label">Products</span>
                 <ul className="nav-mobile-sublinks">
                   <li><Link to="/vehicles" onClick={closeAll}>Model Rockets</Link></li>
-                  <li><Link to="/products/substems" onClick={closeAll}>Substems</Link></li>
                   <li><a href="https://shop.skylakes.io" target="_blank" rel="noopener noreferrer" onClick={closeAll}>Shop</a></li>
                 </ul>
               </motion.li>

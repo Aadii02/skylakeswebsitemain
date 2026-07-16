@@ -20,13 +20,6 @@ const staticRoutes = [
       'A family of three fully reusable launch vehicles — SKYLX-S, SKYLX-M and SKYLX-H — serving the complete commercial launch market.',
   },
   {
-    path: '/products/substems',
-    outFile: 'products/substems.html',
-    title: 'SKYLX Subsystems & Components — SkyLakes Aerospace',
-    description:
-      'Advanced propulsion, avionics, and structural subsystems engineered for reliability, reusability, and rapid iteration.',
-  },
-  {
     path: '/tools',
     outFile: 'tools.html',
     title: 'Engineering Tools — SkyLakes Aerospace',

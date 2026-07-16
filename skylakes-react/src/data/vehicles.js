@@ -64,53 +64,6 @@ export const vehicleCategories = {
       },
     ],
   },
-  'substems': {
-    id: 'substems',
-    name: 'Substems',
-    title: 'SKYLX Subsystems & Components',
-    description: 'Advanced propulsion, avionics, and structural subsystems engineered for reliability, reusability, and rapid iteration.',
-    vehicles: [
-      {
-        id: 'engine-sx',
-        name: 'SX-Engine',
-        subtitle: 'High-performance regenerative engines',
-        description: 'Next-generation regenerative cooling engines with 95% theoretical performance and 100+ flight cycles per core.',
-        specs: [
-          { label: 'Thrust (Sea Level)', value: '450 kN' },
-          { label: 'Isp (Vacuum)', value: '380 sec' },
-          { label: 'Cycles (Demonstrated)', value: '100+' },
-          { label: 'Propellant', value: 'Methane/LOX' },
-          { label: 'Cooling Method', value: 'Regenerative' },
-        ],
-      },
-      {
-        id: 'avionics-ax',
-        name: 'AX-Avionics',
-        subtitle: 'Real-time autonomous flight control',
-        description: 'Fault-tolerant flight computer with triple-redundant processing and AI-assisted real-time trajectory optimization.',
-        specs: [
-          { label: 'Processors', value: 'Triple-Redundant' },
-          { label: 'Telemetry Rate', value: '100 Hz' },
-          { label: 'Autonomous Features', value: 'Full EDL Control' },
-          { label: 'Certification Level', value: 'ITAR-compliant' },
-          { label: 'Mass', value: '~2.4 kg' },
-        ],
-      },
-      {
-        id: 'grid-fins',
-        name: 'Grid Fins',
-        subtitle: 'Precision aerodynamic control',
-        description: 'Hypersonic grid fins with active feedback for stage landing and attitude control during supersonic descent.',
-        specs: [
-          { label: 'Material', value: 'Titanium Alloy' },
-          { label: 'Operating Envelope', value: 'Mach 0.5 - 2.5' },
-          { label: 'Actuation', value: 'Redundant Electro-Mechanical' },
-          { label: 'Load Capacity', value: '50G Peak' },
-          { label: 'Lifecycle', value: '10+ Flights' },
-        ],
-      },
-    ],
-  },
 };
 
 export const getVehicleCategory = (categoryId) => {
