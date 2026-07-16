@@ -13,6 +13,9 @@ const featuredStory = {
 
 const articles = posts;
 
+const formatDate = (dateStr) =>
+  new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
 const signalCards = [
   {
     title: 'Reusable architecture',
@@ -231,7 +234,13 @@ export default function BlogPage() {
                       </div>
                     </div>
                     <div className="blog-body">
-                      <div style={{ color: 'var(--muted)', fontSize: '0.74rem', letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: '10px' }}>{post.meta}</div>
+                      <div className="blog-author-row">
+                        <div className="blog-avatar">{post.author?.initials || 'SK'}</div>
+                        <div className="blog-author-meta">
+                          <span className="blog-author-name">{post.author?.name || 'SKYLX Team'}</span>
+                          <span className="blog-author-date">{formatDate(post.date)} · {post.meta}</span>
+                        </div>
+                      </div>
                       <div className="blog-title" style={{ fontSize: '1rem' }}>{post.title}</div>
                       <p className="blog-excerpt">{post.excerpt}</p>
                     </div>

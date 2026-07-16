@@ -8,6 +8,7 @@ const blogPosts = [
       "Single-use rockets are expensive by design. Reusability breaks that loop by amortizing hardware costs across many flights.",
     meta: '8 min read · Engineering',
     date: '2026-05-09',
+    author: { name: 'SKYLX Engineering', initials: 'SK' },
     content: `
       <p>Single-use rockets are expensive by design. You build the vehicle, burn it once, it falls into the ocean. Every launch, you pay for the whole thing again.</p>
       <p>Reusability breaks that loop.</p>

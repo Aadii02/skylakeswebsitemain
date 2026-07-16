@@ -77,7 +77,7 @@ function SatelliteRing({ radius, tilt = [0, 0, 0], speed = 0.4, offset = 0, satC
 export default function Globe3D() {
   return (
     <div className="globe-canvas">
-      <Canvas camera={{ position: [0, 45, 375], fov: 50 }} dpr={[1, 2]}>
+      <Canvas camera={{ position: [0, 45, 450], fov: 50 }} dpr={[1, 2]}>
         <ambientLight intensity={2} />
         <directionalLight position={[200, 200, 200]} intensity={1.6} />
         <pointLight position={[-250, -100, -250]} intensity={0.8} color="#3b82f6" />
