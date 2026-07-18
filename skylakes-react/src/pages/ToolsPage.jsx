@@ -167,9 +167,9 @@ export default function ToolsPage() {
             </div>
             <h1 className="section-title tools-title">Engineering Tools</h1>
             <p className="tools-subhead">
-              Real engineering tools we build inside SkyLakes to design our launch vehicles — now
-              opened up for anyone to explore. Modeled against published data, tuned by our own
-              engineers.
+              SkyLakes is built by engineers who taught themselves rocketry — so giving back to
+              that community isn&apos;t an afterthought, it&apos;s the point. These are the same tools we
+              use to design our launch vehicles, opened up for anyone who wants to learn.
             </p>
             <div className="tools-stats">
               <div><span className="tools-stat-n">{liveCount}</span><span className="tools-stat-l">Live Now</span></div>
