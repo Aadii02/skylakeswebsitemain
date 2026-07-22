@@ -1,0 +1,189 @@
+/* About Us page. Uses the global palette from index.css (--accent, --border,
+   --muted, …) and the site fonts (Barlow Condensed for headings, Montserrat
+   elsewhere). Only the green/amber accents are page-local, mirroring the
+   pattern in ToolsPage.css. */
+
+.about-page {
+  --about-green: #3ee08f;
+  --about-amber: #f5b74a;
+
+  position: relative;
+  min-height: 100vh;
+  z-index: 1;
+}
+
+/* Background HUD layers (scoped to the page, above the stars canvas) */
+.about-bg-grid {
+  position: absolute; inset: 0; pointer-events: none; opacity: 0.5;
+  background-image:
+    linear-gradient(rgba(96,165,250,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(96,165,250,0.05) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse 90% 55% at 50% 0%, #000 20%, transparent 78%);
+  -webkit-mask-image: radial-gradient(ellipse 90% 55% at 50% 0%, #000 20%, transparent 78%);
+}
+.about-bg-glow {
+  position: absolute; top: -160px; left: 50%; transform: translateX(-50%);
+  width: min(1000px, 100vw); height: 560px; pointer-events: none; filter: blur(20px);
+  background: radial-gradient(ellipse at center, rgba(96,165,250,0.16), transparent 65%);
+}
+
+.about-main {
+  position: relative; z-index: 2;
+  max-width: 1160px; margin: 0 auto;
+  padding: 150px 40px 60px;
+}
+
+/* Hero */
+.about-hero { max-width: 860px; padding-bottom: 72px; }
+.about-eyebrow {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 8px 16px; border: 1px solid var(--border); border-radius: 100px;
+  background: rgba(96,165,250,0.06); margin-bottom: 36px;
+  font-family: 'Montserrat', monospace; font-size: 12px; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--muted2);
+}
+.about-eyebrow-dot {
+  width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+  background: var(--about-green); box-shadow: 0 0 10px var(--about-green);
+}
+.about-hero-title {
+  font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
+  font-size: clamp(2.4rem, 5.6vw, 4rem); line-height: 1.05; letter-spacing: -0.01em;
+  margin: 0 0 28px; color: var(--white); text-wrap: balance;
+}
+.about-accent { color: var(--accent); }
+.about-hero-sub {
+  font-size: clamp(1rem, 1.6vw, 1.3rem); line-height: 1.6; color: var(--muted2);
+  max-width: 720px; margin: 0; text-wrap: pretty;
+}
+
+/* Stats strip */
+.about-stats {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+  background: var(--border); border: 1px solid var(--border); border-radius: 16px;
+  overflow: hidden; margin-top: 64px;
+}
+.about-stat { background: var(--bg-card); padding: 30px 32px; }
+.about-stat-value {
+  font-family: 'Montserrat', monospace; font-weight: 700;
+  font-size: clamp(1.3rem, 2.4vw, 1.7rem); color: var(--white);
+}
+.about-stat-value--green { color: var(--about-green); }
+.about-stat-value--amber { color: var(--about-amber); }
+.about-stat-label { font-size: 0.82rem; color: var(--muted); margin-top: 6px; }
+
+/* Origin */
+.about-origin {
+  display: grid; grid-template-columns: 220px 1fr; gap: 56px;
+  align-items: start; padding: 72px 0; border-top: 1px solid var(--border);
+}
+.about-origin-label-wrap { position: sticky; top: 110px; }
+.about-eyebrow-label {
+  font-family: 'Montserrat', monospace; font-size: 12px; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--muted);
+}
+.about-origin-heading {
+  font-family: 'Barlow Condensed', sans-serif; font-weight: 600;
+  font-size: clamp(1.6rem, 2.6vw, 2rem); line-height: 1.15; letter-spacing: -0.01em;
+  margin: 14px 0 0; color: var(--white);
+}
+.about-origin-copy { font-size: 1.05rem; line-height: 1.75; color: var(--muted2); max-width: 640px; }
+.about-origin-copy p { margin: 0 0 22px; text-wrap: pretty; }
+.about-origin-copy p:last-child { margin-bottom: 0; }
+.about-origin-copy em {
+  color: var(--white); font-style: normal; border-bottom: 1px solid var(--accent);
+}
+
+/* Founders */
+.about-founders { padding: 72px 0; border-top: 1px solid var(--border); }
+.about-founders-header {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  gap: 24px; margin-bottom: 44px; flex-wrap: wrap;
+}
+.about-founders-heading {
+  font-family: 'Barlow Condensed', sans-serif; font-weight: 600;
+  font-size: clamp(1.8rem, 3.4vw, 2.4rem); letter-spacing: -0.01em;
+  margin: 14px 0 0; color: var(--white);
+}
+.about-founders-sub { font-size: 0.9rem; color: var(--muted); max-width: 340px; margin: 0; line-height: 1.6; }
+
+.about-founders-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+.about-founder-card {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; overflow: hidden;
+}
+.about-founder-photo {
+  position: relative; aspect-ratio: 4 / 3;
+  background: linear-gradient(160deg, rgba(96,165,250,0.1), rgba(8,13,26,0.4));
+  border-bottom: 1px solid var(--border);
+}
+.about-founder-card--green .about-founder-photo {
+  background: linear-gradient(160deg, rgba(62,224,143,0.1), rgba(8,13,26,0.4));
+}
+.about-founder-img {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center 30%;
+  display: block;
+}
+.about-founder-body { padding: 28px 30px 30px; }
+.about-founder-name {
+  font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1.6rem;
+  letter-spacing: -0.01em; margin: 0; color: var(--white);
+}
+.about-founder-role {
+  display: inline-flex; align-items: center; margin-top: 10px; padding: 5px 12px;
+  border-radius: 100px; background: rgba(96,165,250,0.16); border: 1px solid rgba(96,165,250,0.4);
+  font-family: 'Montserrat', monospace; font-size: 11px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--accent2);
+}
+.about-founder-card--green .about-founder-role {
+  background: rgba(62,224,143,0.16); border-color: rgba(62,224,143,0.4); color: var(--about-green);
+}
+.about-founder-bio {
+  font-size: 0.92rem; line-height: 1.68; color: var(--muted2); margin: 18px 0 22px; text-wrap: pretty;
+}
+/* Green founder card re-themes the shared social tiles to the green accent. */
+.about-founder-card--green .social-tile {
+  --tile-accent: var(--about-green);
+  --tile-accent-soft: rgba(62, 224, 143, 0.1);
+}
+
+/* Values */
+.about-values { padding: 72px 0 90px; border-top: 1px solid var(--border); }
+.about-values-heading {
+  font-family: 'Barlow Condensed', sans-serif; font-weight: 600;
+  font-size: clamp(1.8rem, 3.4vw, 2.4rem); letter-spacing: -0.01em;
+  margin: 14px 0 40px; color: var(--white);
+}
+.about-values-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.about-value-card {
+  border-top: 2px solid var(--accent); background: var(--bg-card);
+  border-radius: 0 0 16px 16px; padding: 28px 26px 32px;
+}
+.about-value-card--green { border-top-color: var(--about-green); }
+.about-value-card--amber { border-top-color: var(--about-amber); }
+.about-value-index {
+  font-family: 'Montserrat', monospace; font-weight: 700; font-size: 14px;
+  color: var(--accent); margin-bottom: 16px;
+}
+.about-value-card--green .about-value-index { color: var(--about-green); }
+.about-value-card--amber .about-value-index { color: var(--about-amber); }
+.about-value-title {
+  font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 1.15rem;
+  margin: 0 0 12px; color: var(--white);
+}
+.about-value-desc { font-size: 0.9rem; line-height: 1.65; color: var(--muted2); margin: 0; text-wrap: pretty; }
+
+@media (max-width: 900px) {
+  .about-main { padding: 130px 28px 60px; }
+  .about-origin { grid-template-columns: 1fr; gap: 20px; }
+  .about-origin-label-wrap { position: static; }
+  .about-founders-grid { grid-template-columns: 1fr; }
+  .about-values-grid { grid-template-columns: 1fr; }
+  .about-stats { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .about-main { padding: 110px 20px 50px; }
+  .about-hero { padding-bottom: 56px; }
+  .about-origin, .about-founders, .about-values { padding: 56px 0; }
+}
