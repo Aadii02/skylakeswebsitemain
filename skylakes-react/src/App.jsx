@@ -11,6 +11,7 @@ import ModelRocketsPage from './pages/ModelRocketsPage';
 import BlogPage from './pages/BlogPage';
 import BlogPostPage from './pages/BlogPostPage';
 import ToolsPage from './pages/ToolsPage';
+import AboutPage from './pages/AboutPage';
 
 function App() {
   const bgAudioRef = useRef(null);
@@ -137,6 +138,7 @@ function App() {
         {/* page removed: old URL was in the published sitemap, send visitors home */}
         <Route path="/products/substems" element={<Navigate to="/" replace />} />
         <Route path="/tools" element={<ToolsPage />} />
+        <Route path="/about" element={<AboutPage />} />
         <Route path="/blog" element={<BlogPage />} />
         <Route path="/blog/:slug" element={<BlogPostPage />} />
       </Routes>

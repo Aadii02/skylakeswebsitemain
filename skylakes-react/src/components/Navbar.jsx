@@ -77,7 +77,7 @@ export default function Navbar() {
           </li>
           <li><Link className={`nav-link ${isActive('/tools') ? 'active' : ''}`} to="/tools" onClick={closeAll}>Tools</Link></li>
           <li><Link className="nav-link" to="/#tech" onClick={closeAll}>Technology</Link></li>
-          <li><Link className="nav-link" to="/#about" onClick={closeAll}>About Us</Link></li>
+          <li><Link className={`nav-link ${isActive('/about') ? 'active' : ''}`} to="/about" onClick={closeAll}>About Us</Link></li>
           <li><Link className="nav-link" to="/#contact" onClick={closeAll}>Contact</Link></li>
           <li><Link className={`nav-link ${location.pathname.startsWith('/blog') ? 'active' : ''}`} to="/blog" onClick={closeAll}>Blog</Link></li>
         </ul>
@@ -113,7 +113,7 @@ export default function Navbar() {
                 { to: '/vehicles', label: 'Vehicles' },
                 { to: '/tools', label: 'Tools' },
                 { to: '/#tech', label: 'Technology' },
-                { to: '/#about', label: 'About Us' },
+                { to: '/about', label: 'About Us' },
                 { to: '/#contact', label: 'Contact' },
                 { to: '/blog', label: 'Blog' },
               ].map((item, i) => (

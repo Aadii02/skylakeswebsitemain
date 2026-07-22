@@ -1,0 +1,47 @@
+/* Reusable social icon tiles. Uses the global palette from index.css.
+   Accent color is themeable via --tile-accent (defaults to --accent); a
+   parent can override it — e.g. the green founder card on the About page. */
+
+.social-tiles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.social-tile {
+  --tile-accent: var(--accent);
+  --tile-accent-soft: rgba(96, 165, 250, 0.1);
+  width: 42px;
+  height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--muted2);
+  text-decoration: none;
+  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+
+.social-tile svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+.social-tile:hover {
+  border-color: var(--tile-accent);
+  color: var(--tile-accent);
+  background: var(--tile-accent-soft);
+  transform: translateY(-2px);
+}
+
+.social-tile:focus-visible {
+  outline: 2px solid var(--tile-accent);
+  outline-offset: 2px;
+}
+
+.social-tile:active {
+  transform: translateY(0) scale(0.96);
+}

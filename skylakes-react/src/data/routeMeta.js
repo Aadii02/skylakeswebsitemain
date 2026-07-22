@@ -27,6 +27,13 @@ const staticRoutes = [
       'Interactive engineering tools built inside SkyLakes to design our launch vehicles — propulsion, trajectory, structures and thermal analysis, open for anyone to explore.',
   },
   {
+    path: '/about',
+    outFile: 'about.html',
+    title: 'About Us — SkyLakes Aerospace',
+    description:
+      'SkyLakes Aerospace is a pre-seed Indian launch vehicle company building dedicated small-satellite access to orbit for under ₹40 crore — meet the founders and the story behind SKYLX.',
+  },
+  {
     path: '/blog',
     outFile: 'blog.html',
     title: 'Blog — SkyLakes Aerospace',
