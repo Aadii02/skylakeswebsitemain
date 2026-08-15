@@ -160,7 +160,7 @@ export default function ToolsPage() {
         <div className="tools-bg-glow" aria-hidden="true" />
 
         <main className="tools-main">
-          <section className="tools-hero reveal">
+          <section className="tools-hero">
             <div className="section-label tools-eyebrow">
               <span className="tools-eyebrow-tick" />
               SKYLX // Engineering Tools
