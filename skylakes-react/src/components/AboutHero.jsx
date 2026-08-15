@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function AboutHero() {
   return (
-    <section className="about-hero reveal">
+    <section className="about-hero">
       <div className="about-eyebrow">
         <span className="about-eyebrow-dot" />
         <span>SkyLakes Aerospace</span>
