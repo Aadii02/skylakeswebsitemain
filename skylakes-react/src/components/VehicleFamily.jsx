@@ -38,7 +38,7 @@ export default function VehicleFamily() {
             ))}
           </div>
           <div className="vf-padline" aria-hidden="true"></div>
-          <p className="vf-scale-note">Illustrative scale — vehicle images gonna release soon.</p>
+          <p className="vf-scale-note">Illustrative scale — real vehicle renders coming soon.</p>
 
           <div className="vf-panel" aria-live="polite">
             <div className="vf-panel-head">
