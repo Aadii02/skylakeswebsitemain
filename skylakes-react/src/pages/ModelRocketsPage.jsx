@@ -30,7 +30,7 @@ export default function ModelRocketsPage() {
             {category.vehicles.map((vehicle, idx) => (
               <TiltCard
                 key={vehicle.id}
-                className="stat-card reveal"
+                className="stat-card"
                 style={{
                   textAlign: 'left',
                   padding: '32px',
