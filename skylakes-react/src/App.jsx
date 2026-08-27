@@ -13,6 +13,7 @@ import BlogPostPage from './pages/BlogPostPage';
 import ToolsPage from './pages/ToolsPage';
 import AboutPage from './pages/AboutPage';
 import MissionPage from './pages/MissionPage';
+import ProductsPage from './pages/ProductsPage';
 
 function App() {
   const bgAudioRef = useRef(null);
@@ -135,6 +136,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/mission" element={<MissionPage />} />
         <Route path="/vehicles" element={<ModelRocketsPage />} />
+        <Route path="/products" element={<ProductsPage />} />
         {/* backward-compatible redirect: old URL -> new /vehicles */}
         <Route path="/vehicles/model-rockets" element={<Navigate to="/vehicles" replace />} />
         {/* page removed: old URL was in the published sitemap, send visitors home */}

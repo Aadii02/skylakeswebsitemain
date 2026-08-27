@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 // eslint-disable-next-line no-unused-vars -- motion is used as <motion.*> JSX
 import { motion, AnimatePresence } from 'framer-motion';
@@ -6,8 +6,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const dropdownTimeoutRef = useRef(null);
   const location = useLocation();
 
   useEffect(() => {
@@ -17,23 +15,7 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const handleDropdownEnter = () => {
-    if (dropdownTimeoutRef.current) {
-      clearTimeout(dropdownTimeoutRef.current);
-    }
-    setDropdownOpen(true);
-  };
-
-  const handleDropdownLeave = () => {
-    dropdownTimeoutRef.current = setTimeout(() => {
-      setDropdownOpen(false);
-    }, 150);
-  };
-
-  const closeAll = () => {
-    setOpen(false);
-    setDropdownOpen(false);
-  };
+  const closeAll = () => setOpen(false);
 
   const isActive = (path) => location.pathname === path;
 
@@ -44,37 +26,7 @@ export default function Navbar() {
           <li><Link className={`nav-link ${isActive('/') ? 'active' : ''}`} to="/" onClick={closeAll}>Home</Link></li>
           <li><Link className={`nav-link ${isActive('/mission') ? 'active' : ''}`} to="/mission" onClick={closeAll}>Mission</Link></li>
           <li><Link className={`nav-link ${isActive('/vehicles') ? 'active' : ''}`} to="/vehicles" onClick={closeAll}>Vehicles</Link></li>
-          <li
-            className="nav-dropdown"
-            onMouseEnter={handleDropdownEnter}
-            onMouseLeave={handleDropdownLeave}
-          >
-            <button
-              type="button"
-              onClick={() => setDropdownOpen((current) => !current)}
-              aria-expanded={dropdownOpen}
-              className={`nav-link nav-products-trigger ${location.pathname.startsWith('/products') ? 'active' : ''}`}
-            >
-              Products
-              <svg className={`nav-caret ${dropdownOpen ? 'flipped' : ''}`} viewBox="0 0 12 12" fill="none" aria-hidden="true">
-                <path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-            <AnimatePresence>
-              {dropdownOpen && (
-                <motion.ul
-                  className="dropdown-menu"
-                  initial={{ opacity: 0, y: 10, scale: 0.97 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 10, scale: 0.97 }}
-                  transition={{ duration: 0.18, ease: 'easeOut' }}
-                >
-                  <li><Link to="/vehicles" onClick={closeAll}>Model Rockets</Link></li>
-                  <li><a href="https://shop.skylakes.io" target="_blank" rel="noopener noreferrer" onClick={closeAll}>Shop</a></li>
-                </motion.ul>
-              )}
-            </AnimatePresence>
-          </li>
+          <li><Link className={`nav-link ${isActive('/products') ? 'active' : ''}`} to="/products" onClick={closeAll}>Products</Link></li>
           <li><Link className={`nav-link ${isActive('/tools') ? 'active' : ''}`} to="/tools" onClick={closeAll}>Tools</Link></li>
           <li><Link className={`nav-link ${isActive('/about') ? 'active' : ''}`} to="/about" onClick={closeAll}>About Us</Link></li>
           <li><Link className="nav-link" to="/#contact" onClick={closeAll}>Contact</Link></li>
@@ -129,11 +81,7 @@ export default function Navbar() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.35, duration: 0.25 }}
               >
-                <span className="nav-mobile-sub-label">Products</span>
-                <ul className="nav-mobile-sublinks">
-                  <li><Link to="/vehicles" onClick={closeAll}>Model Rockets</Link></li>
-                  <li><a href="https://shop.skylakes.io" target="_blank" rel="noopener noreferrer" onClick={closeAll}>Shop</a></li>
-                </ul>
+                <Link to="/products" onClick={closeAll}>Products</Link>
               </motion.li>
               <motion.li
                 initial={{ opacity: 0, x: -16 }}

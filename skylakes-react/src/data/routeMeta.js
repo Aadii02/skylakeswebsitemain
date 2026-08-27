@@ -27,6 +27,13 @@ const staticRoutes = [
       'A family of three fully reusable launch vehicles — SKYLX-S, SKYLX-M and SKYLX-H — serving the complete commercial launch market.',
   },
   {
+    path: '/products',
+    outFile: 'products.html',
+    title: 'Trainer-1 Model Rocket Kit — SkyLakes Aerospace',
+    description:
+      'Trainer-1: a 30 cm, six-part model rocket kit on an 18 mm motor mount, about 310 m on a C6. Full parts manifest, specification, build sequence, and components and spares.',
+  },
+  {
     path: '/tools',
     outFile: 'tools.html',
     title: 'Engineering Tools — SkyLakes Aerospace',
