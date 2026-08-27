@@ -38,7 +38,7 @@ export default function BlogPostPage() {
             </div>
           </div>
 
-          <article style={{ color: 'var(--muted2)', lineHeight: 1.8 }} dangerouslySetInnerHTML={{ __html: post.content }} />
+          <article style={{ color: 'var(--muted2)', lineHeight: 1.8, maxWidth: '680px' }} dangerouslySetInnerHTML={{ __html: post.content }} />
         </div>
       </main>
       <Footer />

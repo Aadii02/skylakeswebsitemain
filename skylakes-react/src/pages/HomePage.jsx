@@ -1,7 +1,6 @@
 import React from 'react';
 import StarsBackground from '../components/StarsBackground';
 import Hero from '../components/Hero';
-import Marquee from '../components/Marquee';
 import Mission from '../components/Mission';
 import VehicleFamily from '../components/VehicleFamily';
 import Tech from '../components/Tech';
@@ -17,7 +16,6 @@ export default function HomePage() {
     <>
       <StarsBackground />
       <Hero />
-      <Marquee />
       <Mission />
       <div className="divider"></div>
       <VehicleFamily />

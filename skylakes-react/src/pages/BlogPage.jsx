@@ -103,7 +103,7 @@ export default function BlogPage() {
       <main id="blog" style={{ paddingTop: '120px', minHeight: '100vh', position: 'relative', zIndex: 1 }}>
         <section className="blog-page-hero-section" style={{ padding: '40px 60px 0' }}>
           <div style={{ maxWidth: '1300px', margin: '0 auto' }}>
-            <div className="reveal" style={{ textAlign: 'center', marginBottom: '64px' }}>
+            <div style={{ textAlign: 'center', marginBottom: '64px' }}>
               <div className="section-label">Latest Updates</div>
               <h1 className="section-title" style={{ marginBottom: '18px' }}>
                 Beyond Earth Blog
