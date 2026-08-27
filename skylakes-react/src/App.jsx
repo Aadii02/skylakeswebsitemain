@@ -12,6 +12,7 @@ import BlogPage from './pages/BlogPage';
 import BlogPostPage from './pages/BlogPostPage';
 import ToolsPage from './pages/ToolsPage';
 import AboutPage from './pages/AboutPage';
+import MissionPage from './pages/MissionPage';
 
 function App() {
   const bgAudioRef = useRef(null);
@@ -132,6 +133,7 @@ function App() {
       <BackToTop />
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/mission" element={<MissionPage />} />
         <Route path="/vehicles" element={<ModelRocketsPage />} />
         {/* backward-compatible redirect: old URL -> new /vehicles */}
         <Route path="/vehicles/model-rockets" element={<Navigate to="/vehicles" replace />} />

@@ -13,6 +13,13 @@ const staticRoutes = [
       "Revolutionizing India's space industry with reusable rockets, cost-effective launches, and cutting-edge aerospace innovation.",
   },
   {
+    path: '/mission',
+    outFile: 'mission.html',
+    title: 'Our Mission — SkyLakes Aerospace',
+    description:
+      "Building India's first reusable small-lift rocket. Why SkyLakes exists, how we build — propulsion, avionics, simulation — the SKYLX-S/M/H family, and the roadmap to sub-₹40Cr LEO access.",
+  },
+  {
     path: '/vehicles',
     outFile: 'vehicles.html',
     title: 'SKYLX Launch Vehicles — SkyLakes Aerospace',
