@@ -109,25 +109,25 @@ export const CATEGORIES = [
     num: '01',
     title: 'Rocket Kits',
     products: [
-      { code: 'TRN-1R', name: 'Trainer-1 · Recoverable', desc: 'The full kit on this page — parachute recovery, flight computer, six parts.', img: `${BASE}products/infographic-b.png` },
-      { code: 'TRN-1N', name: 'Trainer-1 · Non-Recoverable', desc: 'Same airframe, no recovery bay. Single flight, cheaper, quicker to build.', img: `${BASE}products/rocket-product.png` },
+      { code: 'TRN-1R', name: 'Trainer-1 · Recoverable', desc: 'The full kit on this page — parachute recovery, flight computer, six parts.', img: `${BASE}products/infographic-b.webp` },
+      { code: 'TRN-1N', name: 'Trainer-1 · Non-Recoverable', desc: 'Same airframe, no recovery bay. Single flight, cheaper, quicker to build.', img: `${BASE}products/rocket-product.webp` },
     ],
   },
   {
     num: '02',
     title: 'Recovery Systems',
     products: [
-      { code: 'REC-P30', name: 'Parachute · 30 cm Nylon', desc: 'Ripstop canopy with six shroud lines. Spare for the Trainer-1 bay.', img: `${BASE}products/parachute-30cm.png`, light: true },
-      { code: 'REC-SC', name: 'Shock Cord & Launch Lug', desc: 'Kevlar tether with heat-shrunk loops, plus the launch-rod guide.', img: `${BASE}products/shock-cord.png`, light: true },
-      { code: 'REC-NX', name: 'Nomex Heat Blanket', desc: 'Goes between the ejection charge and the chute. Reusable, unlike wadding.', img: `${BASE}products/nomex-blanket.png`, light: true },
+      { code: 'REC-P30', name: 'Parachute · 30 cm Nylon', desc: 'Ripstop canopy with six shroud lines. Spare for the Trainer-1 bay.', img: `${BASE}products/parachute-30cm.webp`, light: true },
+      { code: 'REC-SC', name: 'Shock Cord & Launch Lug', desc: 'Kevlar tether with heat-shrunk loops, plus the launch-rod guide.', img: `${BASE}products/shock-cord.webp`, light: true },
+      { code: 'REC-NX', name: 'Nomex Heat Blanket', desc: 'Goes between the ejection charge and the chute. Reusable, unlike wadding.', img: `${BASE}products/nomex-blanket.webp`, light: true },
     ],
   },
   {
     num: '03',
     title: 'Avionics & Electronics',
     products: [
-      { code: 'AV-FC1', name: 'Mini Flight Computer', desc: 'BMP280 apogee detection, EEPROM altitude log, 9V input, screw terminals.', img: `${BASE}products/flight-computer.png`, light: true },
-      { code: 'AV-TLM', name: 'Telemetry Add-On', desc: '915 MHz LoRa board with SMA antenna. Streams altitude and events to the ground.', img: `${BASE}products/telemetry-addon.png`, light: true },
+      { code: 'AV-FC1', name: 'Mini Flight Computer', desc: 'BMP280 apogee detection, EEPROM altitude log, 9V input, screw terminals.', img: `${BASE}products/flight-computer.webp`, light: true },
+      { code: 'AV-TLM', name: 'Telemetry Add-On', desc: '915 MHz LoRa board with SMA antenna. Streams altitude and events to the ground.', img: `${BASE}products/telemetry-addon.webp`, light: true },
       { code: 'AV-IGN', name: 'Igniter Controller', desc: 'Wireless launch box with continuity test and a keyed safety switch.' },
     ],
   },
@@ -135,7 +135,7 @@ export const CATEGORIES = [
     num: '04',
     title: 'Airframe Components',
     products: [
-      { code: 'AF-SET', name: 'Trainer-1 Airframe Set', desc: 'Items 1, 3, 5 and 6 from the manifest as a single spares pack.', img: `${BASE}products/exploded-drawing.png`, light: true },
+      { code: 'AF-SET', name: 'Trainer-1 Airframe Set', desc: 'Items 1, 3, 5 and 6 from the manifest as a single spares pack.', img: `${BASE}products/exploded-drawing.webp`, light: true },
       { code: 'AF-BT', name: 'Kraft Body Tube', desc: '32 mm OD, 0.8 mm wall, 240 mm. Pre-printed fin alignment lines.' },
       { code: 'AF-NC', name: 'Molded Nose Cone', desc: 'ABS ogive with shoulder eyelet. Drop-in replacement for item 1.' },
       { code: 'AF-FIN', name: 'Laser-Cut Fin Set', desc: 'Three 2 mm basswood clipped deltas, cut on the Trainer-1 pattern.' },
@@ -144,4 +144,4 @@ export const CATEGORIES = [
 ];
 
 export const ALL_PRODUCTS = CATEGORIES.flatMap((c) => c.products);
-export const DRAWING_IMG = `${BASE}products/exploded-drawing.png`;
+export const DRAWING_IMG = `${BASE}products/exploded-drawing.webp`;

@@ -6,7 +6,7 @@ export default function Hero() {
   return (
     <section className="hero">
       <div className="hero-bg-gradient"></div>
-  <div className="hero-earth-bg" style={{ position: 'absolute', inset: 0, backgroundImage: `url(${import.meta.env.BASE_URL}earth-bg.png)`, backgroundPosition: 'center center', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', opacity: 0.8, zIndex: 0, pointerEvents: 'none' }}></div>
+  <div className="hero-earth-bg" style={{ position: 'absolute', inset: 0, backgroundImage: `url(${import.meta.env.BASE_URL}earth-bg.webp)`, backgroundPosition: 'center center', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', opacity: 0.8, zIndex: 0, pointerEvents: 'none' }}></div>
   <div className="hero-aurora">
     <span></span><span></span><span></span>
   </div>
