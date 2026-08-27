@@ -416,7 +416,7 @@
   /* MISSION */
   .mission {
     padding: 140px 60px;
-    display: grid; grid-template-columns: 1fr 1fr;
+    display: grid; grid-template-columns: 1.05fr 0.95fr;
     gap: 80px; align-items: center;
     max-width: 1300px; margin: 0 auto;
   }
@@ -430,17 +430,55 @@
     aspect-ratio: 1 / 1;
     margin: 0 auto;
   }
-  .globe-canvas canvas { display: block; }
+  .globe-canvas canvas { display: block; width: 100%; height: 100%; }
   .mission-text .section-title { color: var(--white); }
   .mission-body {
     color: var(--muted2);
     font-size: 1.05rem;
     line-height: 1.85;
+    max-width: 56ch;
     margin-bottom: 32px;
   }
-  .mission-stats {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+  .mission-quote {
+    border-left: 2px solid rgba(96,165,250,0.38);
+    padding-left: 22px;
+    margin: 0 0 40px;
+    color: var(--muted2);
+    font-size: 1.02rem;
+    line-height: 1.85;
   }
+  .mission-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    background: linear-gradient(160deg,
+      rgba(96,165,250,0.05) 0%, rgba(11,17,32,0.55) 100%);
+  }
+  .mission-stat {
+    padding: 16px 20px 18px;
+    border-left: 1px solid var(--border);
+  }
+  .mission-stat:first-child { border-left: 0; }
+  .mission-stat .stat-label { margin-bottom: 8px; }
+  .mission-stat-value {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.1;
+    white-space: nowrap;
+  }
+  .mission-stat-unit {
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    margin-left: 3px;
+  }
+  .mission-stat.is-accent .stat-label,
+  .mission-stat.is-accent .mission-stat-value { color: var(--accent); }
   .stat-card {
     position: relative;
     overflow: hidden;
@@ -1055,6 +1093,8 @@
     footer { padding: 48px 24px 32px; }
     .footer-bottom { flex-direction: column; gap: 12px; text-align: center; padding: 0 24px; }
     .mission-stats { grid-template-columns: 1fr; }
+    .mission-stat { border-left: 0; border-top: 1px solid var(--border); }
+    .mission-stat:first-child { border-top: 0; }
     .blog-header { flex-direction: column; gap: 20px; align-items: flex-start; }
     main#blog .blog-page-hero-section { padding: 32px 24px 0 !important; }
     main#blog .blog-feature-panel { min-height: 360px !important; padding: 28px 20px !important; }
@@ -1236,7 +1276,7 @@
   .community-section,
   .quote-section { padding: 60px 20px; }
 
-  .mission-stats { grid-template-columns: 1fr 1fr; gap: 16px; }
+  .mission-stats { grid-template-columns: 1fr; }
   .mission-visual { overflow: hidden; max-width: 100%; }
   .globe-canvas { max-width: 380px; }
   .tech-cards, .blog-grid { grid-template-columns: 1fr; gap: 20px; }
