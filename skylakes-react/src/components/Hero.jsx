@@ -23,9 +23,9 @@ export default function Hero() {
   </h1>
   <p className="hero-subtitle">Revolutionizing India's space industry with reusable rockets, cost-effective launches, and cutting-edge aerospace innovation.</p>
   <div className="hero-ctas">
-    <SlideButton href="#mission">Discover Our Mission</SlideButton>
+    <SlideButton to="/mission">Discover Our Mission</SlideButton>
     <div style={{ width: '8px' }} />
-    <SlideButton href="#vehicles">View Launch Vehicles</SlideButton>
+    <SlideButton to="/vehicles">View Launch Vehicles</SlideButton>
   </div>
 
   

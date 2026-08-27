@@ -1,6 +1,7 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
-export default function SlideButton({ href, onClick, children, disabled, type = "button", fullWidth }) {
+export default function SlideButton({ href, to, onClick, children, disabled, type = "button", fullWidth }) {
   const content = (
     <div className={`slide-btn__inner ${fullWidth ? 'full-width' : ''}`}>
       <div className="slide-btn__fill"></div>
@@ -25,19 +26,23 @@ export default function SlideButton({ href, onClick, children, disabled, type = 
     </div>
   );
 
+  const className = `slide-btn ${disabled ? 'disabled' : ''} ${fullWidth ? 'full-width' : ''}`;
+
+  // `to` is an in-app route, so it goes through the router rather than
+  // reloading the whole document; `href` stays for mailto: and anchors.
+  if (to) {
+    return <Link to={to} className={className}>{content}</Link>;
+  }
+
   if (href) {
-    return (
-      <a href={href} className={`slide-btn ${disabled ? 'disabled' : ''} ${fullWidth ? 'full-width' : ''}`}>
-        {content}
-      </a>
-    );
+    return <a href={href} className={className}>{content}</a>;
   }
 
   return (
     <button 
       onClick={onClick} 
       disabled={disabled} 
-      className={`slide-btn ${disabled ? 'disabled' : ''} ${fullWidth ? 'full-width' : ''}`} 
+      className={className}
       type={type}
     >
       {content}
