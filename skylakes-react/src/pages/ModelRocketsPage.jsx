@@ -3,6 +3,7 @@ import { getVehicleCategory } from '../data/vehicles';
 import TiltCard from '../components/TiltCard';
 import VehicleSilhouette from '../components/VehicleSilhouette';
 import StarsBackground from '../components/StarsBackground';
+import VehicleFamily from '../components/VehicleFamily';
 import Footer from '../components/Footer';
 
 export default function ModelRocketsPage() {
@@ -16,6 +17,8 @@ export default function ModelRocketsPage() {
     <>
       <StarsBackground />
       <div style={{ minHeight: '100vh', paddingTop: '120px' }}>
+        {/* Family overview — header, silhouette selector, comparison */}
+        <VehicleFamily />
         {/* Vehicle Cards */}
         <section style={{ maxWidth: '1200px', margin: '0 auto', padding: '40px 20px 80px' }}>
           <div
