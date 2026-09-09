@@ -30,7 +30,7 @@ export default function Navbar() {
           <li><Link className={`nav-link ${isActive('/tools') ? 'active' : ''}`} to="/tools" onClick={closeAll}>Tools</Link></li>
           <li><Link className={`nav-link ${isActive('/about') ? 'active' : ''}`} to="/about" onClick={closeAll}>About Us</Link></li>
           <li><Link className="nav-link" to="/#contact" onClick={closeAll}>Contact</Link></li>
-          <li><Link className={`nav-link ${location.pathname.startsWith('/blog') ? 'active' : ''}`} to="/blog" onClick={closeAll}>Blog</Link></li>
+          <li><a className="nav-link" href="https://aadityagoswami.substack.com/" target="_blank" rel="noopener noreferrer" onClick={closeAll}>Blog</a></li>
         </ul>
 
         <div className="nav-right">
@@ -65,7 +65,6 @@ export default function Navbar() {
                 { to: '/tools', label: 'Tools' },
                 { to: '/about', label: 'About Us' },
                 { to: '/#contact', label: 'Contact' },
-                { to: '/blog', label: 'Blog' },
               ].map((item, i) => (
                 <motion.li
                   key={item.label}
@@ -76,6 +75,13 @@ export default function Navbar() {
                   <Link to={item.to} onClick={closeAll}>{item.label}</Link>
                 </motion.li>
               ))}
+              <motion.li
+                initial={{ opacity: 0, x: -16 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.3, duration: 0.25 }}
+              >
+                <a href="https://aadityagoswami.substack.com/" target="_blank" rel="noopener noreferrer" onClick={closeAll}>Blog</a>
+              </motion.li>
               <motion.li
                 initial={{ opacity: 0, x: -16 }}
                 animate={{ opacity: 1, x: 0 }}
