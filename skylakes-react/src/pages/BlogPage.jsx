@@ -205,7 +205,7 @@ export default function BlogPage() {
                 {articles.map((post, index) => (
                   <Link
                     to={`/blog/${post.slug}`}
-                    key={post.slu
+                    key={post.slug}
 
                     
                     className="blog-card reveal"
